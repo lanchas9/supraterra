@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <title>Supraterra</title>
+</head>
+
+<body>
+    <div class="px-4 py-5 my-1 text-center hero-container">
+        <img class="d-block mx-auto mb-4" src="./assets/img/supraterra-md.png" alt="Supraterra">
+        <div class="main-form-container" id="mainFormContainer">
+            <p class=" fw-bold">Favor de llenar los datos a continuaci&oacute;n para completar su registro</p>
+            <div class="container">
+                <form id="frmSignup" class="row justify-content-center g-3 needs-validation" novalidate>
+                    <div class="col-8 col-md-4">
+                        <div class="form-floating mb-2">
+                            <input type="email" class="form-control" id="txtEmail" placeholder="name@example.com"
+                                required>
+                            <label for="txtEmail">Correo electr&oacute;nico</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="txtFirstName" placeholder="Nombre" required>
+                            <label for="txtFirstName">Nombre</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="txtLastName" placeholder="Apellido paterno"
+                                required>
+                            <label for="txtLastName">Apellido materno</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="txtLastName2" placeholder="Apellido materno">
+                            <label for="txtLastName2">Apellido materno</label>
+                        </div>
+                        <div class="form-floating mb-2">
+                            <input type="tel" class="form-control" id="txtPhoneNumber" maxlength="10"
+                                placeholder="Tel&eacute;fono celular" required>
+                            <label for="txtPhoneNumber">Tel&eacute;fono celular</label>
+                        </div>
+                        <div class="form-check mb-2 text-start">
+                            <input class="form-check-input" type="checkbox" value="" id="chkPrivacy" required>
+                            <label class="form-check-label" for="chkPrivacy">
+                                Acepto las pol&iacute;ticas de privacidad
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="button" id="btnSignup">
+                            Enviar
+                        </button>
+                        <button class="visually-hidden" type="submit" id="btnSubmit">-</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="visually-hidden qr-code-container" id="qrCodeContainer">
+            <p class=" fw-bold">Tu registro se ha producido de forma exitosa</p>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-8 col-md-6">
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col-auto d-block">
+                                <img src="" alt="QR Code" class="qr-code-img" id="imgQrcode">
+                            </div>
+                            <div class="col p-4 d-flex flex-column position-static text-start">
+                                <h3 class="mb-0" id="lblFullName"></h3>
+                                <p class="card-text mb-auto" id="lblEmail"></p>
+                                <p class="card-text mb-auto" id="lblPhoneNumber"></p>
+                                <a href="#" class="stretched-link" id="lnkDownload">Descargar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="./assets/js/download.js"></script>
+    <script>
+        
+        const url = 'https://mosaico.app:4000/supraterra/';
+        (function () {
+            'use strict'
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+
+        $('#btnSignup').on('click', function () {
+            var $this = $(this);
+            $this.prop('disabled', true)
+            $this.html("<span class='spinner-grow spinner-grow-sm' role='status' aria-hidden='true'></span> Registrando...");
+            var $mainForm = $('#frmSignup');
+            var data = {
+                username: $('#txtEmail').val() || '',
+                nombreUsuario: $('#txtFirstName').val() || '',
+                apellidoPaterno: $('#txtLastName').val() || '',
+                apellidoMaterno: $('#txtLastName2').val() || '',
+                numeroCelular: $('#txtPhoneNumber').val() || ''
+            }
+            if (!$mainForm[0].checkValidity()) {
+                console.log('invalid form');
+                $this.html("Enviar");
+                $this.prop('disabled', false)
+                $mainForm.find(':submit').click();
+            } else {
+                console.log('submitting...')
+                $.ajax({
+                    url: url + 'creaUsuario',
+                    headers: { "Content-Type": "application/json" },
+                    type: 'POST',
+                    processData: false,
+                    contentType: "application/json",
+                    //data: JSON.stringify({ 'username': data.username }),
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        console.log(data.statusCode)
+                        if(data.statusCode == '200') {
+                            var result = data.message[0];
+                            console.log('binding');
+                            console.log(data.message[0])
+                            $('#lblEmail').html(result.username);
+                            $('#lblFullName').html(result.nombreUsuario + ' ' + result.apellidoPaterno + ' ' + (result.ApellidoMaterno || ''));
+                            $('#lblPhoneNumber').html(result.numeroCelular);
+                            $("#imgQrcode").attr("src",result.imagenQR);
+                            //$("#lnkDownload").attr("href",result.imagenQR);
+                        }
+                        $this.html("Enviar");
+                        $this.prop('disabled', false)
+                        $mainForm[0].reset();
+                        $('#mainFormContainer').addClass('visually-hidden');
+                        $('#qrCodeContainer').removeClass('visually-hidden');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("API call ERROR");
+                        console.log(jqXHR);
+                        console.log(textStatus);
+                        $this.html("Enviar");
+                        $this.prop('disabled', false)
+                        $mainForm[0].reset();
+                    }
+                });
+            }
+        });
+        $('#lnkDownload').click(function() {
+            // download($('#imgQrcode:first').attr('src'),"supraterra-qrcode.png","image/png");
+            // const link = document.createElement('a')
+            // link.href = $('#imgQrcode:first').attr('src')
+            // link.download = 'supraterra-qrcode.png'
+            // document.body.appendChild(link)
+            // link.click()
+            // document.body.removeChild(link)
+
+            
+            (async() => {
+                await downloadImage($('#imgQrcode').attr('src'))  
+            })()
+        });
+
+        async function downloadImage(imageSrc) {
+            const image = await fetch(imageSrc)
+            const imageBlog = await image.blob()
+            const imageURL = URL.createObjectURL(imageBlog)
+
+            const link = document.createElement('a')
+            link.href = imageURL
+            link.download = 'supraterra-qrcode.png'
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+        }
+    </script>
+</body>
+
+</html>
