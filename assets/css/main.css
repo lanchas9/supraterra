@@ -1,0 +1,22 @@
+.hero-container {
+
+}
+
+.hero-container img {
+    width: 148px;
+    height: auto;
+}
+
+.centrado{
+    color: black;
+    text-decoration: none;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.piePagina{
+    font-size: smaller;
+    font-weight: bold;
+}
