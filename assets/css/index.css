@@ -126,7 +126,7 @@ body {
 }
 @media only screen and (min-width: 768px){
     body {
-    background: url('./assets/img/desktop/back_inicio.jpg') center center fixed no-repeat;
+    background: url('../img/desktop/back_inicio.jpg') center center fixed no-repeat;
     /* Currently Firefox requires background-size declared separately or the background image will be blank */
     background-size: cover;
     }
@@ -157,7 +157,7 @@ body {
 @media only screen and (min-width: 1300px){
 
     body {
-    background: url('./assets/img/desktop/back_inicio_1200.jpg') center center fixed no-repeat;
+    background: url('../img/desktop/back_inicio_1200.jpg') center center fixed no-repeat;
     background-size: cover;
     }
     .imagenLogo{
