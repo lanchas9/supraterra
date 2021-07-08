@@ -1,9 +1,9 @@
 * {
   box-sizing: border-box;
 }
-/* @media only screen and (max-width: 430px){  */
+
 body {
-    background: url('../img/mobile/back_inicio.jpg') center center fixed no-repeat;
+    background: url('../img/finales/mobile/back_inicio.jpg') center center fixed no-repeat; 
     /* Currently Firefox requires background-size declared separately or the background image will be blank */
     background-size: contain;
     overflow: hidden;
@@ -19,7 +19,7 @@ body {
         flex: 1;
     }
     .divTitulo{
-        width: 20%;
+        width: 40%;
         flex: 2;
     }
 
@@ -28,7 +28,7 @@ body {
         font-size: medium;
         flex: 3;
         text-align: center;
-        width: 50%;
+        width: 30%;
     }
     /* 
     .nav{
@@ -83,7 +83,7 @@ body {
         color: white;
         text-decoration: none;
     }
-/* } */
+
 @media only screen and (min-width: 431px){
 
     .titulo{
@@ -126,7 +126,7 @@ body {
 }
 @media only screen and (min-width: 768px){
     body {
-    background: url('../img/desktop/back_inicio.jpg') center center fixed no-repeat;
+    background: url('../img/finales/desktop/back_inicio.jpg') center center fixed no-repeat;
     /* Currently Firefox requires background-size declared separately or the background image will be blank */
     background-size: cover;
     }
@@ -157,7 +157,7 @@ body {
 @media only screen and (min-width: 1300px){
 
     body {
-    background: url('../img/desktop/back_inicio_1200.jpg') center center fixed no-repeat;
+    background: url('../img/finales/desktop/back_inicio.jpg') center center fixed no-repeat;
     background-size: cover;
     }
     .imagenLogo{

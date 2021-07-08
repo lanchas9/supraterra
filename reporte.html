@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXPO SUPTRATERRA 2021</title>
+    <link rel="stylesheet" href="./assets/css/reportes.css">
+    <link rel="icon" type="image/jpg" href="/assets/img/favicon.jpg" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
+    <link href="dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="dist/js/tabulator.min.js"></script>
+    <link href="/dist/css/tabulator_midnight.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1 id="titulo" class="titulo">Titulo</h1>
+    <img class="imagenLogo center" src="./assets/img/mobile/logo_expo.png" alt="" srcset="">
+    <br>
+    <div id="example-table"></div>
+<script>
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const reporte = urlParams.get('reporte') 
+    const element = document.getElementById("titulo");
+    element.innerHTML = dameTitulo(reporte)
+
+    fetchReportJSON()
+    async function fetchReportJSON() {
+    const response = await fetch('https://mosaico.app:4000/supraterra/' + reporte);
+    const tabledata = await response.json();
+    return tabledata.message;
+    }
+
+    fetchReportJSON().then(tabledata => {
+        var table = new Tabulator("#example-table", {
+        height:"800px",
+        layout:"fitColumns",
+        data:tabledata,
+        autoColumns:true
+        });
+    });
+
+    function dameTitulo(titulo){
+        let nuevo = titulo.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ")
+        
+        return nuevo.charAt(0).toUpperCase() + nuevo.slice(1)
+    }
+</script>
+</body>
+</html>
