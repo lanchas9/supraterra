@@ -5,10 +5,15 @@
 body {
     background: url('../img/finales/mobile/back_inicio.jpg') center center fixed no-repeat; 
     /* Currently Firefox requires background-size declared separately or the background image will be blank */
-    background-size: contain;
+    background-size: cover;
     overflow: hidden;
     font-family: 'Montserrat';
     }
+
+    /* .redBorder{
+        border-color: red;
+        border-style: solid;
+    } */
 
     .titulo{
         display: flex;
@@ -16,19 +21,23 @@ body {
 
     .imagenLogo{
         width: 30%;
-        flex: 1;
-    }
+        flex: 4;
+        object-fit: scale-down;
+    }   
+
     .divTitulo{
         width: 40%;
         flex: 2;
     }
 
-    .tituloNegritas{
-        font-weight: bolder;
-        font-size: medium;
-        flex: 3;
-        text-align: center;
+    .imagenFechas{
         width: 30%;
+        flex: 1;
+        object-fit: scale-down;
+    }
+    .divTitulo2{
+        width: 10%;
+        flex: 4;
     }
     /* 
     .nav{
@@ -41,144 +50,302 @@ body {
         width: 50%;
         margin: 0;
         position: absolute;
-        top: 50%;
+        top: 48%;
         left: 50%;
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
     }
 
-    .fechas{
-        width: 30%;
+    .letreroTerrenos{
+        width: 65%;
         margin: 0;
         position: absolute;
-        top: 68%;
+        top: 64%;
         left: 50%;
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
     }
 
     .footer{
+        width: 94%;
+        margin: 0;
+        position: absolute;
+        top: 74%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .footer2{
+        width: 60%;
+        margin: 0;
+        position: absolute;
+        top: 84%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    
+    .footer3{
         width: 70%;
         margin: 0;
         position: absolute;
-        top: 82.5%;
+        top: 86.5%;
         left: 50%;
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
     }
 
-    .letreroFinal{
-        width: 90%;
+    
+    .footer4{
+        width: 26%;
         margin: 0;
         position: absolute;
-        top: 92%;
+        top: 88%;
         left: 50%;
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
-        font-size: small;
-        color: white;
-    }
-
-    a{
-        color: white;
-        text-decoration: none;
     }
 
 @media only screen and (min-width: 431px){
-
-    .titulo{
-        display: flex;
-        justify-content: center;
-    }
-
-    .imagenLogo{
-        width: 125px;
-        /* border-color: red;
-        border-style: solid; */
-    }
-    .divTitulo{
-        width: 114px;
-    }
-
-    .tituloNegritas{
-        font-weight: bolder;
-        font-size: medium;
-        text-align: center;
-        width: 307px;
-        /* border-color: blue;
-        border-style: solid; */
-    }
-    .botonRegistro{
-        width: 215px;
-    }
-    .fechas{
-        width: 130px;
-    }
-
-    .footer{
-        width: 300px;
-    }
-
-    .letreroFinal{
-        text-align: center;
-        width: 385px;
-    }
+    body {
+        background: url('../img/finales/mobile/back_inicio.jpg') center center fixed no-repeat; 
+        /* Currently Firefox requires background-size declared separately or the background image will be blank */
+        background-size: cover;
+        overflow: hidden;
+        font-family: 'Montserrat';
+        }
+    
+        /* .redBorder{
+            border-color: red;
+            border-style: solid;
+        } */
+    
+        .titulo{
+            display: flex;
+        }
+    
+        .imagenLogo{
+            max-width: 35%;
+            /* flex: 4;
+            object-fit: scale-down; */
+        }   
+/*     
+        .divTitulo{
+            width: 40%;
+            flex: 2;
+        } */
+    
+        .imagenFechas{
+            max-width: 400px;
+            /* flex: 1;
+            object-fit: scale-down; */
+        }
+        .divTitulo2{
+            width: 10%;
+            flex: 4;
+        }
+        /* 
+        .nav{
+            display: flex;
+            align-content: center;
+            align-items: center;
+        } */
+    
+        .botonRegistro{
+            max-width: 250px;
+            margin: 0;
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        .letreroTerrenos{
+            max-width: 285px;
+            margin: 0;
+            position: absolute;
+            top: 68%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        .footer{
+            width: 94%;
+            max-width: 420px;
+            margin: 0;
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        .footer2{
+            width: 60%;
+            max-width: 267px;
+            margin: 0;
+            position: absolute;
+            top: 90%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        
+        .footer3{
+            width: 70%;
+            max-width: 315px;
+            margin: 0;
+            position: absolute;
+            top: 92%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        
+        .footer4{
+            width: 26%;
+            max-width: 116px;
+            margin: 0;
+            position: absolute;
+            top: 93%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
 }
 @media only screen and (min-width: 768px){
     body {
-    background: url('../img/finales/desktop/back_inicio.jpg') center center fixed no-repeat;
+        background: url('../img/finales/mobile/back_inicio.jpg') center center fixed no-repeat; 
+        /* Currently Firefox requires background-size declared separately or the background image will be blank */
+        background-size: cover;
+        overflow: hidden;
+        font-family: 'Montserrat';
+        }
+    
+        /* .redBorder{
+            border-color: red;
+            border-style: solid;
+        } */
+    
+        .titulo{
+            display: flex;
+        }
+    
+        .imagenLogo{
+            width: 30%;
+            flex: 4;
+            object-fit: scale-down;
+        }   
+    
+        .divTitulo{
+            width: 40%;
+            flex: 2;
+        }
+    
+        .imagenFechas{
+            width: 30%;
+            flex: 1;
+            object-fit: scale-down;
+        }
+        .divTitulo2{
+            width: 10%;
+            flex: 4;
+        }
+        /* 
+        .nav{
+            display: flex;
+            align-content: center;
+            align-items: center;
+        } */
+    
+        .botonRegistro{
+            width: 50%;
+            margin: 0;
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        .letreroTerrenos{
+            width: 65%;
+            margin: 0;
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        .footer{
+            width: 94%;
+            margin: 0;
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        .footer2{
+            width: 60%;
+            margin: 0;
+            position: absolute;
+            top: 92%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        
+        .footer3{
+            width: 70%;
+            margin: 0;
+            position: absolute;
+            top: 94.5%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+        
+        .footer4{
+            width: 26%;
+            margin: 0;
+            position: absolute;
+            top: 96%;
+            left: 50%;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    
+}
+@media only screen and (min-width: 1200px){
+
+    
+body {
+    background: url('../img/finales/desktop/back_inicio.jpg') center center fixed no-repeat; 
     /* Currently Firefox requires background-size declared separately or the background image will be blank */
     background-size: cover;
-    }
-     .imagenLogo{
-        width: 200px;
-        /* border-color: red;
-        border-style: solid; */
-    }
-    .tituloNegritas{
-        font-size: x-large;
+    overflow: hidden;
+    font-family: 'Montserrat';
     }
 
-    .botonRegistro{
-        top: 40%;
-    }
-    .fechas{
-        top: 60%;
-    }
-    .footer{
-        top: 75%;
-    }
-
-    .letreroFinal{
-        top: 82%;
-        font-size: medium;
-    }
-}
-@media only screen and (min-width: 1300px){
-
-    body {
-    background: url('../img/finales/desktop/back_inicio.jpg') center center fixed no-repeat;
-    background-size: cover;
-    }
     .imagenLogo{
-        width: 300px;
-        flex: 1;
+        max-width: 400px;
+    }   
+
+
+    .imagenFechas{
+        max-width: 320px;
     }
-    .tituloNegritas{
-       font-size: xx-large;
-    }
-    .botonRegistro{
-        width: 15%;
-    }
-    .fechas{
-        width: 10%;
-    }
-    .footer{
-        top: 85%;
-        width: 40%;
-    }
-    .letreroFinal{
-        top: 95%;
-        width: 70%;
-    }
+          
 }
