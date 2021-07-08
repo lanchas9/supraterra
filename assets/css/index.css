@@ -332,7 +332,7 @@ body {
 
     
 body {
-    background: url('../img/finales/desktop/back_inicio.jpg') center center fixed no-repeat; 
+    background: url('../img/finales/desktop/back_inicio_Desktop2.jpg') center center fixed no-repeat; 
     /* Currently Firefox requires background-size declared separately or the background image will be blank */
     background-size: cover;
     overflow: hidden;
@@ -340,12 +340,80 @@ body {
     }
 
     .imagenLogo{
-        max-width: 400px;
+        max-width: 320px;
+        position: absolute;
+        top: 7%;
+        left: 13%;
+
     }   
 
-
     .imagenFechas{
-        max-width: 320px;
+        max-width: 280px;
+        position: absolute;
+        top: 55%;
+        right: 12%;
     }
           
+    .botonRegistro{
+        max-width: 400px;
+        margin: 0;
+        position: absolute;
+        top: 48%;
+        left: 25%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .letreroTerrenos{
+        max-width: 400px;
+        margin: 0;
+        position: absolute;
+        top: 65%;
+        left: 28%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .footer{
+        max-width: 650px;
+        margin: 0;
+        position: absolute;
+        top: 80%;
+        left: 25%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .footer2{
+        max-width: 450px;
+        margin: 0;
+        position: absolute;
+        top: 94%;
+        left: 25%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    
+    .footer3{
+        max-width: 420px;
+        margin: 0;
+        position: absolute;
+        top: 97%;
+        left: 25%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    
+    .footer4{
+        max-width: 200px;
+        margin: 0;
+        position: absolute;
+        top: 98.5%;
+        left: 25%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
 }
