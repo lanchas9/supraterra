@@ -367,7 +367,7 @@ body {
     }
 
     .letreroTerrenos{
-        width: 25%;
+        width: 20%;
         max-width: 400px;
         margin: 0;
         position: absolute;
@@ -389,10 +389,11 @@ body {
     }
 
     .footer2{
-        max-width: 450px;
+        
+        max-width: 430px;
         margin: 0;
         position: absolute;
-        top: 92%;
+        top: 91.5%;
         left: 25%;
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
@@ -400,7 +401,7 @@ body {
 
     
     .footer3{
-        max-width: 460px;
+        max-width: 430px;
         margin: 0;
         position: absolute;
         top: 95.5%;
@@ -411,7 +412,7 @@ body {
 
     
     .footer4{
-        max-width: 200px;
+        max-width: 150px;
         margin: 0;
         position: absolute;
         top: 97%;
