@@ -340,10 +340,11 @@
       }
   
       .imagenLogo{
+          width: 20%;
           max-width: 320px;
           position: absolute;
           top: 7%;
-          left: 13%;
+          left: 15%;
   
       }   
   
@@ -355,26 +356,29 @@
       }
             
       .botonRegistro{
+          width: 20%;
           max-width: 400px;
           margin: 0;
           position: absolute;
-          top: 48%;
+          top: 52%;
           left: 25%;
           -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
       }
   
       .letreroTerrenos{
+          width: 20%;
           max-width: 400px;
           margin: 0;
           position: absolute;
           top: 65%;
-          left: 28%;
+          left: 25%;
           -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
       }
   
       .footer{
+          width: 35%;
           max-width: 650px;
           margin: 0;
           position: absolute;
@@ -385,10 +389,11 @@
       }
   
       .footer2{
-          max-width: 450px;
+          
+          max-width: 430px;
           margin: 0;
           position: absolute;
-          top: 94%;
+          top: 91.5%;
           left: 25%;
           -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
@@ -396,10 +401,10 @@
   
       
       .footer3{
-          max-width: 420px;
+          max-width: 430px;
           margin: 0;
           position: absolute;
-          top: 97%;
+          top: 95.5%;
           left: 25%;
           -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
@@ -407,10 +412,10 @@
   
       
       .footer4{
-          max-width: 200px;
+          max-width: 150px;
           margin: 0;
           position: absolute;
-          top: 98.5%;
+          top: 97%;
           left: 25%;
           -ms-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
