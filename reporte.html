@@ -28,15 +28,47 @@
     async function fetchReportJSON() {
     const response = await fetch('https://mosaico.app:4000/supraterra/' + reporte);
     const tabledata = await response.json();
+    tabledata.message.forEach(element => {
+        element.Reenviar = '📩'
+    });
     return tabledata.message;
     }
 
     fetchReportJSON().then(tabledata => {
         var table = new Tabulator("#example-table", {
-        height:"800px",
-        layout:"fitColumns",
-        data:tabledata,
-        autoColumns:true
+            height:"800px",
+            layout:"fitColumns",
+            data:tabledata,
+            autoColumns:true,
+            autoColumnsDefinitions:function(definitions){
+            //definitions - array of column definition objects
+
+            definitions.forEach((column) => {
+                column.headerFilter = true; // add header filter to every column
+                column.hozAlign="center"
+            });
+            return definitions;
+            },
+            // rowClick:function(e, row){
+            // //e - the click event object
+            // //row - row component
+            // // reenviaMail(row.getCells()[1].getValue())
+            // console.log('renglon completo')
+            // }
+            cellClick:function(e, cell){
+                //e - the click event object
+                //cell - cell component
+                if (cell.getValue() == '📩'){
+                    let username = cell.getRow().getData().username
+                    if (confirm('Confirmas el reenvío del correo para: ' + username)) {
+                        // Send it!
+                            reenviaMail(username)
+                        } else {
+                        // Do nothing!
+                    }
+                    
+                }
+            }
         });
     });
 
@@ -44,6 +76,32 @@
         let nuevo = titulo.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ")
         
         return nuevo.charAt(0).toUpperCase() + nuevo.slice(1)
+    }
+
+    function reenviaMail(username){
+        const data = {
+            username : username
+        }
+        let url1 = 'https://mosaico.app:4000/supraterra/reenviaMailaUsuario'
+        let url2 = 'https://mosaico.app:4000/helloMySql'
+        fetch(url1, {
+        method: 'POST',
+        body: data
+        })
+        .then(function(response) {
+        if(response.ok) {
+            return response.text()
+        } else {
+            throw "Error en la llamada Ajax";
+        }
+
+        })
+        .then(function(texto) {
+            console.log(texto);
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
     }
 </script>
 </body>
