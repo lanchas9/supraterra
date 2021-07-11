@@ -91,18 +91,22 @@
             'Content-Type': 'application/json'
         },
         mode: 'cors', // no-cors, *cors, same-origin
-        body: data
+        body: JSON.stringify(data)
         })
         .then(function(response) {
         if(response.ok) {
-            return response.text()
+            return response.json()
         } else {
             throw "Error en la llamada Ajax";
         }
 
         })
-        .then(function(texto) {
-            console.log(texto);
+        .then(function(json) {
+            if(json.result == "True"){
+                alert("El reenvío se realizó con éxito");
+            }else{
+                alert("Error desconocido en el reenvío del mail");
+            }
         })
         .catch(function(err) {
             console.log(err);
