@@ -26,12 +26,23 @@
 
     fetchReportJSON()
     async function fetchReportJSON() {
-    const response = await fetch('https://mosaico.app:4000/supraterra/' + reporte);
-    const tabledata = await response.json();
-    tabledata.message.forEach(element => {
-        element.Reenviar = '📩'
-    });
-    return tabledata.message;
+        const response = await fetch('https://mosaico.app:4000/supraterra/' + reporte);
+        const tabledata = await response.json();
+        if (tabledata.result == 'True'){
+            if(reporte == 'reporteUsuariosRegistrados'){
+                tabledata.message.forEach(element => {
+                element.Reenviar = '📩'
+                });
+                return tabledata.message;
+            }else{
+                return tabledata.message;
+            }
+        }else{
+            let array = []
+            array.push({data: "No existen datos"})
+            return array
+            
+        }
     }
 
     fetchReportJSON().then(tabledata => {
