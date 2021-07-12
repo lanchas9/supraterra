@@ -8,17 +8,115 @@
     <link rel="stylesheet" href="./assets/css/reportes.css">
     <link rel="icon" type="image/jpg" href="/assets/img/favicon.jpg" />
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
+    <script>
+        async function compruebaUsuario(idQR){
+                const data = {
+                    idQR : idQR
+                }
+                let url1 = 'https://mosaico.app:4000/supraterra/existeUsuarioConQR'
+                const response = await fetch(url1, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
+                body: JSON.stringify(data)
+                })
+                
+                const dataFinal = await response.json();
+                let result = dataFinal.result
+                if (result == "True"){
+                    return dataFinal.message[0].username
+                }else{
+                    return ''
+                }
+            }
+    </script>
 </head>
 <body>        
     <img class="imagenLogo center" src="./assets/img/mobile/logo_expo.png" alt="" srcset="">
     <br>
-    <ol>
-        <li><a href="reporte.html?reporte=reporteUsuariosRegistrados">reporteUsuariosRegistrados</a></li>
-        <li><a href="reporte.html?reporte=reporteUsuariosConAccesos">reporteUsuariosConAccesos</a></li>
-        <li><a href="reporte.html?reporte=reporteTestQrExpositores">reporteTestQrExpositores</a></li>
-        <li><a href="reporte.html?reporte=reporteEscaneosDeExpositoresTodos">reporteEscaneosDeExpositoresTodos</a></li>
-        <li><a href="reporte.html?reporte=reporteEscaneosDeExpositoresPorDia">reporteEscaneosDeExpositoresPorDia</a></li>
-        <li><a href="reporte.html?reporte=reporteEscaneosDeExpositoresUnicos">reporteEscaneosDeExpositoresUnicos</a></li>
-    </ol>
+    <div id="cuerpo">
+        <script>
+            function setCookie(cname, cvalue, exdays) {
+                const d = new Date();
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                let expires = "expires="+d.toUTCString();
+                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            }
+
+            function getCookie(cname) {
+                let name = cname + "=";
+                let ca = document.cookie.split(';');
+                for(let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+
+            async function checkCookie() {
+                let idQR = getCookie("idQR");
+                if (idQR != "") {
+                    let resultado = await compruebaUsuario(idQR)
+                    if (resultado == 'info@theyellowhat.com'){
+                        //TRUE ponemos links
+                        creaLinks()
+                    }else{
+                        //FALSE borramos cookie
+                        setCookie("idQR", '', 60);
+                        checkCookie()
+                    }
+                } else {
+                    idQR = prompt("Ingresa la contraseña", "");
+                    if (idQR != "" && idQR != null) {
+                        let resultado = await compruebaUsuario(idQR)
+                        if (resultado == 'info@theyellowhat.com'){
+                            //TRUE guardamos QR y ponemos links
+                            setCookie("idQR", idQR, 60);
+                            creaLinks()
+                        }else{
+                            //FALSE pagina en blanco
+                            creaMensaje()
+                        }
+                    }else{
+                        //FALSE pagina en blanco
+                        creaMensaje()
+                    }
+                }
+            }
+            
+            function creaLinks(){
+                let nuevo = document.getElementById("cuerpo")
+                nuevo.innerHTML = `
+                <ol>
+                    <li><a href="reporte.html?reporte=reporteUsuariosRegistrados">reporteUsuariosRegistrados</a></li>
+                    <li><a href="reporte.html?reporte=reporteUsuariosConAccesos">reporteUsuariosConAccesos</a></li>
+                    <li><a href="reporte.html?reporte=reporteTestQrExpositores">reporteTestQrExpositores</a></li>
+                    <li><a href="reporte.html?reporte=reporteEscaneosDeExpositoresTodos">reporteEscaneosDeExpositoresTodos</a></li>
+                    <li><a href="reporte.html?reporte=reporteEscaneosDeExpositoresPorDia">reporteEscaneosDeExpositoresPorDia</a></li>
+                    <li><a href="reporte.html?reporte=reporteEscaneosDeExpositoresUnicos">reporteEscaneosDeExpositoresUnicos</a></li>
+                </ol>   
+                `;     
+            }
+            function creaMensaje(){
+                let nuevo = document.getElementById("cuerpo")
+                nuevo.innerHTML = `
+                    <h1>Area restringida con contraseña</h1>
+                `;     
+            }
+            (async() => {
+            console.log('before start');
+            await checkCookie();
+            console.log('after start');
+            })();
+        </script>
+        </div>
 </body>
 </html>
