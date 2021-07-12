@@ -14,6 +14,7 @@
 </head>
 <body>
     <h1 id="titulo" class="titulo">Titulo</h1>
+    <h2 id="numeroRenglones" class="titulo"></h2>
     <img class="imagenLogo center" src="./assets/img/mobile/logo_expo.png" alt="" srcset="">
     <br>
     <div id="example-table"></div>
@@ -29,14 +30,13 @@
         const response = await fetch('https://mosaico.app:4000/supraterra/' + reporte);
         const tabledata = await response.json();
         if (tabledata.result == 'True'){
-            if(reporte == 'reporteUsuariosRegistrados'){
+            if((reporte == 'reporteUsuariosRegistrados') || (reporte == 'reporteUsuariosRegistradosIncluidoDemo')){
                 tabledata.message.forEach(element => {
                 element.Reenviar = '📩'
+                element.Actualizar = '💾'
                 });
-                return tabledata.message;
-            }else{
-                return tabledata.message;
             }
+            return tabledata.message;
         }else{
             let array = []
             array.push({data: "No existen datos"})
@@ -57,6 +57,12 @@
             definitions.forEach((column) => {
                 column.headerFilter = true; // add header filter to every column
                 column.hozAlign="center"
+                if((reporte == 'reporteUsuariosRegistrados') || (reporte == 'reporteUsuariosRegistradosIncluidoDemo')){
+                    let columnasEditables = ['username', 'nombreUsuario', 'apellidoPaterno', 'apellidoMaterno', 'numeroCelular']
+                    if(columnasEditables.some(r=>columnasEditables.includes(column.title))){
+                        column.editor = true
+                    }
+                }
             });
             return definitions;
             },
@@ -69,6 +75,7 @@
             cellClick:function(e, cell){
                 //e - the click event object
                 //cell - cell component
+                console.log('cell clickeada')
                 if (cell.getValue() == '📩'){
                     let username = cell.getRow().getData().username
                     if (confirm('Confirmas el reenvío del correo para: ' + username)) {
@@ -77,16 +84,63 @@
                         } else {
                         // Do nothing!
                     }
-                    
+                }else if (cell.getValue() == '💾'){
+                    let username = cell.getRow().getData().username
+                    if (confirm('Confirmas que quieres actualizar los datos de: ' + username)) {
+                        // Send it!
+                            actualizaDB(cell.getRow().getData())
+                            console.log(cell.getRow().getData())
+                        } else {
+                        // Do nothing!
+                    }
                 }
-            }
+            },
+            cellEdited:function(cell){
+                //cell - cell component
+                //console.log(cell.getValue())
+            },
         });
+        var count = table.getDataCount();
+        const element = document.getElementById("numeroRenglones");
+        element.innerHTML = 'Número Renglones: ' + count
     });
 
     function dameTitulo(titulo){
         let nuevo = titulo.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ")
         
         return nuevo.charAt(0).toUpperCase() + nuevo.slice(1)
+    }
+
+    function actualizaDB(username){
+        const data = username
+        let url1 = 'https://mosaico.app:4000/supraterra/actualizaUsuario'
+        fetch(url1, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        mode: 'cors', // no-cors, *cors, same-origin
+        body: JSON.stringify(data)
+        })
+        .then(function(response) {
+        if(response.ok) {
+            return response.json()
+        } else {
+            throw "Error en la llamada Ajax";
+        }
+
+        })
+        .then(function(json) {
+            if(json.result == "True"){
+                alert('La actualización de: ' + username.username + 'se realizó con éxito');
+            }else{
+                alert("Error desconocido en la actualización");
+            }
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
     }
 
     function reenviaMail(username){
