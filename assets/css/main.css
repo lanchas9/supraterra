@@ -20,3 +20,11 @@ body {
     font-size: smaller;
     font-weight: bold;
 }
+
+body.custom.h-100 {
+    height: 100vh !important;
+}
+
+.qrscanner video {
+    width: 100%;
+} 

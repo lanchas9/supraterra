@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpg" href="./assets/img/favicon.jpg" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <title>EXPO SUPTRATERRA 2021 - Expositores</title>
+</head>
+
+<body class="d-flex flex-column h-100 custom">
+    <div class="px-1 py-5 my-1 text-center hero-container flex-shrink-0">
+        <img class="d-block mx-auto mb-1" src="./assets/img/mobile/logo_expo.png" alt="Supraterra">
+        <div class="main-form-container" id="mainFormContainer">
+            <p class=" fw-bold">Ingreso Desarrolladores Inmobiliarios</p>
+            <p class="text-muted">Por favor ingresa con el correo que te registraste con el personal de Supraterra</p>
+            <div class="container">
+                <form id="frmLogin" class="row justify-content-center g-3 needs-validation" novalidate>
+                    <div class="col-10 col-md-6 col-sm-8">
+                        <div class="form-floating mb-2">
+                            <input type="email" class="form-control" id="txtEmail" placeholder="name@example.com"
+                                required>
+                            <label for="txtEmail">Correo electr&oacute;nico</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" type="button" id="btnLogin">
+                            Enviar
+                        </button>
+                        <button class="visually-hidden" type="submit" id="btnSubmit">-</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <div class="visually-hidden qr-code-container" id="qrCodeContainer">
+            <p class=" fw-bold" id="lblExpoName"></p>
+            <p class="text-muted">Para registrar la visita de los asistentes, por favor escanea los c&oacute;digos QR
+                desde el dispositivo para que se registre en tu stand</p>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-10 col-md-8 col-lg-6">
+                        <div class="qrscanner" id="scanner"></div>
+                        <div class="form-floating mb-2">
+                            <input type="text" class="form-control" id="txtQRCode" placeholder="qrcode" required>
+                            <label for="txtQRCode">QR Code</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img class="d-block mx-auto mb-1" id="imgExpoLogo" src="" alt="">
+            <p class="text-muted" id="lblExpoName2"></p>
+            <p class="text-muted" id="lblExpoEmail"></p>
+            <div class="col-12">
+                <button class="btn btn-primary" type="button" id="btnLogout">
+                    Cerrar sesi&oacute;n
+                </button>
+            </div>
+        </div>
+    </div>
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted piePagina">CONOCE LA MEJOR OFERTA INMOBILIARIA DENTRO DE NUESTROS DESARROLLOS
+                <a class="centrado" href="https://supraterra.com.mx">supraterra.com.mx</a></span>
+        </div>
+    </footer>
+    <div class="modal fade" id="mdlLoginResult" tabindex="-1" aria-labelledby="lblModalTitle" aria-hidden="true"
+        data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lblModalTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="lblModalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="./assets/js/download.js"></script>
+    <script type="text/javascript" src="./assets/js/qrscanner/jsqrscanner.nocache.js"></script>
+    <script>
+
+        const url = 'https://mosaico.app:4000/supraterra/';
+        var mdlResult = new bootstrap.Modal(document.getElementById('mdlLoginResult'));
+        var jbScanner = null;
+        (function () {
+            'use strict'
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+
+            var currentUser = getExpositor();
+            if (currentUser == null) {
+                $('#mainFormContainer').removeClass('visually-hidden');
+                $('#qrCodeContainer').addClass('visually-hidden');
+            } else {
+                $('#mainFormContainer').addClass('visually-hidden');
+                $('#qrCodeContainer').removeClass('visually-hidden');
+                setExpositorTemplate();
+            }
+        })()
+
+        $('#btnLogin').on('click', function () {
+            var $this = $(this);
+            $this.prop('disabled', true)
+            $this.html("<span class='spinner-grow spinner-grow-sm' role='status' aria-hidden='true'></span> Validando...");
+            var $mainForm = $('#frmLogin');
+            var data = {
+                username: $('#txtEmail').val() || '',
+            }
+            if (!$mainForm[0].checkValidity()) {
+                console.log('invalid form');
+                $this.html("Enviar");
+                $this.prop('disabled', false)
+                $mainForm.find(':submit').click();
+            } else {
+                console.log('submitting...')
+                $.ajax({
+                    url: url + 'existeExpositorConCorreo',
+                    headers: { "Content-Type": "application/json" },
+                    type: 'POST',
+                    processData: false,
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (data) {
+                        console.log(data)
+                        if (data.result == 'True') {
+                            var result = data.message[0];
+                            saveExpositor(result);
+                            setExpositorTemplate();
+                        } else {
+                            $('#lblModalTitle').html('Ingreso Expositores');
+                            $('#lblModalMessage').html('El correo proporcionado no está registrado');
+                            mdlResult.show();
+                        }
+
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus)
+                        console.log(jqXHR)
+                    },
+                    complete: function (data) {
+                        $this.html("Enviar");
+                        $this.prop('disabled', false)
+                        $mainForm[0].reset();
+                    }
+                });
+            }
+        });
+        $('#btnLogout').on('click', function () {
+            logout();
+        });
+        function saveExpositor(data) {
+            localStorage.setItem("expositor", JSON.stringify(data));
+        }
+
+        function resetExpositor(data) {
+            localStorage.removeItem("expositor");
+            localStorage.removeItem("lastQR");
+        }
+
+        function getExpositor() {
+            return JSON.parse(localStorage.getItem("expositor"));
+        }
+
+        function saveLastQR(qrValue) {
+            localStorage.setItem("lastQR", qrValue);
+        }
+
+        function setExpositorTemplate() {
+            var expositor = getExpositor();
+            $('#mainFormContainer').addClass('visually-hidden');
+            $('#qrCodeContainer').removeClass('visually-hidden');
+            $('#lblExpoName').html(expositor.nombreVendedor);
+            $('#lblExpoName2').html(expositor.nombreVendedor);
+            $('#lblExpoEmail').html(expositor.correoElectronicoVentas);
+            $("#imgExpoLogo").attr("src", expositor.ligaPngLogotipo);
+            if(jbScanner) {
+                var scannerParentElement = document.getElementById("scanner");                
+                if (scannerParentElement) {
+                    jbScanner.appendTo(scannerParentElement);
+                    jbScanner.resumeScanning();
+                }
+            }
+        }
+
+        function logout() {
+            resetExpositor();
+            $('#mainFormContainer').removeClass('visually-hidden');
+            $('#qrCodeContainer').addClass('visually-hidden');
+            $('#lblExpoName').html('');
+            $('#lblExpoName2').html('');
+            $('#lblExpoEmail').html('');
+            $("#imgExpoLogo").attr("src", '');
+            if(jbScanner) {
+                jbScanner.stopScanning();
+                var scannerParentElement = document.getElementById("scanner");                
+                if (scannerParentElement) {
+                    jbScanner.removeFrom(scannerParentElement);
+                }
+            }
+        }
+
+        function saveExpoScanner (scannedText) {
+            var expositor = getExpositor();
+            var lastQR = localStorage.getItem("lastQR");
+            if(lastQR != scannedText) {
+                if(expositor) {
+                    $.ajax({
+                        url: url + 'guardaEscaneoExpositor',
+                        headers: { "Content-Type": "application/json" },
+                        type: 'POST',
+                        processData: false,
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            idExpositores: expositor.idExpositores,
+                            idQR: scannedText
+                        }),
+                        success: function (data) {
+                            console.log(data)
+                            if(data.statusCode == '200') {
+                                $('#lblModalMessage').html('Participante registrado correctamente en el stand');
+                            } else {
+                                $('#lblModalMessage').html('El código QR no existe');
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus)
+                            console.log(jqXHR)
+                            $('#lblModalMessage').html('Error al consumir el servicio de registro');
+                        },
+                        complete: function (data) {
+                            $('#lblModalTitle').html('Registro de Participante');
+                            localStorage.setItem("lastQR", scannedText);
+                            mdlResult.show();
+                        }
+                    });
+                }
+            } else {
+                // $('#lblModalTitle').html('Registro de Participante');
+                // $('#lblModalMessage').html('El código QR ya fue registrado previamente');
+                // mdlResult.show();
+            }
+            
+        }
+
+        function onQRCodeScanned(scannedText) {
+            var scannedTextMemo = document.getElementById("txtQRCode");
+            if (scannedTextMemo) {
+                scannedTextMemo.value = scannedText;
+                saveExpoScanner(scannedText);
+            }
+        }
+
+        //funtion returning a promise with a video stream
+        function provideVideoQQ() {
+            return navigator.mediaDevices.enumerateDevices()
+                .then(function (devices) {
+                    var exCameras = [];
+                    devices.forEach(function (device) {
+                        if (device.kind === 'videoinput') {
+                            exCameras.push(device.deviceId)
+                        }
+                    });
+                    return Promise.resolve(exCameras);
+                }).then(function (ids) {
+                    if (ids.length === 0) {
+                        return Promise.reject('Could not find a webcam');
+                    }
+                    return navigator.mediaDevices.getUserMedia({
+                        video: {
+                            'optional': [{
+                                'sourceId': ids.length === 1 ? ids[0] : ids[1]//this way QQ browser opens the rear camera
+                            }]
+                        }
+                    });
+                });
+        }
+
+        //this function will be called when JsQRScanner is ready to use
+        function JsQRScannerReady() {
+            //create a new scanner passing to it a callback function that will be invoked when
+            //the scanner succesfully scan a QR code
+            jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ);
+            //reduce the size of analyzed images to increase performance on mobile devices
+            jbScanner.setSnapImageMaxSize(150);
+            var scannerParentElement = document.getElementById("scanner");
+            var currentUser = getExpositor();
+            if (currentUser != null) {
+                if (scannerParentElement) {
+                    //append the jbScanner to an existing DOM element
+                    jbScanner.appendTo(scannerParentElement);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
