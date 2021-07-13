@@ -99,6 +99,10 @@
         const url = 'https://mosaico.app:4000/supraterra/';
         var mdlResult = new bootstrap.Modal(document.getElementById('mdlLoginResult'));
         var jbScanner = null;
+        var formMode = localStorage.getItem("formMode");
+        if(formMode == null) {
+            localStorage.setItem("formMode", 1);
+        }
         (function () {
             'use strict'
             // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -209,6 +213,7 @@
                     jbScanner.resumeScanning();
                 }
             }
+            localStorage.setItem("formMode", 2);
         }
 
         function logout() {
@@ -219,6 +224,7 @@
             $('#lblExpoName2').html('');
             $('#lblExpoEmail').html('');
             $("#imgExpoLogo").attr("src", '');
+            localStorage.setItem("formMode", 1);
             if(jbScanner) {
                 jbScanner.stopScanning();
                 var scannerParentElement = document.getElementById("scanner");                
@@ -231,7 +237,7 @@
         function saveExpoScanner (scannedText) {
             var expositor = getExpositor();
             var lastQR = localStorage.getItem("lastQR");
-            if(lastQR != scannedText) {
+            //if(lastQR != scannedText) {
                 if(expositor) {
                     $.ajax({
                         url: url + 'guardaEscaneoExpositor',
@@ -263,11 +269,11 @@
                         }
                     });
                 }
-            } else {
+            //} else {
                 // $('#lblModalTitle').html('Registro de Participante');
                 // $('#lblModalMessage').html('El código QR ya fue registrado previamente');
                 // mdlResult.show();
-            }
+            //}
             
         }
 
@@ -275,6 +281,7 @@
             var scannedTextMemo = document.getElementById("txtQRCode");
             if (scannedTextMemo) {
                 scannedTextMemo.value = scannedText;
+                jbScanner.stopScanning();
                 saveExpoScanner(scannedText);
             }
         }
@@ -320,6 +327,14 @@
                 }
             }
         }
+    
+        var mdlResult2 = document.getElementById('mdlLoginResult')
+        mdlResult2.addEventListener('hidden.bs.modal', function (event) {
+            var status = localStorage.getItem("formMode");
+            if(status == 2) {
+                jbScanner.resumeScanning();
+            }
+        })
     </script>
 </body>
 
