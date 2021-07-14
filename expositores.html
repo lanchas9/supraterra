@@ -46,11 +46,8 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-10 col-md-8 col-lg-6">
-                        <select class="form-select" id="selCameras" aria-label="Cameras">
-                            <option selected>Select default camera</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <select class="form-select mb-2" id="selCameras" aria-label="Cameras">
+                            
                           </select>
                     </div>
                 </div>
@@ -317,7 +314,7 @@
                         $('#selCameras')
                             .append($("<option></option>")
                             .attr("value", value)
-                            .text("Cámara " + (value + 1))); 
+                            .text("Cámara " + (index + 1))); 
                     });
                     return navigator.mediaDevices.getUserMedia({
                         video: {
