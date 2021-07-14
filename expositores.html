@@ -46,6 +46,16 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-10 col-md-8 col-lg-6">
+                        <select class="form-select" aria-label="Cameras">
+                            <option selected>Select default camera</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                          </select>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-10 col-md-8 col-lg-6">
                         <div class="qrscanner" id="scanner"></div>
                         <div class="form-floating mb-2">
                             <input type="text" class="form-control" id="txtQRCode" placeholder="qrcode" required>
@@ -154,6 +164,7 @@
                     contentType: "application/json",
                     data: JSON.stringify(data),
                     success: function (data) {
+                        console.log("Expo login")
                         console.log(data)
                         if (data.result == 'True') {
                             var result = data.message[0];
@@ -164,7 +175,6 @@
                             $('#lblModalMessage').html('El correo proporcionado no está registrado');
                             mdlResult.show();
                         }
-
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log(textStatus)
@@ -250,6 +260,7 @@
                             idQR: scannedText
                         }),
                         success: function (data) {
+                            console.log("save scan")
                             console.log(data)
                             if(data.statusCode == '200') {
                                 $('#lblModalMessage').html('Participante registrado correctamente en el stand');
@@ -279,6 +290,7 @@
 
         function onQRCodeScanned(scannedText) {
             var scannedTextMemo = document.getElementById("txtQRCode");
+            console.log("qr detected")
             if (scannedTextMemo) {
                 scannedTextMemo.value = scannedText;
                 jbScanner.stopScanning();
@@ -306,7 +318,7 @@
                     return navigator.mediaDevices.getUserMedia({
                         video: {
                             'optional': [{
-                                'sourceId': ids.length > 1 ? ids[1] : ids[0]//this way QQ browser opens the rear camera
+                                'sourceId': ids.length == 1 ? ids[0] : ids[1]//this way QQ browser opens the rear camera
                             }]
                         }
                     });
