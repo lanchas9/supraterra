@@ -27,4 +27,5 @@ body.custom.h-100 {
 
 .qrscanner video {
     width: 100%;
+    max-height: 300px;
 } 
