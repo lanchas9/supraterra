@@ -46,7 +46,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-10 col-md-8 col-lg-6">
-                        <select class="form-select" aria-label="Cameras">
+                        <select class="form-select" id="selCameras" aria-label="Cameras">
                             <option selected>Select default camera</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
@@ -313,8 +313,12 @@
                     if (ids.length === 0) {
                         return Promise.reject('Could not find a webcam');
                     }
-                    console.log("cameras")
-                    console.log(ids);
+                    $.each(ids, function( index, value ) {
+                        $('#selCameras')
+                            .append($("<option></option>")
+                            .attr("value", value)
+                            .text("Cámara " + (value + 1))); 
+                    });
                     return navigator.mediaDevices.getUserMedia({
                         video: {
                             'optional': [{
