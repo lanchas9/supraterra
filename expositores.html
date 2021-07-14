@@ -306,7 +306,7 @@
                     return navigator.mediaDevices.getUserMedia({
                         video: {
                             'optional': [{
-                                'sourceId': ids.length === 1 ? ids[0] : ids[0]//this way QQ browser opens the rear camera
+                                'sourceId': ids.length > 1 ? ids[1] : ids[0]//this way QQ browser opens the rear camera
                             }]
                         }
                     });
