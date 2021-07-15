@@ -297,22 +297,24 @@
 
         //funtion returning a promise with a video stream
         function provideVideoQQ(selDeviceId) {
+            console.log("current id " + selDeviceId);
             return navigator.mediaDevices.enumerateDevices()
                 .then(function (devices) {
                     var exCameras = [];
                     console.log("devices")
                     console.log(devices);
-                    $('#selCameras')
-                        .find('option')
-                        .remove()
-                        .end()
+                    var hasOptions = $('#selCameras')[0].length;
+                    console.log("has options " + hasOptions);
                     devices.forEach(function (device) {
                         if (device.kind === 'videoinput') {
-                            exCameras.push(device.deviceId)
-                            $('#selCameras')
-                            .append($("<option></option>")
-                            .attr("value", device.deviceId)
-                            .text(device.label)); 
+                            exCameras.push(device.deviceId);
+                            if(hasOptions == 0) {
+                                $('#selCameras')
+                                .append($("<option></option>")
+                                .attr("value", device.deviceId)
+                                .text(device.label)); 
+                            }
+                            
                         }
                     });
                     return Promise.resolve(exCameras);
@@ -320,6 +322,7 @@
                     if (ids.length === 0) {
                         return Promise.reject('Could not find a webcam');
                     }
+                    console.log("selecting id " + selDeviceId);
                     var currentDeviceId = ids[0];
                     if(selDeviceId != null) {
                         currentDeviceId = selDeviceId;
@@ -370,16 +373,17 @@
             var scannerParentElement = document.getElementById("scanner");
             console.log("Remove element...");
             jbScanner.removeFrom(scannerParentElement);
-            /*jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ(this.value));
+            console.log("Create new element...");
+            jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ(this.value));
             jbScanner.setSnapImageMaxSize(150);
             var currentUser = getExpositor();
             if (currentUser != null) {
                 if (scannerParentElement) {
                     jbScanner.appendTo(scannerParentElement);
                 }
-            }*/
+            }
         });
-        console.log("v2.0.1")
+        console.log("v2.0.2")
     </script>
 </body>
 
