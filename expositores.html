@@ -44,13 +44,13 @@
             <p class="text-muted">Para registrar la visita de los asistentes, por favor escanea los c&oacute;digos QR
                 desde el dispositivo para que se registre en tu stand</p>
             <div class="container">
-                <div class="row justify-content-center">
+                <!-- <div class="row justify-content-center">
                     <div class="col-10 col-md-8 col-lg-6">
                         <select class="form-select mb-2" id="selCameras" aria-label="Cameras">
                             
                           </select>
                     </div>
-                </div>
+                </div> -->
                 <div class="row justify-content-center">
                     <div class="col-10 col-md-8 col-lg-6">
                         <div class="qrscanner" id="scanner"></div>
@@ -297,24 +297,23 @@
 
         //funtion returning a promise with a video stream
         function provideVideoQQ(selDeviceId) {
-            console.log("current id " + selDeviceId);
+            // console.log("current id " + selDeviceId);
             return navigator.mediaDevices.enumerateDevices()
                 .then(function (devices) {
                     var exCameras = [];
-                    console.log("devices")
+                    /*console.log("devices")
                     console.log(devices);
                     var hasOptions = $('#selCameras')[0].length;
-                    console.log("has options " + hasOptions);
+                    console.log("has options " + hasOptions);*/
                     devices.forEach(function (device) {
                         if (device.kind === 'videoinput') {
                             exCameras.push(device.deviceId);
-                            if(hasOptions == 0) {
+                            /*if(hasOptions == 0) {
                                 $('#selCameras')
                                 .append($("<option></option>")
                                 .attr("value", device.deviceId)
                                 .text(device.label)); 
-                            }
-                            
+                            }*/
                         }
                     });
                     return Promise.resolve(exCameras);
@@ -322,17 +321,17 @@
                     if (ids.length === 0) {
                         return Promise.reject('Could not find a webcam');
                     }
-                    console.log("selecting id " + selDeviceId);
+                    /*console.log("selecting id " + selDeviceId);
                     var currentDeviceId = ids[0];
                     if(selDeviceId != null) {
                         currentDeviceId = selDeviceId;
-                    }
+                    }*/
                     return navigator.mediaDevices.getUserMedia({
                         audio: false, 
                         video: {
-                            deviceId: currentDeviceId
+                            //deviceId: currentDeviceId
                             //deviceId: ids.length == 1 ? ids[0] : ids[1]
-                            //facingMode: "environment"
+                            facingMode: "environment"
                             /*'optional': [{
                                 'sourceId': ids.length == 1 ? ids[0] : ids[1]//this way QQ browser opens the rear camera
                             }]*/
@@ -368,7 +367,7 @@
 
         $( "#selCameras" ).change(function() {
             console.log("Changing camera to: " + this.value);
-            console.log("Stop scanning...");
+            /*console.log("Stop scanning...");
             jbScanner.stopScanning();
             var scannerParentElement = document.getElementById("scanner");
             console.log("Remove element...");
@@ -382,9 +381,9 @@
                 if (scannerParentElement) {
                     jbScanner.appendTo(scannerParentElement);
                 }
-            }
+            }*/
         });
-        console.log("v2.0.3")
+        console.log("v2.0.4")
     </script>
 </body>
 
