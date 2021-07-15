@@ -374,6 +374,7 @@
             console.log("Remove element...");
             jbScanner.removeFrom(scannerParentElement);
             console.log("Create new element...");
+            jbScanner = null;
             jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ(this.value));
             jbScanner.setSnapImageMaxSize(150);
             var currentUser = getExpositor();
@@ -383,7 +384,7 @@
                 }
             }
         });
-        console.log("v2.0.2")
+        console.log("v2.0.3")
     </script>
 </body>
 
