@@ -302,6 +302,10 @@
                     var exCameras = [];
                     console.log("devices")
                     console.log(devices);
+                    $('#selCameras')
+                        .find('option')
+                        .remove()
+                        .end()
                     devices.forEach(function (device) {
                         if (device.kind === 'videoinput') {
                             exCameras.push(device.deviceId)
@@ -360,20 +364,22 @@
         })
 
         $( "#selCameras" ).change(function() {
-            console.log("change camera " + this.value);
+            console.log("Changing camera to: " + this.value);
+            console.log("Stop scanning...");
             jbScanner.stopScanning();
             var scannerParentElement = document.getElementById("scanner");
+            console.log("Remove element...");
             jbScanner.removeFrom(scannerParentElement);
-            jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ(this.value));
+            /*jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ(this.value));
             jbScanner.setSnapImageMaxSize(150);
             var currentUser = getExpositor();
             if (currentUser != null) {
                 if (scannerParentElement) {
                     jbScanner.appendTo(scannerParentElement);
                 }
-            }
+            }*/
         });
-        console.log("v2.0.0")
+        console.log("v2.0.1")
     </script>
 </body>
 
