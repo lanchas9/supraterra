@@ -2,10 +2,10 @@
     "version": "0.1.0",
     "configurations": [
         {
-            "name": "Launch Reportes",
+            "name": "Launch welcome",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:5500/menu_reporte.html",
+            "url": "http://localhost:5500/welcome.html",
             "webRoot": "${workspaceFolder}/"
         },
         {

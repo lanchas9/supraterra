@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXPO SUPTRATERRA 2021</title>
+    <link rel="stylesheet" href="./assets/css/index2.css">
+    <link rel="icon" type="image/jpg" href="./assets/img/favicon.jpg" />
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+    <div id="bienvenida" onclick="resetLectorQR()">
+        <header class="titulo">
+            <img class="imagenLogo redBorder" src="/assets/img/semaforo/Inicio/Logo.png" alt="" srcset="">
+            <div class="divTitulo redBorder"></div> 
+            <img class="imagenFechas redBorder" src="/assets/img/semaforo/Inicio/Fechas.png" alt="" srcset="">
+            <div class="divTitulo2"></div>
+        </header>
+        <nav class="flex">
+                <div id="ladosQR" class="ladosQR"></div>
+                <div id="centroQR" class="centroQR"></div>
+                    <img id="codigoQR" class="codigoQR" src="/assets/img/semaforo/Inicio/qr-code.png" alt="" srcset="">
+                <div class="ladosQR"></div>
+                
+        </nav>
+        <section class="horizontal">
+            <img class="footer" src="/assets/img/finales/mobile/desarrollos.png" alt="" srcset="">
+            <img class="footer2" src="/assets/img/finales/mobile/Conoce_la_mejor_oferta.png" alt="" srcset="">
+            <img class="footer3" src="/assets/img/finales/mobile/Linea.png" alt="" srcset="">
+            <img class="footer4" src="/assets/img/finales/mobile/site.png" alt="" srcset="">
+        </section>       
+    </div>
+    <div id="verde" class="resultado" onclick="inicio()">
+        <img class="background" src="assets/img/semaforo/Verde/verde_back.jpg" alt="" srcset="">
+        <img class="pleca" src="assets/img/semaforo/Verde/pleca.png" alt="" srcset="">
+        <img class="plecaLetrero" src="assets/img/semaforo/Verde/Te_damos_la_bienvenida.png" alt="" srcset="">
+        <img class="semaforo"src="assets/img/semaforo/Verde/semaforo_verde.png" alt="" srcset="">
+        <div class="datosVisitante">
+            <p>
+                <h1 id="datosVisitanteNombre">EMILIO JOSE SAN MIGUEL VILLANUEVA</h2>
+                <h2>
+                    <small id="datosVisitanteTelefono">7771201885</small><br>
+                    <small id="datosVisitanteCorreo">nombre@visitante.com</small>
+                </h2>
+            </p>
+        </div>
+        <img class="semaforoLogo" src="assets/img/semaforo/Verde/Logo.png" alt="" srcset="">
+    </div> 
+    <div id="rojo" class="resultado rojo" onclick="inicio()">
+        <img class="background" src="assets/img/semaforo/Verde/verde_back.jpg" alt="" srcset="">
+        <img class="pleca" src="assets/img/semaforo/Verde/pleca.png" alt="" srcset="">
+        <img class="plecaLetreroSinAcceso" src="assets/img/semaforo/Rojo/Sin_acceso.png" alt="" srcset="">
+        <img class="semaforo" src="assets/img/semaforo/Rojo/semaforo_rojo.png" alt="" srcset="">
+        <img class="semaforoLogoSinAcceso" src="assets/img/semaforo/Verde/Logo.png" alt="" srcset="">
+    </div> 
+    <script>
+        let final = ''
+        document.getElementById("verde").style.display = "none"
+        document.getElementById("rojo").style.display = "none"
+
+        document.addEventListener("keypress", function(event) {
+            let eval = event.keyCode
+            if (eval == 45){
+                final = final + String.fromCharCode(eval);
+            }else if((eval>=97) && (eval<=102)){
+                final = final + String.fromCharCode(eval);
+            }else if((eval>=45) && (eval<=57)){
+                final = final + String.fromCharCode(eval);
+            }else if(eval == 13){
+                if(final.length == 36){
+                    dameUsuario(final)
+                }else{
+                    final = ''
+                }
+            }else if(final.length > 36){
+                    final = ''
+            }
+            
+            // let contador = final.length
+            // console.log({final})
+            // console.log({contador})
+        });
+
+        function dameUsuario(idQR){
+            const data = {
+                idQR: idQR
+            }
+            let url1 = 'https://mosaico.app:4000/supraterra/guardaIngreso'
+            fetch(url1, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            mode: 'cors', // no-cors, *cors, same-origin
+            body: JSON.stringify(data)
+            })
+            .then(function(response) {
+            if(response.ok) {
+                return response.json()
+            } else {
+                final = ''
+                throw "Error en la llamada Ajax";
+                
+            }
+
+            })
+            .then(function(json) {
+                document.getElementById("bienvenida").style.display = "none"
+                if(json.result == "True"){
+
+                    document.getElementById("verde").style.display = "flex"
+                    document.getElementById("datosVisitanteNombre").innerHTML = json.message.nombreUsuario + ' ' + json.message.apellidoPaterno + ' ' + json.message.apellidoMaterno
+                    document.getElementById("datosVisitanteTelefono").innerHTML = json.message.numeroCelular
+                    document.getElementById("datosVisitanteCorreo").innerHTML = json.message.username
+
+                }else{
+                    document.getElementById("rojo").style.display = "flex"
+                }
+                final = ''
+            })
+            .catch(function(err) {
+                console.log(err);
+                final = ''
+            });
+        }
+
+        function inicio(){
+            document.getElementById("verde").style.display = "none"
+            document.getElementById("rojo").style.display = "none"
+            document.getElementById("bienvenida").style.display = ""
+        }
+
+        function resetLectorQR(){
+            final = ''
+        }
+    </script>
+</body>
+</html>
