@@ -237,3 +237,24 @@ body {
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
     }
+
+    .semaforoLoading{
+        width: 100%;
+        margin: 0;
+        position: absolute;
+        top: 45%;
+        left: 54%;
+        object-fit: scale-down;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .plecaLetreroValidando{
+        width: 100%;
+        margin: 0;
+        position: absolute;
+        top: -65px;
+        object-fit: none;
+        /* -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%); */
+    }

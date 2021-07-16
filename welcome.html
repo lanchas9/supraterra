@@ -23,7 +23,6 @@
                 <div id="centroQR" class="centroQR"></div>
                     <img id="codigoQR" class="codigoQR" src="/assets/img/semaforo/Inicio/qr-code.png" alt="" srcset="">
                 <div class="ladosQR"></div>
-                
         </nav>
         <section class="horizontal">
             <img class="footer" src="/assets/img/finales/mobile/desarrollos.png" alt="" srcset="">
@@ -35,8 +34,8 @@
     <div id="verde" class="resultado" onclick="inicio()">
         <img class="background" src="assets/img/semaforo/Verde/verde_back.jpg" alt="" srcset="">
         <img class="pleca" src="assets/img/semaforo/Verde/pleca.png" alt="" srcset="">
-        <img class="plecaLetrero" src="assets/img/semaforo/Verde/Te_damos_la_bienvenida.png" alt="" srcset="">
-        <img class="semaforo"src="assets/img/semaforo/Verde/semaforo_verde.png" alt="" srcset="">
+        <img id="plecaVerde" class="plecaLetrero" src="assets/img/semaforo/Verde/Te_damos_la_bienvenida.png" alt="" srcset="">
+        <img id="semaforoVerde" class="semaforo"src="assets/img/semaforo/Verde/semaforo_verde.png" alt="" srcset="">
         <div class="datosVisitante">
             <p>
                 <h1 id="datosVisitanteNombre">EMILIO JOSE SAN MIGUEL VILLANUEVA</h2>
@@ -52,16 +51,46 @@
         <img class="background" src="assets/img/semaforo/Verde/verde_back.jpg" alt="" srcset="">
         <img class="pleca" src="assets/img/semaforo/Verde/pleca.png" alt="" srcset="">
         <img class="plecaLetreroSinAcceso" src="assets/img/semaforo/Rojo/Sin_acceso.png" alt="" srcset="">
-        <img class="semaforo" src="assets/img/semaforo/Rojo/semaforo_rojo.png" alt="" srcset="">
+        <img id="semaforoRojo" class="semaforo" src="assets/img/semaforo/Rojo/semaforo_rojo.png" alt="" srcset="">
+        <img class="semaforoLogoSinAcceso" src="assets/img/semaforo/Verde/Logo.png" alt="" srcset="">
+    </div> 
+    <div id="leyendoQR" class="resultado rojo" onclick="inicio()">
+        <img class="background" src="assets/img/semaforo/Verde/verde_back.jpg" alt="" srcset="">
+        <img class="pleca" src="assets/img/semaforo/Verde/pleca.png" alt="" srcset="">
+        <img id="plecaRojoLeyendo" class="plecaLetreroValidando" src="assets/img/semaforo/Inicio/leyendoQR.png">
+        <img id="semaforoLoading2" class="semaforoLoading" src="assets/img/semaforo/Inicio/loading.gif" alt="" srcset="">
         <img class="semaforoLogoSinAcceso" src="assets/img/semaforo/Verde/Logo.png" alt="" srcset="">
     </div> 
     <script>
         let final = ''
-        document.getElementById("verde").style.display = "none"
-        document.getElementById("rojo").style.display = "none"
+        divOnTop('bienvenida')
+
+        const largoQR = 36
+
+        function divOnTop(div){
+            document.getElementById("bienvenida").style.display = "none"
+            document.getElementById("verde").style.display = "none"
+            document.getElementById("rojo").style.display = "none"
+            document.getElementById("leyendoQR").style.display = "none"
+            document.getElementById(div).style.display = ""
+        }
 
         document.addEventListener("keypress", function(event) {
+            
             let eval = event.keyCode
+            // console.log('keyCode=' + eval)
+
+            if(final.length == 0){
+                divOnTop('leyendoQR')
+                // document.getElementById("semaforoVerde").style.display = "none"
+                // document.getElementById("semaforoRojo").style.display = "none"
+                // document.getElementById("semaforoLoading1").style.display = ""
+                // document.getElementById("semaforoLoading2").style.display = ""
+                // document.getElementById("datosVisitanteNombre").innerHTML = ""
+                // document.getElementById("datosVisitanteTelefono").innerHTML = ""
+                // document.getElementById("datosVisitanteCorreo").innerHTML = ""
+            }
+
             if (eval == 45){
                 final = final + String.fromCharCode(eval);
             }else if((eval>=97) && (eval<=102)){
@@ -69,18 +98,28 @@
             }else if((eval>=45) && (eval<=57)){
                 final = final + String.fromCharCode(eval);
             }else if(eval == 13){
-                if(final.length == 36){
+                if(final.length == largoQR){
                     dameUsuario(final)
                 }else{
-                    final = ''
+                    divOnTop('rojo')
+                    // document.getElementById("rojo").style.display = "flex"
+                    // document.getElementById("datosVisitanteNombre").innerHTML = ""
+                    // document.getElementById("datosVisitanteTelefono").innerHTML = ""
+                    // document.getElementById("datosVisitanteCorreo").innerHTML = ""
+
+                    // document.getElementById("semaforoVerde").style.display = ""
+                    // document.getElementById("semaforoRojo").style.display = ""
+                    // document.getElementById("semaforoLoading1").style.display = "none"
+                    // document.getElementById("semaforoLoading2").style.display = "none"
                 }
-            }else if(final.length > 36){
-                    final = ''
+                final = ''
             }
+            // else if(final.length > largoQR){
+            //         final = ''
+            // } 
             
             // let contador = final.length
-            // console.log({final})
-            // console.log({contador})
+            // console.log('Index' + contador + '.-' + final)
         });
 
         function dameUsuario(idQR){
@@ -109,32 +148,86 @@
             })
             .then(function(json) {
                 document.getElementById("bienvenida").style.display = "none"
+                let resultadoVerificacionAPI = json.result
+                console.log({resultadoVerificacionAPI})
                 if(json.result == "True"){
 
-                    document.getElementById("verde").style.display = "flex"
+                    divOnTop('verde')
+                    // document.getElementById("verde").style.display = "flex"
+                    // document.getElementById("rojo").style.display = "none"
                     document.getElementById("datosVisitanteNombre").innerHTML = json.message.nombreUsuario + ' ' + json.message.apellidoPaterno + ' ' + json.message.apellidoMaterno
                     document.getElementById("datosVisitanteTelefono").innerHTML = json.message.numeroCelular
                     document.getElementById("datosVisitanteCorreo").innerHTML = json.message.username
 
+                    // document.getElementById("semaforoVerde").style.display = ""
+                    // document.getElementById("semaforoRojo").style.display = ""
+                    // document.getElementById("semaforoLoading1").style.display = "none"
+                    // document.getElementById("semaforoLoading2").style.display = "none"
                 }else{
-                    document.getElementById("rojo").style.display = "flex"
+                    divOnTop('rojo')
+                    // document.getElementById("rojo").style.display = "flex"
+                    // document.getElementById("verde").style.display = "none"
+                    // document.getElementById("datosVisitanteNombre").innerHTML = ""
+                    // document.getElementById("datosVisitanteTelefono").innerHTML = ""
+                    // document.getElementById("datosVisitanteCorreo").innerHTML = ""
+
+                    // document.getElementById("semaforoVerde").style.display = ""
+                    // document.getElementById("semaforoRojo").style.display = ""
+                    // document.getElementById("semaforoLoading1").style.display = "none"
+                    // document.getElementById("semaforoLoading2").style.display = "none"
                 }
                 final = ''
             })
             .catch(function(err) {
-                console.log(err);
+                console.log('Err' + err);
                 final = ''
             });
         }
 
         function inicio(){
-            document.getElementById("verde").style.display = "none"
-            document.getElementById("rojo").style.display = "none"
-            document.getElementById("bienvenida").style.display = ""
+            divOnTop('bienvenida')
         }
 
         function resetLectorQR(){
             final = ''
+        }
+
+        function simulaEntradaLectorQR(index, idRandom){
+            let idQRArray = [
+            'a5388cd0-243e-5d05-997a-ddccc785ed6d',
+            'e6989b7a-9971-5948-89c8-d15bb03dd97b',
+            '7d9a527e-5d68-5449-9d3b-bbb66e73e298',
+            '41ef4216-eb7b-5e10-9f9b-96cd84a30a78',
+            'ef2ce3d9-9ba2-5a3c-9866-ba77cd72d7fe',
+            '5d8bf9b5-ad0d-5a68-a792-2c510a4a995c',
+            '8c638cfa-a802-53b1-96ce-f41165fb10d6',
+            '6de3b580-d587-56dd-aaed-9b159c95ab92',
+            '5bc2ff98-03d5-5570-861b-dbc3c1be1b84',
+            '4e699745-4658-5a1d-9b3a-68b09d1dc29d',
+            '35bf7923-94e0-5c2b-8230-f3155a3299ed',
+            '390ee8e5-a1b8-5ee7-b48b-7142d336b5ed',
+            'b3f5e1ba-db96-5da5-8a5f-ecc56bfe6a81',
+            '324ef043-5a2f-5e43-ab3b-2b6272312d7c',
+            'fbcb369e-5ac7-5dc2-99b8-0b2df16cebc8']
+            let idQR = idQRArray[idRandom]
+            
+            if (index==36){
+                document.dispatchEvent(new KeyboardEvent('keypress', {'keyCode':13,} ));
+            }
+            else if(index<=35) {
+                document.dispatchEvent(new KeyboardEvent('keypress', {'keyCode':idQR.charCodeAt(index),} ));
+            }
+        }
+
+        function entrada(){
+            let delay = 100
+            let idRandom = Math.floor(Math.random() * 15);
+            console.log({idRandom})
+            for(let index=0; index <= 36; index++){
+                let timeout = delay*(index+1)
+                // console.log({timeout})
+                setTimeout(function(){simulaEntradaLectorQR(index,idRandom)}, timeout); 
+            }
         }
     </script>
 </body>
