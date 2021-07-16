@@ -296,13 +296,24 @@
         }
 
         //funtion returning a promise with a video stream
-        function provideVideoQQ() {
+        function provideVideoQQ(selDeviceId) {
+            // console.log("current id " + selDeviceId);
             return navigator.mediaDevices.enumerateDevices()
                 .then(function (devices) {
                     var exCameras = [];
+                    /*console.log("devices")
+                    console.log(devices);
+                    var hasOptions = $('#selCameras')[0].length;
+                    console.log("has options " + hasOptions);*/
                     devices.forEach(function (device) {
                         if (device.kind === 'videoinput') {
-                            exCameras.push(device.deviceId)
+                            exCameras.push(device.deviceId);
+                            /*if(hasOptions == 0) {
+                                $('#selCameras')
+                                .append($("<option></option>")
+                                .attr("value", device.deviceId)
+                                .text(device.label)); 
+                            }*/
                         }
                     });
                     return Promise.resolve(exCameras);
@@ -310,15 +321,15 @@
                     if (ids.length === 0) {
                         return Promise.reject('Could not find a webcam');
                     }
-                    // $.each(ids, function( index, value ) {
-                    //     $('#selCameras')
-                    //         .append($("<option></option>")
-                    //         .attr("value", value)
-                    //         .text("Cámara " + (index + 1))); 
-                    // });
+                    /*console.log("selecting id " + selDeviceId);
+                    var currentDeviceId = ids[0];
+                    if(selDeviceId != null) {
+                        currentDeviceId = selDeviceId;
+                    }*/
                     return navigator.mediaDevices.getUserMedia({
                         audio: false, 
                         video: {
+                            //deviceId: currentDeviceId
                             //deviceId: ids.length == 1 ? ids[0] : ids[1]
                             facingMode: "environment"
                             /*'optional': [{
@@ -355,23 +366,24 @@
         })
 
         $( "#selCameras" ).change(function() {
-            console.log("change camera " + this.value);
-            /*jbScanner.stopScanning();
+            console.log("Changing camera to: " + this.value);
+            /*console.log("Stop scanning...");
+            jbScanner.stopScanning();
             var scannerParentElement = document.getElementById("scanner");
+            console.log("Remove element...");
             jbScanner.removeFrom(scannerParentElement);
-            jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ);
-            //reduce the size of analyzed images to increase performance on mobile devices
+            console.log("Create new element...");
+            jbScanner = null;
+            jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ(this.value));
             jbScanner.setSnapImageMaxSize(150);
-            
             var currentUser = getExpositor();
             if (currentUser != null) {
                 if (scannerParentElement) {
-                    //append the jbScanner to an existing DOM element
                     jbScanner.appendTo(scannerParentElement);
                 }
             }*/
         });
-        console.log("default rear camera")
+        console.log("v2.0.4")
     </script>
 </body>
 
