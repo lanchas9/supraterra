@@ -10,12 +10,13 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
     <link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+    <script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.9.3/css/tabulator_midnight.min.css" rel="stylesheet">
 </head>
 <body>
     <h1 id="titulo" class="titulo">Titulo</h1>
     <h2 id="numeroRenglones" class="titulo"></h2>
-    <img class="imagenLogo center" src="./assets/img/mobile/logo_expo.png" alt="" srcset="">
+    <img id="download-xlsx" class="imagenLogo center" src="./assets/img/mobile/logo_expo.png" alt="" srcset="">
     <br>
     <div id="example-table"></div>
 <script>
@@ -103,6 +104,11 @@
         var count = table.getDataCount();
         const element = document.getElementById("numeroRenglones");
         element.innerHTML = 'Número Renglones: ' + count
+
+        //trigger download of data.xlsx file
+        document.getElementById("download-xlsx").addEventListener("click", function(){
+        table.download("xlsx", "data.xlsx", {sheetName:"Expo Supraterra 2021"});
+        });
     });
 
     function dameTitulo(titulo){
