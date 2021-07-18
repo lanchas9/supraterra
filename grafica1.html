@@ -14,7 +14,7 @@
     <h2 id="numeroRenglones" class="titulo"></h2>
     <img class="imagenLogo center" src="./assets/img/mobile/logo_expo.png" alt="" srcset="">
     <br>
-    <canvas id="chart"></canvas>
+    <div id="chart"></div>
     <script>
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -28,7 +28,7 @@
         async function fetchReportJSON() {
             let local = 'http://localhost:4000/supraterra/' + reporte
             let server = 'https://mosaico.app:4000/supraterra/' + reporte
-            let urlReporte = local
+            let urlReporte = server
             const response =  await fetch(urlReporte);
             const tabledata = await response.json();
             if (tabledata.result == 'True'){
@@ -56,7 +56,18 @@
                 const labels = tabledata.message.map(data => data.fechaRegistro)
                 const dataManual = tabledata.message.map(data => data.Registros)
                 
-                let context = document.getElementById('chart').getContext('2d')
+                var count = dataManual.reduce((suma, actual)=> suma+actual)
+                const element = document.getElementById("numeroRenglones");
+                element.innerHTML = 'Número de Registrados: ' + count
+                
+                // let context = document.getElementById('chart').getContext('2d')
+                var newCanvas = document.createElement('canvas');
+                newCanvas.id = 'canv';
+                newCanvas.height = window.innerHeight*0.65
+                newCanvas.width = window.innerWidth
+                document.getElementById('chart').appendChild(newCanvas);
+                var context = newCanvas.getContext('2d'); // whatever type of context
+
                 var gradient = context.createLinearGradient(0, 0, 0, 1000);
                 gradient.addColorStop(0, "rgb(181,30,138)");
                 gradient.addColorStop(0.15, "rgb(133,41,142)");
@@ -73,7 +84,7 @@
                         backgroundColor: 'rgb(181,30,138)',
                         borderColor: 'rgb(133,41,142)',
                         data: dataManual,
-                        borderWidth : 2,
+                        borderWidth : 5,
                         backgroundColor: gradient,
                     }]
                 };
@@ -96,12 +107,8 @@
                     type: 'bar',
                     data: data,
                 }
-                
-                var chart = new Chart(context, config);
-                var count = dataManual.reduce((suma, actual)=> suma+actual)
-                const element = document.getElementById("numeroRenglones");
-                element.innerHTML = 'Número de Registrados: ' + count
 
+                var chart = new Chart(context, config);
             }
         }
 
