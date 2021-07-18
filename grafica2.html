@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/reportes.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Gráfica Reporte</title>
+</head>
+<body>
+    <h1 id="titulo" class="titulo">Titulo</h1>
+    <h2 id="numeroRenglones" class="titulo"></h2>
+    <img class="imagenLogo center" src="./assets/img/mobile/logo_expo.png" alt="" srcset="">
+    <br>
+    <canvas id="chart"></canvas>
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const reporte = urlParams.get('grafica') 
+        const tituloReporte = urlParams.get('titulo') 
+        const element = document.getElementById("titulo");
+        
+        element.innerHTML = dameTitulo(reporte)
+        fetchReportJSON()
+        
+        async function fetchReportJSON() {
+            let local = 'http://localhost:4000/supraterra/' + reporte
+            let server = 'https://mosaico.app:4000/supraterra/' + reporte
+            let urlReporte = local
+            const response =  await fetch(urlReporte);
+            const tabledata = await response.json();
+            if (tabledata.result == 'True'){
+                
+                // let dataManual = '{"Registros":2,"DIA":"09","MES":"07","AÑO":"20"},{"Registros":6,"DIA":"10","MES":"07","AÑO":"20"},{"Registros":6,"DIA":"11","MES":"07","AÑO":"20"},{"Registros":16,"DIA":"12","MES":"07","AÑO":"20"},{"Registros":12,"DIA":"13","MES":"07","AÑO":"20"},{"Registros":9,"DIA":"14","MES":"07","AÑO":"20"},{"Registros":12,"DIA":"15","MES":"07","AÑO":"20"},{"Registros":3,"DIA":"16","MES":"07","AÑO":"20"},{"Registros":9,"DIA":"17","MES":"07","AÑO":"20"}'
+
+                //CONFIGURACION GRAFICA
+                // const config = {
+                //     type: 'bar',
+                //     data: tabledata.message,
+                //     options: {
+                //         responsive: true,
+                //         plugins: {
+                //         legend: {
+                //             position: 'top',
+                //         },
+                //         title: {
+                //             display: true,
+                //             text: dameTitulo(reporte)
+                //         }
+                //         }
+                //     },
+                // };
+                const etiqueta = dameTitulo(tituloReporte)
+                const labelsFromTable = tabledata.message.map(data => data.fechaIngreso + " " + data.horaIngreso )
+                const labels = labelsFromTable
+                // const labels = await dameLabels(labelsFromTable)
+                const dataManual = tabledata.message.map(data => data.Accesos)
+
+                let context = document.getElementById('chart').getContext('2d')
+                var gradient = context.createLinearGradient(0, 0, 0, 1000);
+                gradient.addColorStop(0, "rgb(181,30,138)");
+                gradient.addColorStop(0.15, "rgb(133,41,142)");
+                gradient.addColorStop(0.25, "rgb(181,30,138)");
+                gradient.addColorStop(0.5, "rgb(133,41,142)");
+                gradient.addColorStop(0.75, "rgb(181,30,138)");
+                gradient.addColorStop(1, "rgb(133,41,142)");
+
+                const data = {
+                    labels: labels,
+                    datasets: [{
+                        label: etiqueta,
+                        backgroundColor: gradient,
+                        borderColor: 'rgb(133,41,142)',
+                        data: dataManual,
+                        borderWidth : 2,
+                    }]
+                };
+                // const config = {
+                // labels: labels,
+                // datasets: [
+                //     {
+                //         label: 'Registros',
+                //         data: dataManual,
+                //         borderColor: 'rgb(255, 99, 132)',
+                //         backgroundColor: 'rgb(0, 255, 0)',
+                //         borderWidth: 2,
+                //         borderRadius: 5,
+                //         borderSkipped: false,
+                //     }
+                // ]
+                // };
+
+                const config = {
+                    type: 'bar',
+                    data: data,
+                }
+                
+                var chart = new Chart(context, config);
+                var count = dataManual.reduce((suma, actual)=> suma+actual)
+                const element = document.getElementById("numeroRenglones");
+                element.innerHTML = 'Número de Accesos: ' + count
+
+            }
+        }
+
+        
+    function dameTitulo(titulo){
+        let nuevo = titulo.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ")
+        
+        return nuevo.charAt(0).toUpperCase() + nuevo.slice(1)
+    }
+
+    async function dameLabels(labelsFromTable){
+        let funcion = 'dameCalendarios'
+        let local = 'http://localhost:4000/supraterra/' + funcion
+        let server = 'https://mosaico.app:4000/supraterra/' + funcion
+        let urlReporte = local
+        const response =  await fetch(urlReporte);
+        const tabledata = await response.json();
+        let horariosFinales = []
+        if (tabledata.result == 'True'){
+            let horarios = tabledata.message[2]
+            let fechaInicio = new Date(horarios.fechaInicio)
+            let fechaFin = new Date(horarios.fechaFin)
+            let diff = timeDiffCalc(fechaInicio,fechaFin)
+
+            for(let i=0; i<diff; i++){
+                let hora = fechaInicio.addHours(1)
+                horariosFinales.push(hora)
+            }
+            return horariosFinales
+        }
+    }
+    function timeDiffCalc(dateFuture, dateNow) {
+            let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
+
+            // calculate days
+            const days = Math.floor(diffInMilliSeconds / 86400);
+            diffInMilliSeconds -= days * 86400;
+            console.log('calculated days', days);
+
+            // calculate hours
+            const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
+            diffInMilliSeconds -= hours * 3600;
+            console.log('calculated hours', hours);
+
+            let difference = 0;
+            if (days > 0) {
+                difference += days*24;
+            }
+
+            difference += hours
+            return difference;
+        }
+        
+        Date.prototype.addHours = function(h) {
+            this.setTime(this.getTime() + (h*60*60*1000));
+            return this;
+        }
+    
+    </script>
+</body>
+</html>
