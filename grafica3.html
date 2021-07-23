@@ -29,7 +29,7 @@
         async function fetchReportJSON() {
             let local = 'http://localhost:4000/supraterra/' + reporte
             let server = 'https://mosaico.app:4000/supraterra/' + reporte
-            let urlReporte = local
+            let urlReporte = server
             const response =  await fetch(urlReporte);
             const tabledata = await response.json();
             if (tabledata.result == 'True'){
