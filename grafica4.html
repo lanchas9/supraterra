@@ -36,13 +36,13 @@
             if (tabledata.result == 'True'){
                 
                 const etiqueta = dameTitulo(tituloReporte)
-                const labelsFromTable = tabledata.message.map(data => data.fechaEscaneo)
-                const labels = ['21/07/2021','22/07/2021','23/07/2021','24/07/2021','25/07/2021']
+                const labelsFromTable = tabledata.message.map(data => data.nombreCliente)
+                const labels = labelsFromTable
                 const dataManual = tabledata.message.map(data => data.escaneos)
 
                 var count = dataManual.reduce((suma, actual)=> suma+actual)
                 const element = document.getElementById("numeroRenglones");
-                element.innerHTML = 'Número de Accesos: ' + count
+                element.innerHTML = 'Número de Escaneos: ' + count
 
                  
                 var newCanvas = document.createElement('canvas');
