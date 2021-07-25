@@ -2,11 +2,22 @@
     box-sizing: border-box;
     font-family: 'Montserrat';
   }
+  
+  .titulo2 {
+    font: bold;
+    color: green;
+  }
 
   .imagenLogo{
       width: 10%;
       align-content: center;
   }
+
+  .imagenLogo2{
+    width: 50%;
+    max-width: 400px;
+    align-content: center;
+}
 
   .center {
     display: block;
