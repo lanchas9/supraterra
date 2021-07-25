@@ -18,6 +18,12 @@
     <h2 id="numeroRenglones" class="titulo"></h2>
     <img id="download-xlsx" class="imagenLogo center" src="./assets/img/mobile/logo_expo.png" alt="" srcset="">
     <br>
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="img01">
+        <div id="caption"></div>
+    </div>
     <div id="example-table"></div>
 <script>
     const queryString = window.location.search;
@@ -35,6 +41,8 @@
                 tabledata.message.forEach(element => {
                 element.Reenviar = '📩'
                 element.Actualizar = '💾'
+                element.codigoQR = '👁️'
+                element.WhatsApp = '📲'
                 });
             }
             return tabledata.message;
@@ -94,11 +102,37 @@
                         } else {
                         // Do nothing!
                     }
+                }else if (cell.getValue() == '👁️'){
+                    let idQR = cell.getRow().getData().idQR
+                    let username = cell.getRow().getData().username
+                    muestraPopUp(idQR, username)
+                }else if (cell.getValue() == '📲'){
+                    let numeroCelular = cell.getRow().getData().numeroCelular
+                    let nombreCompleto = cell.getRow().getData().nombreUsuario + ' ' + cell.getRow().getData().apellidoPaterno + ' ' + cell.getRow().getData().apellidoMaterno
+                    let idQR = cell.getRow().getData().idQR
+                    enviaTwilio(numeroCelular, nombreCompleto, idQR)
                 }
             },
             cellEdited:function(cell){
                 //cell - cell component
                 //console.log(cell.getValue())
+            }, 
+            dataFiltered:function(filters, rows){
+                if(table===undefined){
+                }else{
+                    if(rows.length==table.getDataCount()){
+                        var count = table.getDataCount();
+                        const element = document.getElementById("numeroRenglones");
+                        element.innerHTML = 'Número Renglones: ' + count
+                        element.style.color = "black"
+                    }else{
+                        var count = rows.length
+                        const element = document.getElementById("numeroRenglones");
+                        element.innerHTML = 'Registros encontrados: ' + count
+                        element.style.color = "red"
+                    }
+                }
+                return true
             },
         });
         var count = table.getDataCount();
@@ -110,6 +144,71 @@
         table.download("xlsx", "data.xlsx", {sheetName:"Expo Supraterra 2021"});
         });
     });
+
+    function enviaTwilio(numeroCelular, nombreCompleto, idQR){
+
+        let url = 'https://sepia-caribou-5362.twil.io/resendqr'
+        let secure_url = 'https://mosaico.app:4000/file?path=qrcodes/' + idQR + '.png';
+        let body = {
+            info_status : 'complete',
+            telefono : '52' + numeroCelular,
+            secure_url : secure_url,
+            mensaje : 'Hola ' + nombreCompleto +', gracias por registrarte en EXPO SUPRATERRA 2021, te anexamos tu código QR para ingresar al evento.'
+        }
+        fetch(url, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json'
+        },
+        mode: 'cors', // no-cors, *cors, same-origin
+        body: JSON.stringify(body)
+        })
+        .then(function(response) {
+        console.log('hay response')
+        console.log(response)
+        if(response.ok) {
+            return response.json()
+        } else {
+            throw "Error en la llamada Ajax";
+        }
+
+        })
+        .then(function(json) {
+            console.log('hay json')
+            if(json.errorCode === null){
+                alert('El envío para ' + nombreCompleto + 'por WhatsApp: ' + numeroCelular + 'se realizó con éxito');
+            }else{
+                alert('Error desconocido al enviar el WhatsApp:' + json.errorMessage);
+            }
+        })
+        .catch(function(err) {
+            console.error(err);
+        });
+    }
+
+    function muestraPopUp(idQR, username){
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        var img = document.getElementById("myImg");
+        var modalImg = document.getElementById("img01");
+        var captionText = document.getElementById("caption");
+        // img.onclick = function(){
+            modal.style.display = "block";
+            modalImg.src = 'https://mosaico.app:4000/file?path=qrcodes/' + idQR + '.png';
+            captionText.innerHTML = username;
+        // }
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+    }
 
     function dameTitulo(titulo){
         let nuevo = titulo.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ")
@@ -174,7 +273,7 @@
         })
         .then(function(json) {
             if(json.result == "True"){
-                alert('El reenvío a: ' + username.username + 'se realizó con éxito');
+                alert('El reenvío a: ' + username + 'se realizó con éxito');
             }else{
                 alert('Error desconocido en el reenvío del mail');
             }
