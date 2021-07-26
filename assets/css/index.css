@@ -108,6 +108,31 @@
           transform: translate(-50%, -50%);
       }
   
+      .botonGracias {
+        box-shadow:inset 0px 0px 35px -31px #a9de92;
+        background:linear-gradient(to bottom, #9af570 5%, #3f9c0c 100%);
+        background-color:#9af570;
+        border-radius:23px;
+        border:5px solid #5bcc22;
+        /* display:inline-block; */
+        cursor:pointer;
+        color:#ffffff;
+        font-family:Montserrat;
+        font-size:16px;
+        padding:19px 25px;
+        text-decoration:none;
+        text-shadow:0px 1px 0px #92b879;
+        text-align: center;
+    }
+    .botonGracias:hover {
+        background:linear-gradient(to bottom, #3f9c0c 5%, #9af570 100%);
+        background-color:#3f9c0c;
+    }
+    .botonGracias:active {
+        /* position:relative; */
+        top:1px;
+    }
+
   @media only screen and (min-width: 431px){
       body {
           background: url('../img/finales/mobile/back_inicio.jpg') center center fixed no-repeat; 
@@ -162,6 +187,10 @@
               -ms-transform: translate(-50%, -50%);
               transform: translate(-50%, -50%);
           }
+
+          .botonGracias {
+            font-size:20px;
+            }
       
           .letreroTerrenos{
               max-width: 285px;
