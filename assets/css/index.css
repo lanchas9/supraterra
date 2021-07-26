@@ -128,10 +128,10 @@
         background:linear-gradient(to bottom, #3f9c0c 5%, #9af570 100%);
         background-color:#3f9c0c;
     }
-    .botonGracias:active {
-        /* position:relative; */
+    /* .botonGracias:active {
+        position:relative;
         top:1px;
-    }
+    } */
 
   @media only screen and (min-width: 431px){
       body {
