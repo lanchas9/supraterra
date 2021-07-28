@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/reportes.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/jpg" href="/assets/img/favicon.jpg" />
+    <title>Estadísticas Expo Supraterra 2021</title>
+</head>
+<body>
+    <img class="imagenLogo2 center" src="./assets/img/mobile/logo_expo.png" alt="" srcset="">
+    <h3 id="titulo" class="titulo">Estadísticas Expo Supraterra 2021</h3>
+        <div>
+            <h2 class="titulo">Actualización Día: <span id="actualizacion" class="titulo2">
+                <br>0
+            </span></h2>
+            <h2 class="titulo">Hora: <span id="actualizacionHora" class="titulo2">
+                <br>0
+            </span></h2>
+            <h2 class="titulo">Registros TOTALES a la EXPO: <span class="titulo2" id="registrosTotales">
+                <br>0
+            </span> </h2>
+            <h2 class="titulo">Registrados el día de HOY: <span class="titulo2" id="registrosTotales2">
+                <br>0
+            </span></h2>
+            <h2 class="titulo">QR's escaneados en la entrada a la EXPO: <span class="titulo2" id="escaneosEntrada">
+                <br>0
+            </span></h2>
+            <h2 class="titulo">Expositores han escaneado QR's de visitantes: <span class="titulo2" id="escaneosExpositores">
+                <br>0
+            </span></h2>
+        </div>
+    
+    <br>
+    
+    <script>
+        // document.addEventListener("DOMContentLoaded", () => {
+        //     fetchReportJSON()
+        // });  
+        fetchReportJSON()
+    
+        async function fetchReportJSON() {
+            let reporte = 'dameEstadisticasDeHoy'
+            let local = 'http://localhost:4000/supraterra/' + reporte
+            let server = 'https://mosaico.app:4000/supraterra/' + reporte
+            let urlReporte = server
+            const response =  await fetch(urlReporte);
+            const tabledata = await response.json();
+            
+            let actualizacion = document.getElementById("actualizacion");
+            actualizacion.innerHTML = '<br>' + (new Date()).toLocaleDateString('es-MX')
+
+            let actualizacionHora = document.getElementById("actualizacionHora");
+            actualizacionHora.innerHTML = '<br>' + new Date().toTimeString().split(' ')[0]
+
+            let registrosTotales = document.getElementById("registrosTotales");
+            registrosTotales.innerHTML = '<br>' + tabledata.message.val1.registrados
+
+            let registrosTotales2 = document.getElementById("registrosTotales2");
+            registrosTotales2.innerHTML = '<br>' + tabledata.message.val2.registrados
+
+            let escaneosEntrada = document.getElementById("escaneosEntrada");
+            escaneosEntrada.innerHTML = '<br>' + tabledata.message.val3.escaneos
+
+            let escaneosExpositores = document.getElementById("escaneosExpositores");
+            escaneosExpositores.innerHTML = '<br>' + tabledata.message.val4.escaneos   
+        }
+                
+    </script>
+</body>
+</html>
