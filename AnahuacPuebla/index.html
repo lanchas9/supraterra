@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día OV 2022</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body style="font-family:'Avenir',sans-serif;" onload="cargaDatos()">
+    <div class="cuerpo">
+        <img class="imagenEncabezado" src="assets/img/logo.jpg" alt="" srcset="">
+        <p class="titulo">REGÍSTRATE</p>
+        <div id="registro" class="detalleEvento"></div>
+        <div class="mensajeError" id="mensajeError"></div>
+        <br><br>
+        <button class="titulo" onclick="guardaDatos()">Enviar</button>
+        <br><br>
+    </div>
+    <script type="text/javascript">
+        let urlServer = "https://mosaico.app:4000/Anahuac/"
+        let tipoValidaciones = { 
+            existeValor: "existeValor",
+            esNumero: "esNumero",
+            email: "email",
+            celular: "celular",
+            paginaWeb: "paginaWeb",
+            esNumeroMayorAcero: "esNumeroMayorQueCero"
+        }
+        let radioOpcionSeleccionada = -1;
+    
+        let arrayPreguntasServer = [];
+        let arrayPreguntasHtml = [];
+        
+        async function cargaDatos(){
+           try{ 
+                let datos = await fetch(urlServer + "dameEstructuraRegistro")
+                let json = await datos.json()
+    
+                if (json.statusCode = 200 ){ 
+                json.message.forEach(element => {
+                    arrayPreguntasServer.push(element)
+                    creaElementoHTML(element)
+                });
+            }
+           }catch(error){
+               console.log({error})
+           }
+        }
+
+        function creaElementoHTML(element){
+            let formulario = document.getElementById("registro");
+            let divPadre = document.createElement("div");
+            divPadre.setAttribute("class", "elmentoFormulario");
+            divPadre.setAttribute("id", "elmentoFormulario" + element.id);
+            
+
+            if((element.idEstructuraPreguntas >= 22) && (element.idEstructuraPreguntas <= 27)){
+                divPadre.setAttribute("class", "elmentoFormulario22 oculto");
+                console.log("oculto")
+            }
+            
+            let titulo = document.createElement("p");
+            titulo.setAttribute("class", "elmentoFormularioTitulo");
+
+            if(element.obligatorioEstructuraPreguntas == 1){
+                titulo.innerHTML = element.tituloEstructuraPreguntas + '<b class="asterisc"> *</b>'
+            }else{
+                titulo.innerHTML = element.tituloEstructuraPreguntas
+            }
+            let input
+
+            if(element.nombreCatalogo === ''){
+                input = document.createElement("input");
+                input.setAttribute("class", "elmentoFormularioinput");
+                input.setAttribute("id", `elementoFormulario${element.idEstructuraPreguntas}`);
+                if(element.tipoValidacionEstructuraPreguntas == 4){
+                    input.setAttribute("type","number")
+                    input.addEventListener('keypress', function(e){
+                        return isNumberKey(e)
+                    })
+                }
+            }else{
+                if(element.idEstructuraPreguntas == 21){
+                    input = document.createElement("div");
+                    fetch(urlServer + element.nombreCatalogo)
+                    .then((response) => response.json())
+                    .then((json) => {
+                        if (json.statusCode = 200 ){ 
+                        json.message.forEach(element2 => {
+                            var opt1 = document.createElement('input');
+                            opt1.type = "radio"
+                            opt1.value = element2.id
+                            opt1.name = element.id
+                            opt1.className = "elementoRadio"
+                            opt1.addEventListener('change', function(e){
+                                var item = event.target.value;
+                                radioOpcionSeleccionada = item
+                                if(item == 1){
+                                    let list = document.getElementsByClassName("elmentoFormulario22 oculto")
+                                    console.log("lista para visible:" + list.length)
+                                    let max = list.length
+                                    for (var i = 0; i < max; i++) {
+                                        list[0].setAttribute("class", "elmentoFormulario22 visible");
+                                        console.log("visible")
+                                    }
+                                }else{
+                                    let list = document.getElementsByClassName("elmentoFormulario22 visible")
+                                    console.log("lista para oculto:" + list.length)
+                                    let max = list.length
+                                    for (var i = 0; i < max; i++) {
+                                        list[0].setAttribute("class", "elmentoFormulario22 oculto");
+                                        console.log("oculto")
+                                    }
+                                }
+                            })
+                            input.appendChild(opt1)
+
+                            var opt2 = document.createElement('label');
+                            opt2.for = element2.id
+                            opt2.className = "elementoRadio"
+                            opt2.innerHTML = element2.texto;
+
+                            input.appendChild(opt2)
+                            var br = document.createElement('br');
+                            input.appendChild(br)
+                        });
+                    }
+                    });
+
+                }else{
+                    input = document.createElement("select");
+                    input.setAttribute("class", "elmentoFormularioSelect");
+                    input.setAttribute("id", `elementoFormulario${element.idEstructuraPreguntas}`);
+
+                    var optDefault = document.createElement('option');
+                    optDefault.value = 0;
+                    optDefault.innerHTML = "";
+                    input.appendChild(optDefault)
+
+                    fetch(urlServer + element.nombreCatalogo)
+                    .then((response) => response.json())
+                    .then((json) => {
+                        if (json.statusCode = 200 ){ 
+                        json.message.forEach(element2 => {
+                            var opt = document.createElement('option');
+                            opt.value = element2.id;
+                            opt.innerHTML = element2.texto;
+                            input.appendChild(opt)
+                        });
+                    }
+                    });
+                }
+            }   
+            formulario.appendChild(divPadre)
+            divPadre.appendChild(titulo)
+            divPadre.appendChild(input)
+        }
+
+        async function guardaDatos(){
+        let hayErrror = false;
+        let datosRegistro = {}
+        let datosPreUniversitarios = {}
+        arrayPreguntasServer.forEach((element, index) => {
+            if(!hayErrror){
+                let resultadoStr = "Perfil no seleccionado"
+                let dato = -1
+                if(index == 11){
+                    if(radioOpcionSeleccionada >= 0){
+                        dato = radioOpcionSeleccionada
+                        resultadoStr = ""
+                    }
+                }else{
+                    let valor = document.getElementById(`elementoFormulario${element.idEstructuraPreguntas}`);
+                    console.log(valor.value + " en index: " + index)
+                    dato = valor.value.trim()
+                    resultadoStr = validaElemento(dato, element.textoTipoValidaciones, element.tituloEstructuraPreguntas, element.obligatorioEstructuraPreguntas);
+                    if((index >= 12) && (radioOpcionSeleccionada!=1)){
+                        resultadoStr = ""
+                    }
+                }
+                if(resultadoStr == ""){
+                    if(index >= 12){
+                        let key = `{"${element.tooltipEstructuraPreguntas}" : "${dato}"}`;
+                        datosPreUniversitarios =  Object.assign(datosRegistro, JSON.parse(key));
+                    }else{
+                        let key = `{"${element.tooltipEstructuraPreguntas}" : "${dato}"}`;
+                        datosRegistro =  Object.assign(datosRegistro, JSON.parse(key));
+                    }
+                }else{
+                    hayErrror=true
+                    document.getElementById("mensajeError").innerHTML = resultadoStr
+                }
+            }
+        })
+        if (!hayErrror){
+            if(radioOpcionSeleccionada == 1){
+                let resul1 = await guardaEnServerPreUniversitario(datosPreUniversitarios);
+                let key = `{"idPreUniversitario" : ${resul1.idPreUniversitario}}`;
+                datosRegistro =  Object.assign(datosRegistro, JSON.parse(key));
+            }else{
+                let key = `{"idPreUniversitario" : ${0}}`;
+                datosRegistro =  Object.assign(datosRegistro, JSON.parse(key));
+            }
+            let resul2 = await guardaEnServer(datosRegistro);
+            if (resul2.error == false){
+                window.location.href = "registroExitoso.html?idQr=" + resul2.idQr
+            }else{
+                document.getElementById("mensajeError").innerHTML = resul2.message
+            }
+        }
+    }
+
+    async function guardaEnServerPreUniversitario(datosPreUniversitarios){
+        let resul = {
+            error : true,
+            message: "",
+            idPreUniversitario: 0,
+            statusCode: 0,
+            idQr : ""
+        }
+        const data = datosPreUniversitarios
+        const dataJson = JSON.stringify(data)
+        console.log("Vamos a mandar al POST de datosPreUniversitarios")
+        console.log({dataJson})
+        const settings = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: 
+                dataJson
+        };
+        try{
+            const fetchResponse = await fetch(`https://mosaico.app:4000/Anahuac/registroPreUniversitario`, settings);
+            const data = await fetchResponse.json();
+            console.log("Data" + JSON.stringify(data))
+                    
+            if(data.statusCode == 200){
+                resul.error = false
+                resul.statusCode = data.statusCode
+                resul.idPreUniversitario = data.idPreUniversitario
+                resul.message = data.message
+            }else{                        
+                resul.statusCode = data.statusCode
+                resul.message = data.message
+            }
+            return resul;
+        } catch (e) {
+            console.log("Error" + e)
+            resul.statusCode = 404
+            resul.message = e
+            return resul;
+        }
+    }
+
+    async function guardaEnServer(datosRegistro){
+        let resul = {
+            error : true,
+            message: "",
+            idUsuario: 0,
+            statusCode: 0,
+            idQr : ""
+        }
+        const data = datosRegistro
+        const dataJson = JSON.stringify(data)
+        console.log("Vamos a mandar al POST de datosRegistro")
+        console.log({dataJson})
+        const settings = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: 
+                dataJson
+        };
+        try{
+            const fetchResponse = await fetch(`https://mosaico.app:4000/Anahuac/guardaUsuario`, settings);
+            const data = await fetchResponse.json();
+            console.log("Data" + JSON.stringify(data))
+                    
+            if(data.statusCode == 200){
+                resul.error = false
+                resul.statusCode = data.statusCode
+                resul.idUsuario = data.message[0].idUsuarios
+                resul.message = data.message
+                resul.idQr = data.message[0].idQR
+            }else{                        
+                resul.statusCode = data.statusCode
+                resul.message = data.message
+            }
+            return resul;
+        } catch (e) {
+            console.log("Error" + e)
+            resul.statusCode = 404
+            resul.message = e
+            return resul;
+        }
+    }
+
+    function validaElemento(str, tipoValidacion, campo, obligatorio){
+        let respuesta = ""
+        switch (tipoValidacion) {
+                case tipoValidaciones.existeValor: 
+                        if(str.length == 0 && obligatorio==1){
+                            respuesta = `El campo ${campo} es obligatorio en el registro`
+                        }
+                    break;
+                case tipoValidaciones.esNumero: 
+                        if( isNumeric(str) ){
+                            respuesta = `El campo ${campo} no tiene el formato numerico`
+                        }
+                    break;
+                case tipoValidaciones.email: 
+                        if (str == ""){
+                            respuesta = `El campo ${campo} no puede estar vacio`
+                        }else{
+                            if  (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(str))) {
+                                respuesta = `El campo ${campo} no tiene el formato correcto`
+                            } 
+                        }
+                    break;
+                case tipoValidaciones.celular: 
+                        if( !isNumeric(str) || str.length != 10 ){
+                            respuesta = `El campo ${campo} no tiene el formato correcto, use únicamente 10 digitos`
+                        }
+                    break;
+                case tipoValidaciones.paginaWeb: 
+                         var res = str.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+                        if (res == null){
+                            respuesta = `El campo ${campo} no tiene el formato correcto, use dirección web completa`
+                        }
+                    break;
+                case tipoValidaciones.esNumeroMayorAcero:
+                        let val = Number(str);
+                        if( val <= 0 && obligatorio==1){
+                            respuesta = `El campo ${campo} no ha sido seleccionado`
+                        }
+                    break;
+                default:
+                    console.error("No es formato correcto")
+                    break;
+            }
+            return respuesta
+    }
+
+    function isNumeric(str) {
+            if (typeof str != "string") return false // we only process strings!  
+            return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+                    !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+        }
+
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode== 101)
+            return false;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        
+        return true;
+    }
+</script>
+</body>
+</html>

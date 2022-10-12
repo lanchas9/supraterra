@@ -1,0 +1,133 @@
+body{
+    background-color: #E6EEF2;
+}
+
+.cuerpo{
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 40px;
+    max-width: 900px;
+}
+
+.imagenEncabezado{
+    margin-top: 20px;
+    margin-bottom: 2%;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.detalleEvento{
+    margin-left: 5%
+}
+
+.titulo{
+    width: 60%;
+    background-color: #FF5900;
+    color: white;
+    /* height: 40px; */
+    margin-left: 20%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: x-large;
+}
+
+.elmentoFormularioTitulo{
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 5px;
+}
+
+.asterisc {
+    color: red;
+    font-size: larger;
+}
+
+.mensajeError {
+    color: red;
+    font-size: larger;
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+.elmentoFormularioinput{
+    width: 90%;
+    margin-top: 0px;
+    height: 40px;
+    background-color: #F7F7F7;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    box-shadow: none;
+    color: #787878;
+    font-size: larger;
+}
+
+.botonRegistrarse{
+    background: #333;
+    border: 0;
+    color: #f7f7f7;
+    height: 50px;
+    margin-left: 5%;
+    margin-top: 2%;
+    font-size: 20px;
+    margin-bottom: 5%;
+}
+
+.elmentoFormularioSelect{
+    font-size: larger;
+    background-color: #F7F7F7;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    box-shadow: none;
+    color: #787878;
+    height: 40px;
+    max-width: 90%;
+}
+
+.elmentoFormularioSelect22{
+    font-size: larger;
+    background-color: #F7F7F7;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    box-shadow: none;
+    color: #787878;
+    height: 40px;
+    max-width: 90%;
+}
+
+.oculto{
+    display: none;
+}
+
+.visible{
+    display: block;
+}
+.elementoRadio{
+    font-size: larger;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+}
+
+.textoExplicacion3Izq{
+	margin-left: 10%;
+	width: 80%;
+	font-size: large;
+	font-weight: 400;
+	text-align: left;
+	color: black	;
+    margin-top: 5px;
+	margin-bottom: 20px;
+}
+
+.qr{
+	width: 30%;
+	margin-left: 35%;
+	margin-top: 0%;
+	margin-bottom: 0%;
+}

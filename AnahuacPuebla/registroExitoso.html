@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día OV 2022</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body style="font-family:'Avenir',sans-serif;" onload="cargaResultados()">
+    <div class="cuerpo">
+        <img class="imagenEncabezado" src="assets/img/logo.jpg" alt="" srcset="">
+        <p class="titulo">REGISTRO EXITOSO</p><br>
+        <p class="textoExplicacion3Izq">Tu Registro ha sido exitoso, y tu lugar en nuestro eventos ha sido reservado. Recibirás un correo electrónico de confirmación (en caso de no visualizarlo te sugerimos checar tu SPAM y buzón de correo no deseado).</p>
+        <img src="" alt="" srcset="" id="qr" class="qr">
+        <p class="textoExplicacion3Izq">Te recomendamos sacar un screenshot de tu QR, esto facilitará tu acceso al evento.</p>
+        <p class="textoExplicacion3Izq">Para más información visita nuestro sitio web:  <a href="https://www.anahuac.mx/puebla/diaov/">Día OV 2022</a></p>
+        <br><br>
+    </div>
+    <script>
+        let idQr = ""
+        async function cargaResultados(){
+                    const queryString = window.location.search;
+                    const urlParams = new URLSearchParams(queryString);
+                    if(urlParams.get('idQr') == null){
+                        idQR = urlParams.get('idQR')
+                    }else{
+                        idQR = urlParams.get('idQr')
+                    }
+                    let urlImagenQR = 'https://mosaico.app:4000/' + 'file?path=qrcodesAnahuacPuebla/' + idQR + ".png"
+                    let imagen = document.getElementById("qr")
+                    imagen.src = urlImagenQR
+        }
+    
+        function vamosMicrositio(){
+            window.location.href = 'perfilUsuario.html?idQR=' + idQR;
+        }
+    
+    </script>
+</body>
+</html>
