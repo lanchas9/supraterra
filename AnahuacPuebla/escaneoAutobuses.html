@@ -74,7 +74,7 @@
             let datosUsuario
             let data = {
                 "idQR" : idQR,
-                "metodoRegistro" : "Escaneo cliente Anahuac"
+                "metodoRegistro" : "Escaneo Cliente Anahuac"
             }
             const dataJson = JSON.stringify(data)
             const settings = {
@@ -90,11 +90,14 @@
                     let datos = await fetch(urlServer + "guardaIngreso",settings) 
                     let json = await datos.json()
 
-                    if (json.statusCode = 200 ){ 
+                    if (json.statusCode == 200 ){ 
                             let temp = json.message
                             datosUsuario = temp
                             mostrarDetalle(datosUsuario)
                     }else{
+                        let etiqueta = document.getElementById("nombreCompleto")
+                        etiqueta.innerHTML = json.message
+
                         let icono = document.getElementById("iconoAcceso")
                         icono.src = "assets/img/rojo.png"
                     }

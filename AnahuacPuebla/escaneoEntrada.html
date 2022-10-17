@@ -90,11 +90,14 @@
                     let datos = await fetch(urlServer + "guardaIngreso",settings) 
                     let json = await datos.json()
 
-                    if (json.statusCode = 200 ){ 
+                    if (json.statusCode == 200 ){ 
                             let temp = json.message
                             datosUsuario = temp
                             mostrarDetalle(datosUsuario)
                     }else{
+                        let etiqueta = document.getElementById("nombreCompleto")
+                        etiqueta.innerHTML = json.message
+
                         let icono = document.getElementById("iconoAcceso")
                         icono.src = "assets/img/rojo.png"
                     }
