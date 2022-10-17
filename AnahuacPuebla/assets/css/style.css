@@ -131,3 +131,21 @@ body{
 	margin-top: 0%;
 	margin-bottom: 0%;
 }
+
+.imagen{
+    width: 30%;
+	margin-left: 35%;
+	margin-top: 0%;
+	margin-bottom: 0%;
+}
+
+.centrado{
+    text-align: center;
+}
+
+.elmentoFormularioTitulo2{
+    margin-top: 0px;
+    font-weight: bold;
+    font-size: xx-large;
+    margin-bottom: 5px;
+}
