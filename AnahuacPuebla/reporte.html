@@ -140,7 +140,12 @@
 
         //trigger download of data.xlsx file
         document.getElementById("download-xlsx").addEventListener("click", function(){
-        table.download("xlsx", "data.xlsx", {sheetName:"Día OV 2022"});
+            const d = new Date();
+            let fechaFormateada = d.toLocaleString();
+            fechaFormateada = fechaFormateada.replaceAll("/","_")
+            fechaFormateada = fechaFormateada.replaceAll(", ","-")
+            fechaFormateada = fechaFormateada.replaceAll(":","_")
+        table.download("xlsx", reporte + "-" + fechaFormateada + ".xlsx", {sheetName:"Día OV 2022"});
         });
     });
 
