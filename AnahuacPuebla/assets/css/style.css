@@ -67,6 +67,20 @@ body{
     font-size: larger;
 }
 
+.elmentoFormularioinput2{
+    width: 60%;
+    margin-top: 0px;
+    height: 40px;
+    background-color: #F7F7F7;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    box-shadow: none;
+    color: #787878;
+    font-size: larger;
+    margin-left: 20%;
+    text-align: center;
+}
+
 .botonRegistrarse{
     background: #333;
     border: 0;

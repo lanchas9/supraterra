@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/reportes.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/jpg" href="/assets/img/favicon.jpg" />
+    <title>Día OV 2022</title>
+</head>
+<body>
+    <h1 id="titulo" class="titulo">Titulo</h1>
+    <h2 id="numeroRenglones" class="titulo"></h2>
+    <img class="imagenLogo center" src="./assets/img/logo.jpg" alt="" srcset="">
+    <br>
+    <div id="chart"></div>
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const reporte = urlParams.get('grafica') 
+        const tituloReporte = urlParams.get('titulo') 
+        const element = document.getElementById("titulo");
+        
+        element.innerHTML = dameTitulo(reporte)
+        fetchReportJSON()
+        
+        async function fetchReportJSON() {
+            let local = 'http://localhost:4000/Anahuac/' + reporte
+            let server = 'https://mosaico.app:4000/Anahuac/' + reporte
+            let urlReporte = server
+            const response =  await fetch(urlReporte);
+            const tabledata = await response.json();
+            if (tabledata.result == 'True'){
+                
+                // let dataManual = '{"Registros":2,"DIA":"09","MES":"07","AÑO":"20"},{"Registros":6,"DIA":"10","MES":"07","AÑO":"20"},{"Registros":6,"DIA":"11","MES":"07","AÑO":"20"},{"Registros":16,"DIA":"12","MES":"07","AÑO":"20"},{"Registros":12,"DIA":"13","MES":"07","AÑO":"20"},{"Registros":9,"DIA":"14","MES":"07","AÑO":"20"},{"Registros":12,"DIA":"15","MES":"07","AÑO":"20"},{"Registros":3,"DIA":"16","MES":"07","AÑO":"20"},{"Registros":9,"DIA":"17","MES":"07","AÑO":"20"}'
+
+                //CONFIGURACION GRAFICA
+                // const config = {
+                //     type: 'bar',
+                //     data: tabledata.message,
+                //     options: {
+                //         responsive: true,
+                //         plugins: {
+                //         legend: {
+                //             position: 'top',
+                //         },
+                //         title: {
+                //             display: true,
+                //             text: dameTitulo(reporte)
+                //         }
+                //         }
+                //     },
+                // };
+                const etiqueta = dameTitulo(tituloReporte)
+                const labels = tabledata.message.map(data => data.fechaRegistro)
+                const dataManual = tabledata.message.map(data => data.Registros)
+                
+                var count = dataManual.reduce((suma, actual)=> suma+actual)
+                const element = document.getElementById("numeroRenglones");
+                element.innerHTML = 'Número de Registrados: ' + count
+                
+                // let context = document.getElementById('chart').getContext('2d')
+                var newCanvas = document.createElement('canvas');
+                newCanvas.id = 'canv';
+                newCanvas.height = window.innerHeight*0.65
+                newCanvas.width = window.innerWidth
+                document.getElementById('chart').appendChild(newCanvas);
+                var context = newCanvas.getContext('2d'); // whatever type of context
+
+                var gradient = context.createLinearGradient(0, 0, 0, 1000);
+                gradient.addColorStop(0, "rgb(255,90,1)");
+                gradient.addColorStop(0.15, "rgb(255,140,0)");
+                gradient.addColorStop(0.25, "rgb(255,90,1)");
+                gradient.addColorStop(0.5, "rgb(255,140,0)");
+                gradient.addColorStop(0.75, "rgb(255,90,1)");
+                gradient.addColorStop(1, "rgb(255,140,0)");
+
+
+                const data = {
+                    labels: labels,
+                    datasets: [{
+                        label: etiqueta,
+                        backgroundColor: 'rgb(255,140,0)',
+                        borderColor: 'rgb(0,0,0)',
+                        data: dataManual,
+                        borderWidth : 5,
+                        backgroundColor: gradient,
+                    }]
+                };
+                // const config = {
+                // labels: labels,
+                // datasets: [
+                //     {
+                //         label: 'Registros',
+                //         data: dataManual,
+                //         borderColor: 'rgb(255, 99, 132)',
+                //         backgroundColor: 'rgb(0, 255, 0)',
+                //         borderWidth: 2,
+                //         borderRadius: 5,
+                //         borderSkipped: false,
+                //     }
+                // ]
+                // };
+
+                const config = {
+                    type: 'bar',
+                    data: data,
+                }
+
+                var chart = new Chart(context, config);
+            }
+        }
+
+        
+    function dameTitulo(titulo){
+        let nuevo = titulo.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ")
+        
+        return nuevo.charAt(0).toUpperCase() + nuevo.slice(1)
+    }
+    </script>
+</body>
+</html>

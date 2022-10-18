@@ -20,6 +20,7 @@
     <script>
         let idQr = ""
         async function cargaResultados(){
+                    document.body.scrollTop = document.documentElement.scrollTop = 0;
                     const queryString = window.location.search;
                     const urlParams = new URLSearchParams(queryString);
                     if(urlParams.get('idQr') == null){

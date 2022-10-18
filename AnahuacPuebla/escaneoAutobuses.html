@@ -6,12 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Día OV 2022</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <script type="text/javascript" src="./assets/js/qrscanner/jsqrscanner.nocache.js"></script>
 </head>
-<body style="font-family:'Avenir',sans-serif;" onload="creaEventosTeclado()">
+<body style="font-family:'Avenir',sans-serif;" onload="monitoreaInput()">
     <div class="cuerpo">
         <img class="imagenEncabezado" src="assets/img/logo.jpg" alt="" srcset="">
         <p class="titulo">SISTEMA ESCANEO CÓDIGO QR ACCESO</p><br>
-        <div id="detalleUsuario">
+        <div class="" id="divValidacion">
+            <p class="elmentoFormularioTitulo2 centrado"> Ingresa correo electrónico válido </p><br>
+            <input type="text" class="elmentoFormularioinput2" id="inputMail"> <br><br>
+            <button class="titulo" onclick="validaDatos()">Validar</button><br>
+        </div>
+        
+        <div id="detalleUsuario" class="oculto">
             <p class="elmentoFormularioTitulo2 centrado"> Nombre completo: </p>
             <p class="titulo" id="nombreCompleto"></p><br>
             <img src="assets/img/listo.png" alt="" class="imagen" id="iconoAcceso">
@@ -25,6 +32,28 @@
         let datosRelaciones
         let strInput = ""
         let index = 0
+        let usuarioValido = false
+
+        function monitoreaInput(){
+            const input = document.getElementById("inputMail")
+            input.addEventListener('input', updateValue);
+        }
+
+        function updateValue(e) {
+            if (e.target.value == "bruno.neriar@anahuac.mx"){
+                usuarioValido = true;
+            }
+        }
+
+        async function validaDatos(){
+            if(usuarioValido == true){
+                let div = document.getElementById("divValidacion")
+                div.className = "oculto"
+
+                
+
+            }
+        }
 
         async function creaEventosTeclado(){
             addEvent(document, "keypress", function (e) {
