@@ -37,7 +37,7 @@
 </head>
 <body style="font-family:'Avenir',sans-serif;"">
     <div class="cuerpo" id="cuerpo">
-        <img class="imagenEncabezado" src="assets/img/logo.jpg" alt="" srcset="">
+        <img class="imagenEncabezado" src="assets/img/logo.jpg" alt="" srcset="" onclick="borraCookie()">
         <p class="titulo">SISTEMA ESCANEO CÓDIGO QR ACCESO</p><br>
         <div class="cuerpo2" id="scanner">
             <!-- <video class="qrPreviewVideo" autoplay="" tabindex="0" src=""></video> -->
@@ -78,6 +78,10 @@
                 }
             }
             return "";
+        }
+
+        function borraCookie(){
+            setCookie("correoAdministrador", '', 60);
         }
 
         async function checkCookie() {
