@@ -163,3 +163,13 @@ body{
     font-size: xx-large;
     margin-bottom: 5px;
 }
+
+.qrscanner video {
+    max-width: 50%;
+    max-height: 75%;
+  }
+
+.qrPreviewVideo{
+    margin-left: 15%;
+    width: 70%;
+  }
