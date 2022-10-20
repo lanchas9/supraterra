@@ -37,11 +37,10 @@
 </head>
 <body style="font-family:'Avenir',sans-serif;"">
     <div class="cuerpo" id="cuerpo">
-        <img class="imagenEncabezado" src="assets/img/logo.jpg" alt="" srcset="" onclick="borraCookie()">
-        <p class="titulo">SISTEMA ESCANEO CÓDIGO QR ACCESO</p><br>
-        <div class="cuerpo2" id="scanner">
-            <!-- <video class="qrPreviewVideo" autoplay="" tabindex="0" src=""></video> -->
-        </div>
+        <img class="imagenEncabezado2" src="assets/img/logo.jpg" alt="" srcset="" onclick="borraCookie()">
+        <p id="botonAbreCamara" class="titulo2" onclick="creaLinks()">Sistema de Escaneo QR - dar click para abrir cámara</p><br>
+        <div id="divVideoFeed"></div>
+        <!-- <div id="emilio"></div> -->
         <!-- <input type="text" id="scannedTextMemo" class=""> -->
         <div id="detalleUsuario">
             <p class="elmentoFormularioTitulo2 centrado"> Nombre completo: </p>
@@ -57,6 +56,7 @@
         let datosRelaciones
         let strInput = ""
         let index = 0
+        let fuePorBotonUsuario = false
 
         function setCookie(cname, cvalue, exdays) {
             const d = new Date();
@@ -91,7 +91,7 @@
                 let resultado = await compruebaUsuario(correoAdministrador)
                 if (resultado != ''){
                     //TRUE ponemos links
-                    creaLinks()
+                    fuePorBotonUsuario=true
                 }else{
                     //FALSE borramos cookie
                     setCookie("correoAdministrador", '', 60);
@@ -104,7 +104,7 @@
                     if (resultado != ''){
                         //TRUE guardamos QR y ponemos links
                         setCookie("correoAdministrador", correoAdministrador, 60);
-                        creaLinks()
+                        fuePorBotonUsuario=true
                     }else{
                         //FALSE pagina en blanco
                         creaMensaje()
@@ -118,7 +118,18 @@
         
         function creaLinks(){
             //let nuevo = document.getElementById("cuerpo2")
-            provideVideoQQ()
+            // <div class="cuerpo2" id="scanner">
+            //     <!-- <video class="qrPreviewVideo" autoplay="" tabindex="0" src=""></video> -->
+            // </div>
+            
+            let video = document.createElement("div")
+            video.className = "qrPreviewVideo"
+            video.id = "scanner"
+            video.style.width=500
+            video.style.height=500
+            document.getElementById("botonAbreCamara").innerHTML = "Sistema de Escaneo QR"
+            document.getElementById("divVideoFeed").appendChild(video)
+            JsQRScannerReady()
         }
         function creaMensaje(){
             let nuevo = document.getElementById("cuerpo")
