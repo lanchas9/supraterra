@@ -155,7 +155,8 @@
                 setTimeout(() => {
                     console.log("Tiempo sin leer códigos QR 10 seg");
                     ocupado = false
-                }, "10000")
+                    loading()
+                }, "5000")
                 tenemosQR(scannedText)
 
             }
