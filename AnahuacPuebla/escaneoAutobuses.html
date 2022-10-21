@@ -10,6 +10,7 @@
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="./assets/js/qrscanner/jsqrscanner.nocache.js"></script>
     <script>
+        let idAdministrador
         async function compruebaUsuario(correoAdministrador){
                 const data = {
                     correoAdministrador : correoAdministrador
@@ -28,6 +29,7 @@
                 const dataFinal = await response.json();
                 let result = dataFinal.result
                 if (result == "True"){
+                    idAdministrador = dataFinal.message[0].idAdministrador
                     return dataFinal.message[0].correoAdministrador
                 }else{
                     return ''
@@ -57,6 +59,7 @@
         let strInput = ""
         let index = 0
         let fuePorBotonUsuario = false
+        let correoAdministrador
 
         function setCookie(cname, cvalue, exdays) {
             const d = new Date();
@@ -86,7 +89,7 @@
         }
 
         async function checkCookie() {
-            let correoAdministrador = getCookie("correoAdministrador");
+            correoAdministrador = getCookie("correoAdministrador");
             if (correoAdministrador != "") {
                 let resultado = await compruebaUsuario(correoAdministrador)
                 if (resultado != ''){
@@ -166,7 +169,8 @@
             let datosUsuario
             let data = {
                 "idQR" : idQR,
-                "metodoRegistro" : "Escaneo Autobuses"
+                "metodoRegistro" : "Escaneo Autobuses",
+                "idAdministrador" : idAdministrador
             }
             const dataJson = JSON.stringify(data)
             const settings = {
