@@ -242,7 +242,7 @@
         })
         .then(function(json) {
             if(json.result == "True"){
-                alert('La actualización de: ' + correoUsuario + ' se realizó con éxito');
+                alert('La actualización de idUsuario: ' + json.message + ' se realizó con éxito');
             }else{
                 alert('Error desconocido en la actualización');
             }
