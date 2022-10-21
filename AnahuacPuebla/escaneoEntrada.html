@@ -25,6 +25,7 @@
         let datosRelaciones
         let strInput = ""
         let index = 0
+        let idAdministrador = ''
 
         async function creaEventosTeclado(){
             addEvent(document, "keypress", function (e) {
@@ -71,11 +72,15 @@
         }
 
         async function tenemosQR(idQR){
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            idAdministrador = urlParams.get('idAdministrador')
+
             let datosUsuario
             let data = {
                 "idQR" : idQR,
                 "metodoRegistro" : "Acceso Principal",
-                "idAdministrador" : 0
+                "idAdministrador" : idAdministrador
             }
             const dataJson = JSON.stringify(data)
             const settings = {
