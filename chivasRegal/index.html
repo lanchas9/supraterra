@@ -25,15 +25,28 @@
         try{
             let data = await fetch("https://mosaico.app:4000/FileListDefault")
             lista = await data.json()
+            let fecha = new Date()
+            let hora = new Date().getHours()         // Get the hour (0-23)
+            let min = new Date().getMinutes()       // Get the minutes (0-59)
+            let seg = new Date().getSeconds()  // Get the milliseconds (0-999)
+            let fechaFinal = fecha.toLocaleDateString('es-MX')
+            let horaFinal = hora + ":" + min + ":" + seg
+            console.log(fechaFinal + "-" + horaFinal + " Base de datos Actualizada con # " + lista.length)
         }catch(error){
-            console.error("Mensaje Error: " + error)
+            let fecha = new Date()
+            let hora = new Date().getHours()         // Get the hour (0-23)
+            let min = new Date().getMinutes()       // Get the minutes (0-59)
+            let seg = new Date().getMilliseconds()  // Get the milliseconds (0-999)
+            let fechaFinal = fecha.toLocaleDateString('es-MX')
+            let horaFinal = hora + ":" + min + ":" + seg
+            console.error(fechaFinal + "-" + horaFinal + " Mensaje Error: " + error)
         }
     }
 
     function creaTimer(){
         setTimeout(() => {
             siguienteFoto()
-        }, 5000);
+        }, 10000);
     }
 
     async function siguienteFoto(){
