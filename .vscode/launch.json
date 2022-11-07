@@ -5,7 +5,7 @@
             "name": "Launch welcome",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:5500/stats.html",
+            "url": "http://localhost:5501/chivasRegal/index.html",
             "webRoot": "${workspaceFolder}/"
         },
         {
