@@ -22,8 +22,12 @@
     }
 
     async function actualizaLista(){
-        let data = await fetch("https://mosaico.app:4000/FileListDefault")
-        lista = await data.json()
+        try{
+            let data = await fetch("https://mosaico.app:4000/FileListDefault")
+            lista = await data.json()
+        }catch(error){
+            console.error("Mensaje Error: " + error)
+        }
     }
 
     function creaTimer(){
