@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIEWER</title>
+    <link rel="stylesheet" href="styleChivasRegal.css">
+</head>
+<body onload="anima()">
+    <div src="" alt="" srcset="" class="imagen" id="imagen"></div>
+<script>
+    let lista = []
+    let url = "https://mosaico.app:4433/htp/Prints/"
+    let index = 1
+    let arraySize = 0
+    async function anima(){
+        await actualizaLista()
+        arraySize = lista.length
+        asignaNuevaFoto()
+        creaTimer()
+    }
+
+    async function actualizaLista(){
+        try{
+            let data = await fetch("https://mosaico.app:4000/FileListDefault")
+            lista = await data.json()
+            let fecha = new Date()
+            let hora = new Date().getHours()         // Get the hour (0-23)
+            let min = new Date().getMinutes()       // Get the minutes (0-59)
+            let seg = new Date().getSeconds()  // Get the milliseconds (0-999)
+            let fechaFinal = fecha.toLocaleDateString('es-MX')
+            let horaFinal = hora + ":" + min + ":" + seg
+            console.log(fechaFinal + "-" + horaFinal + " Base de datos Actualizada con # " + lista.length)
+        }catch(error){
+            let fecha = new Date()
+            let hora = new Date().getHours()         // Get the hour (0-23)
+            let min = new Date().getMinutes()       // Get the minutes (0-59)
+            let seg = new Date().getMilliseconds()  // Get the milliseconds (0-999)
+            let fechaFinal = fecha.toLocaleDateString('es-MX')
+            let horaFinal = hora + ":" + min + ":" + seg
+            console.error(fechaFinal + "-" + horaFinal + " Mensaje Error: " + error)
+        }
+    }
+
+    function creaTimer(){
+        setTimeout(() => {
+            siguienteFoto()
+        }, 10000);
+    }
+
+    async function siguienteFoto(){
+        await actualizaLista()
+        if(lista.length > arraySize){
+            index = 1
+            arraySize = lista.length
+        }
+
+        if(index == lista.length){
+            index = 1
+        }else{
+            asignaNuevaFoto()
+        }
+        creaTimer()
+    }
+
+    async function asignaNuevaFoto(){
+        let imgUrl = url + lista[index];
+
+        await preloadImage(imgUrl)
+        .then(val =>{
+            let img = document.getElementById("imagen")
+            img.style.backgroundImage = `url(${imgUrl})`; 
+            index += 1
+        })
+        .catch(e =>{
+            console.error(e)
+        })
+    }
+
+    const preloadImage = src => 
+        new Promise((resolve, reject) => {
+            const image = new Image()
+            image.onload = resolve
+            image.onerror = reject
+            image.src = src
+        })
+</script>
+</body>
+</html>
