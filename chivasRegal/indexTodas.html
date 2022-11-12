@@ -12,7 +12,7 @@
 <script>
     let lista = []
     let url = "https://mosaico.app:4433/htp/Prints/"
-    let index = 0
+    let index = 2
     let arraySize = 0
     async function anima(){
         await actualizaLista()
@@ -23,7 +23,7 @@
 
     async function actualizaLista(){
         try{
-            let data = await fetch("https://mosaico.app:4000/14FileListDefaultTop10")
+            let data = await fetch("https://mosaico.app:4000/FileListDefault")
             lista = await data.json()
             let fecha = new Date()
             let hora = new Date().getHours()         // Get the hour (0-23)
@@ -52,12 +52,12 @@
     async function siguienteFoto(){
         await actualizaLista()
         if(lista.length > arraySize){
-            index = 0
+            index = 2
             arraySize = lista.length
         }
 
         if(index == lista.length){
-            index = 0
+            index = 2
         }else{
             asignaNuevaFoto()
         }

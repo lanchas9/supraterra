@@ -23,7 +23,7 @@
 
     async function actualizaLista(){
         try{
-            let data = await fetch("https://mosaico.app:4000/FileListDefault")
+            let data = await fetch("https://mosaico.app:4000/14FileListDefaultTop10")
             lista = await data.json()
             let fecha = new Date()
             let hora = new Date().getHours()         // Get the hour (0-23)
