@@ -2,10 +2,10 @@
     "version": "0.1.0",
     "configurations": [
         {
-            "name": "Launch welcome",
+            "name": "Launch QR reader",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:5501/chivasRegal/index.html",
+            "url": "http://localhost:5501/reebok/escaneoEntrada.html",
             "webRoot": "${workspaceFolder}/"
         },
         {

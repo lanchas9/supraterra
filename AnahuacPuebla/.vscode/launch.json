@@ -8,7 +8,7 @@
             "name": "Launch welcome",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:5500/menu_reporte.html",
+            "url": "http://localhost:5500/reebok/escaneoEntrada.html",
             "webRoot": "${workspaceFolder}/"
         }
     ]
