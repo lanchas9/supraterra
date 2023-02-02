@@ -1,6 +1,12 @@
+@font-face {
+    font-family: "Neue Plak W01";
+    src: url('../font/NeuePlakW01.ttf') format('truetype');
+}
+
 body{
     background-color: white;
     background-image: url("../img/back.jpg");
+    font-family: "Neue Plak W01", Calibri, Tahoma, sans-serif;
 }
 
 .cuerpo{
@@ -37,11 +43,13 @@ body{
     color: white;
     /* height: 40px; */
     margin-left: 20%;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     border-radius: 10px;
     text-align: center;
     font-size: x-large;
+    margin-top: 2px;
+    margin-bottom: 2px;
 }
 
 .elmentoFormularioTitulo{
