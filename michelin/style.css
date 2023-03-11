@@ -96,6 +96,7 @@ body {
     margin-bottom: 0px;
     margin-top: 5%;
     margin-bottom: 10px;
+    border: none;
 }
 
 .divisionMoradaAbajo{
@@ -106,27 +107,30 @@ body {
     margin-right: 20%;
     margin-bottom: 10%;
     margin-top: 10px;
+    border: none;
 }
 
 .divisionAmarilloArriba{
     color: #FFE600;
     background-color: #FFE600;
-    height: 6px;
+    height: 10px;
     margin-left: 10%;
     margin-right: 10%;
     margin-bottom: 0px;
     margin-top: 5%;
     margin-bottom: 10px;
+    border: none;
 }
 
 .divisionAmarilloAbajo{
     color: #FFE600;
     background-color: #FFE600   ;
-    height: 6px;
+    height: 10px;
     margin-left: 10%;
     margin-right: 10%;
     margin-bottom: 10%;
     margin-top: 10px;
+    border: none;
 }
 
 .textoTitulo{

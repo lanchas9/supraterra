@@ -97,6 +97,7 @@ body {
     margin-bottom: 0px;
     margin-top: 5%;
     margin-bottom: 10px;
+    border: none;
 }
 
 .divisionMoradaAbajo{
@@ -107,12 +108,13 @@ body {
     margin-right: 20%;
     margin-bottom: 10%;
     margin-top: 10px;
+    border: none;
 }
 
 .divisionAmarilloArriba{
     color: #b68a1c;
     background-color: #b68a1c;
-    height: 6px;
+    height: 10px;
     margin-left: 10%;
     margin-right: 10%;
     margin-bottom: 0px;
@@ -124,7 +126,7 @@ body {
 .divisionAmarilloAbajo{
     color: #b68a1c;
     background-color: #b68a1c   ;
-    height: 6px;
+    height: 10px;
     margin-left: 10%;
     margin-right: 10%;
     margin-bottom: 10%;
