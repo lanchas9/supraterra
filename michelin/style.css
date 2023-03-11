@@ -238,3 +238,47 @@ body {
     justify-content: center;
     margin-bottom: 5%;
 }
+
+
+@media only screen and (min-width: 1024px){
+.logoTitulo{
+    display: block;
+    margin: auto;
+    max-width: 350px;
+    margin-top: 10px;
+}
+.texto{
+    font-size: x-large;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.divisionAmarilloArriba{
+    margin-top: 30px;
+    max-width: 800px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+.divisionAmarilloAbajo{
+    margin-bottom: 30px;
+    max-width: 800px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+.inputDatos{
+    margin-bottom: 10px;
+    max-width: 512px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.mensajeError{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+}
