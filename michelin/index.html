@@ -19,8 +19,8 @@
     <input type="text" class="inputDatos" id="nombreUsuario" >
     <p class="texto">Correo Electrónico</p>
     <input type="email" class="inputDatos" id="correoUsuario" >
-    <p class="texto">Celular (10 dígitos)</p>
-    <input type="number" class="inputDatos" id="celularUsuario" >
+    <p class="texto">Marca y Modelo de Vehículo</p>
+    <input type="text" class="inputDatos" id="automovilUsuario" >
     <p class="mensajeError" id="mensajeError"></p>
     <div class="centrado">
         <button class="boton" onclick="validaDatos()">Guardar</button>
@@ -31,17 +31,22 @@
             document.getElementById("mensajeError").innerHTML = ""
             let nombreUsuario = new String(document.getElementById("nombreUsuario").value);
             let correoUsuario = new String(document.getElementById("correoUsuario").value);
-            let celularUsuario = new String(document.getElementById("celularUsuario").value);
+            let automovilUsuario = new String(document.getElementById("automovilUsuario").value);
             
             
             let valido = true
             let mensaje = ""
             
-            celularUsuario = celularUsuario.trim()
-            if(celularInValido(celularUsuario)){
+            // celularUsuario = celularUsuario.trim()
+            // if(celularInValido(celularUsuario)){
+            //     valido = false
+            //     mensaje = "celular no es de 10 dígitos"
+            // }
+            if (automovilUsuario.length<= 5) {
                 valido = false
-                mensaje = "celular no es de 10 dígitos"
+                mensaje = "Agrega Marca y Modelo de tu Vehículo"
             }
+
             correoUsuario = correoUsuario.trim()
             if(mailInValido(correoUsuario)){
                 valido = false
@@ -54,7 +59,7 @@
             }
             
             if(valido){
-                let resul = await guardaDatos(nombreUsuario, correoUsuario,celularUsuario)
+                let resul = await guardaDatos(nombreUsuario, correoUsuario,automovilUsuario)
                 if (resul.statusCode ==200){
                     
                     window.location.href = `validado.html?idUsuario=${resul.idUsuario}`;
@@ -76,7 +81,7 @@
             const data = {
                     "nombreUsuario" : nombreUsuario,
                     "correoUsuario" : correoUsuario,
-                    "celularUsuario" : celularUsuario
+                    "automovilUsuario" : automovilUsuario
                 }
                 const dataJson = JSON.stringify(data)
 
