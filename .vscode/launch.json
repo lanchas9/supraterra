@@ -5,7 +5,7 @@
             "name": "Launch QR reader",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:5501/michellin/index.html",
+            "url": "http://localhost:5501/michelin/index.html",
             "webRoot": "${workspaceFolder}/"
         },
         {
