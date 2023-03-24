@@ -49,8 +49,10 @@
 
                  const formData = new FormData();
                  formData.append("command" , "login");
-                 formData.append("username" , "");
-                 formData.append("password" , "");
+                 let user = prompt("Dame el username:")
+                 formData.append("username" , user);
+                 let pass = prompt("Dame el password:")
+                 formData.append("password" , pass);
                  formData.append("orig_url" , "http%3A%2F%2Fgoogle.com");
 
                  const request = new XMLHttpRequest();
