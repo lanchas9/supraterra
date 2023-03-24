@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <title>Michelin Wifi</title>
 </head>
-<body>
+<body onload="realizaLogin()">
     <img src="ver2/Michelin-Logo-PNG_2.png" alt="" srcset="" class="logoTitulo">
     <hr class="divisionAmarilloArriba">
     <div class="divCentrado">
@@ -18,11 +18,47 @@
     <br>
     <p class="texto">Ya puedes acceder a nuestra red WIFI durante el evento</p>
     <div class="centrado">
-        <button class="boton" onclick="token()">Acceder Wifi</button>
+        <a href="http://google.com">
+            <button class="boton">Acceder Wifi</button>
+        </a>
     </div>
     <script>
         function token(){
-            window.location.href = 'https://www.michelin.com.mx/';
+            window.location.href = 'http://google.com';
+        }
+
+        async function realizaLogin(){
+
+            const data = {
+                    "command" : "login",
+                    "username" : "",
+                    "password" : "",
+                    "orig_url" : "http%3A%2F%2Fgoogle.com"
+                }
+                const dataJson = JSON.stringify(data)
+
+                const settings = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                 body: 
+                    dataJson
+                 };
+
+                 const formData = new FormData();
+                 formData.append("command" , "login");
+                 formData.append("username" , "");
+                 formData.append("password" , "");
+                 formData.append("orig_url" , "http%3A%2F%2Fgoogle.com");
+
+                 const request = new XMLHttpRequest();
+                request.open("POST", "https://captive-portal.peplink.com:8000/portal.cgi");
+                request.send(formData);
+
+                alert("mensaje enviado")
+                console.log({formData})
         }
     </script>
 </body>

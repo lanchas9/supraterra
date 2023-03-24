@@ -62,7 +62,7 @@
                 let resul = await guardaDatos(nombreUsuario, correoUsuario,automovilUsuario)
                 if (resul.statusCode ==200){
                     
-                    window.location.href = `validado.html?idUsuario=${resul.idUsuario}`;
+                    window.location.href = `validado.html`;
                 }else{
                     document.getElementById("mensajeError").innerHTML = resul.message
                 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulario de ejemplo para Pepwave</title>
+  <script>
+    function onSubmitForm() {
+      alert("Formulario enviado");
+      // Aquí puedes agregar acciones adicionales que se ejecutarán cuando se envíe el formulario
+    }
+  </script>
+</head>
+<body>
+  <form onsubmit="onSubmitForm();" action="https://captive-portal.peplink.com:8000/portal.cgi" method="POST">
+    <input type="hidden" name="command" value="login">
+    
+    <label for="username">Nombre de usuario:</label>
+    <input type="text" id="username" name="username" required>
+    <br>
+    <label for="password">Contraseña:</label>
+    <input type="password" id="password" name="password" required>
+    <br>
+    
+    <!-- Aquí puedes agregar el URL original al que el usuario debe ser redirigido después del inicio de sesión exitoso -->
+    <input type="hidden" name="orig_url" value="https://www.ejemplo.com">
+    
+    <input type="submit" value="Iniciar">
+  </form>
+</body>
+</html>
