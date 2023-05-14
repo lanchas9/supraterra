@@ -1,0 +1,56 @@
+body{
+    color: #1E1E1E;
+    text-align: center;
+    background: url(../img/oppo.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  overflow: hidden;
+}
+
+.img{
+    width: 50%;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    
+}
+
+.centrado{
+    align-items: center;    
+}
+
+.logo{
+    width: 25%;    
+    margin-bottom: 2%;
+}
+
+
+.fotoInvitado{
+    width: 90%;    
+    box-shadow: 10px 10px 5px black;
+    margin-bottom: 2%;
+}
+
+.qr{
+    width: 10%;    
+    height: 10%;
+    margin-left: 10%;
+}
+
+.boton{
+    background-color: green;
+    color: white;
+    width: 60%;
+    margin-left: 20%;
+    height: 35px;
+    font-size: x-large;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 7px;
+    box-shadow: 5px 5px 5px #116532;
+}
+.liga{
+    text-decoration: none;
+}

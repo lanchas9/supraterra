@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OPPO</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/jquery.min.js"  type='text/javascript'></script>
+    <script src="js/qrcode.js"  type='text/javascript'></script>
+</head>
+<body>
+    <div class="centrado"></div>
+    <img src="" alt="" srcset="" class="fotoInvitado" id="fotoInvitado">
+        <div id="qrcode1" class="qr"></div>
+        <div class="boton" onclick="regresa()">Regresar</div>
+    </div>
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        let path = urlParams.get('path');
+
+        document.getElementById("fotoInvitado").src = 'https://res.cloudinary.com/yellowhat/image/upload/' + path
+        let str = "https://api.whatsapp.com/send?phone=12134938066&text=Hola%2C+acabo+de+participar+en+el+evento+OPPO+-+Champions+League+Trophy+patrocinado+por+la+Red+TELCEL+5G%2C+mi+fotograf%C3%ADa+tiene+el+ID%3A" + path
+        
+        let urlImagenQR = str
+            
+        try{
+            new QRCode(document.getElementById('qrcode1'), urlImagenQR);
+        }catch(err){
+            console.log(err)
+        }
+        async function regresa(){
+        window.location.href = `tomaFoto.html`;
+        }
+    </script>
+</body>
+</html>

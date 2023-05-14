@@ -1,0 +1,16 @@
+@local = http://localhost:3000/
+@server =   https://mosaico.app:3000/
+@hostname = {{server}}
+
+### helloNode
+GET {{hostname}}
+Content-Type: application/json
+
+### Probar descarga de fotos desde cloudinary
+POST {{hostname}}guardarFotoNuevaDeCloudinary
+Content-Type: application/json
+
+{
+    "public_id" : "oppo/tm0drygvb5srb5jgpsrj", 
+    "format" : "jpg"
+}
