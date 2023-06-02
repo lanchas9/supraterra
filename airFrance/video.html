@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" type="image/jpg" href="assets/images/70aniversario.jpg" />
+    <title>AirFrance México - Paris 70 aniversario</title>
+</head>
+<body onload="guardaIdUsuario()">
+    <div class="centrado">
+        <img src="assets/images/Logo.png" alt="" srcset="" class="logoTitulo">
+    </div>
+    <video id="myVideo" class="video" src="assets/video/video.mp4" controls autoplay></video>
+    <div class="centrado">
+        <button id="botonTerminar" class="boton oculto" onclick="window.location.href = `preguntas.html?idUsuario=${idUsuario}`;">Preguntas</button>
+    </div>
+    <script type='text/javascript'>
+        let idUsuario = 0
+        function guardaIdUsuario() {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            idUsuario = urlParams.get('idUsuario') 
+            document.getElementById('myVideo').addEventListener('ended',myHandler,false);
+        }
+
+        function myHandler(){
+            document.getElementById('botonTerminar').className = "boton mostrar";
+        }
+    </script>
+</body>
+</html>

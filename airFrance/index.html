@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpg" href="assets/images/70aniversario.jpg" />
+<link rel="stylesheet" href="assets/css/style.css">
+    <title>AirFrance México - Paris 70 aniversario</title>
+</head>
+<body>
+    <div class="centrado">
+        <img src="assets/images/Logo.png" alt="" srcset="" class="logoTitulo">
+    </div>
+    <div class="centrado">
+        <img src="assets/images/70aniversario.jpg" alt="" srcset="" class="logoPortada" onclick="borraCookies()">
+    </div>
+    
+    <p class="texto">Gracias por ser parte <br> de esta celebración. <br>
+         ¡Mucha suerte! </p>
+         <div class="centrado">
+            <button class="boton" onclick="window.location.href = 'instrucciones.html';">Iniciar</button>
+         </div>
+    
+    <script src="assets/js/cookie.js"type="text/javascript"></script>
+    <script type="text/javascript">
+        function borraCookies(){
+            deleteCookie("idUsuario");
+            deleteCookie("yaContesto");
+            deleteCookie("numAciertos");
+            deleteCookie("numPreguntas");
+            deleteCookie("botonRegresar");
+        }
+
+        function deleteCookie(name){
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        }
+
+    </script>
+</body>
+</html>

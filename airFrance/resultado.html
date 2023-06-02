@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/jpg" href="assets/images/70aniversario.jpg" />
+    <title>AirFrance México - Paris 70 aniversario</title>
+</head>
+<body onload="cargaResultados()">
+    <div class="centrado">
+        <img src="assets/images/Logo.png" alt="" srcset="" class="logoTitulo">
+    </div>
+    <hr class="divisionRojaArriba">
+    <div class="divCentrado">
+        <span class="textoTitulo">Resultado</span>
+    </div>
+    <hr class="divisionRojaAbajo">
+    <p class="texto">Tuviste: </p>
+    <p class="mensajeError grande" id="numeroAciertos">1 / 6 </p>
+    <p class="texto">aciertos </p>
+    <p class="texto oculto centrado" id="textoGanador">
+        ¡Felicidades! <br>
+        Revisa la bandeja <br>
+        para recoger tus <br>
+        premios</p>
+
+    <p class="texto oculto centrado" id="textoPerdedor">
+        ¡Gracias por participar! <br>
+        Te invitamos a seguir volando<br>
+        con nosotros</p>
+    <br><br>
+    <div class="centrado">
+        <button class="boton" onclick="connectSerial()">Salir</button>
+    </div>
+    <script type="text/javascript">
+        let numAciertos = 0;
+            async function cargaResultados(){
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                let idUsuario = urlParams.get('idUsuario') 
+                numAciertos = urlParams.get('numAciertos') 
+                let numPreguntas = urlParams.get('numPreguntas') 
+                document.getElementById("numeroAciertos").innerHTML = numAciertos + " / " + numPreguntas
+                /*
+                if (numAciertos == numPreguntas){
+                    document.getElementById("textoGanador").className = "texto mostrar centrado"
+                     
+                    let botonRegresar = getCookie("botonRegresar")
+                    if (botonRegresar == false){
+                            const data = {
+                                "idUsuario" : idUsuario,
+                            }
+                            const dataJson = JSON.stringify(data)
+
+                            const settings = {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: 
+                                dataJson
+                            };
+                            
+                            try {
+                            const fetchResponse = await fetch(`https://mosaico.app:4000/airFrance/guardaGanador`, settings);
+                            const data = await fetchResponse.json();
+                            resul = data.statusCode
+                            if(resul == 200){
+                                console.log("Email enviado correctamente")
+                            }else{
+                                console.log("Error: " + data.message)
+                            }
+                        } catch (e) {
+                            console.log("Error:" + e)
+                        }
+                    }
+                }else*/ if(numAciertos > 0){
+                    document.getElementById("textoGanador").className = "texto mostrar centrado"
+                     
+                    let botonRegresar = getCookie("botonRegresar")
+                    if (botonRegresar == false){
+                            const data = {
+                                "idUsuario" : idUsuario,
+                            }
+                            const dataJson = JSON.stringify(data)
+
+                            const settings = {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: 
+                                dataJson
+                            };
+                            
+                            try {
+                            // const fetchResponse = await fetch(`https://mosaico.app:4000/airFrance/guardaGanador`, settings);
+                            // const data = await fetchResponse.json();
+                            // resul = data.statusCode
+                            let resul = 200;
+                            if(resul == 200){
+                                console.log("Email enviado correctamente")
+                            }else{
+                                console.log("Error: " + data.message)
+                            }
+                        } catch (e) {
+                            console.log("Error:" + e)
+                        }
+                    }
+            }else{
+                    document.getElementById("textoPerdedor").className = "texto mostrar centrado"
+                }
+            }
+
+            // async function entregaPremios(){
+            //     switch(true){
+            //             case (numAciertos >=6):
+            //                 await sendCharacterNumber("6")
+            //                 console.log("Enviamos 6")
+            //             case (numAciertos >=5):
+            //                 await sendCharacterNumber("5")
+            //                 console.log("Enviamos 5")
+            //             case (numAciertos >=4):
+            //                 await sendCharacterNumber("4")
+            //                 console.log("Enviamos 4")
+            //             case (numAciertos >=3):
+            //                 await sendCharacterNumber("3")
+            //                 console.log("Enviamos 3")
+            //             case (numAciertos >=2):
+            //                 await sendCharacterNumber("2")
+            //                 console.log("Enviamos 2")
+            //             case (numAciertos >=1):
+            //                 await sendCharacterNumber("1")
+            //                 console.log("Enviamos 1")
+            //                 break;
+            //         }
+            // }
+    </script>
+    <script src="assets/js/cookie.js"type="text/javascript"></script>
+    <script>
+        var port, textEncoder, writableStreamClosed, writer, historyIndex = -1;
+        const lineHistory = [];
+    
+        async function connectSerial() {
+
+            if ("serial" in navigator) {
+                try {
+
+                    const portsYaAutorizados = await navigator.serial.getPorts();    
+                    if (portsYaAutorizados){
+                        port = portsYaAutorizados[0]
+                        console.log("Ya autorizado")
+                    }else{
+                        console.log("Vamos a Preguntar de nuevo")
+                        const filters = [
+                        { usbVendorId: 0x2341, usbProductId: 0x0042 }
+                        //     ,{ usbVendorId: 0x2341, usbProductId: 0x0001 }
+                        ];
+
+                        port = await navigator.serial.requestPort({ filters });
+                    }
+                    
+                    await port.open({ baudRate: 9600 });
+                    // const { usbProductId, usbVendorId } = port.getInfo();
+                    // console.log({usbProductId})
+                    // console.log({usbVendorId})
+                    listenToPort();
+        
+                    textEncoder = new TextEncoderStream();
+                    writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+        
+                    writer = textEncoder.writable.getWriter();
+                    let resul = 48 + numAciertos;
+                    console.log("vamos a envar: " + resul)
+                    await writer.write(resul)
+                    console.log("salimos de entrega de premios")
+                
+                } catch(err) {
+                    alert("Serial Connection Failed: " + err);
+                }
+            }else{
+                alert("API serial no soportada");
+            }
+        }
+    
+        // async function sendCharacterNumber(str){
+        //     try{
+        //         await writer.write(str);
+        //     }catch(err){
+        //         console.error("Mensaje: " + err)
+        //     }
+        // }
+
+        async function listenToPort() {
+        const textDecoder = new TextDecoderStream();
+        const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+        const reader = textDecoder.readable.getReader();
+        console.log("Vamos a escuchar el serial tambien")
+        // Listen to data coming from the serial device.
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) {
+                // Allow the serial port to be closed later.
+                //reader.releaseLock();
+                break;
+            }
+            // value is a string.
+            console.log(value)
+        }
+    }
+
+    </script>
+</body>
+</html>

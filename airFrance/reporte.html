@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/jpg" href="assets/images/70aniversario.jpg" />
+    <script src="assets/js/jquery.min.js"  type='text/javascript'></script>
+    <script src="assets/js/qrcode.js"  type='text/javascript'></script>
+    <title>AirFrance México - Paris 70 aniversario</title>
+</head>
+<body onload="actualiza()">
+    <div class="centrado">
+        <img src="assets/images/Logo.png" alt="" srcset="" class="logoTitulo">
+    </div>
+    <hr class="divisionRojaArriba">
+    <div class="centrado">
+        <span class="textoTitulo">Usuarios Totales</span>
+    </div>
+    <hr class="divisionRojaAbajo">
+    <br>
+    <p class="texto">Usuarios Registrados : </p><p class="mensajeError grande" id="numUsuariosTotales"> </p>
+    <p class="texto">Usuarios con 3 Aciertos: </p><p class="mensajeError grande" id="numUsuariosGanadores"> </p>
+    <div">
+        <div id="qrcode1"  class="qrcode2"></div>
+    </div>
+    <div class="centrado">
+        <button class="boton" onclick="actualiza()">Actualizar</button>
+    </div>
+    <script type='text/javascript'>
+
+         async function actualiza(){
+            
+            const settings = {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                 };
+                try {
+                    const fetchResponse = await fetch(`https://mosaico.app:4000/airFrance/dameTotalDeUsuarios`, settings);
+                    const data = await fetchResponse.json();
+                    if (data.statusCode==200){
+                        let numUsuariosTotales  = data.numUsuariosTotales
+                        let numUsuariosGanadores = data.numUsuariosGanadores
+
+                        document.getElementById("numUsuariosTotales").innerHTML = numUsuariosTotales 
+                        document.getElementById("numUsuariosGanadores").innerHTML = numUsuariosGanadores
+                        
+                        let qr = document.getElementById('qrcode1')
+                        qr.innerHTML= ''
+                        let newLink = 'AirFrance_YH_MaxQR_'+numUsuariosGanadores
+                        let baseURL = newLink
+                        new QRCode(document.getElementById('qrcode1'), baseURL);
+                    }
+                    
+                    
+                } catch (e) {
+                    console.log("Error" + e)
+                }
+        }
+
+    </script>
+</body>
+</html>

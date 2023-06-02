@@ -1,0 +1,291 @@
+body {
+    background-color: white;
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+  }
+
+  .verde{
+      background-color: green;
+  }
+
+.logoTitulo{
+    align-items: center;
+    width: 80%;
+    margin-top: 10%;
+    max-width: 400px;
+}
+
+.logoTituloPreguntas{
+    align-items: center;
+    margin-left: 10%;
+    width: 80%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    max-width: 400px;
+}
+
+.logoPortada{
+    align-items: center;
+    margin: 10%;
+    width: 80%;
+    margin-top: 5%;
+    max-width: 400px;
+}
+
+.texto{
+    text-align: center;
+    font-weight: 600;
+    font-size: 20px;
+    color: #002156 ;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-top: 0%;
+    margin-bottom: 7%;
+}
+
+.boton{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 8px; 
+    background-color: #ed1c24  ; 
+    border: none;
+    color: white;
+    padding-top : 16px;
+    padding-bottom : 16px;
+    padding-left: 32px;
+    padding-right: 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 24px;
+    width: 50%;
+    max-width: 250px;
+}
+
+.boton2{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border-radius: 8px; 
+    background-color: #ed1c24  ; 
+    border: none;
+    color: white;
+    padding-top : 16px;
+    padding-bottom : 16px;
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 24px;
+    width: 50%;
+    max-width: 250px;
+}
+
+.divisionRojaArriba{
+    color: #ed1c24;
+    background-color: #ed1c24;
+    height: 6px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 0px;
+    margin-top: 5%;
+    margin-bottom: 10px;
+}
+
+.divisionRojaAbajo{
+    color: #ed1c24;
+    background-color: #ed1c24;
+    height: 6px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 10%;
+    margin-top: 10px;
+}
+
+.textoTitulo{
+    font-weight: 600;
+    font-size: 32px;
+    color: #002156 ;
+    margin: auto;
+}
+
+.divCentrado{
+    text-align: center;
+}
+
+.textoTitulo2{
+    font-weight: 600;
+    font-size: 32px;
+    color: #002156 ;
+    text-align: center;
+    width: 50%;
+    margin-left: 32%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.textoTitulo3{
+    font-weight: 600;
+    font-size: 18px;
+    color: #002156 ;
+    text-align: center;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.inputDatos{
+    font-weight: 600;
+    font-size: 18px;
+    color: #002156 ;
+    text-align: center;
+    width: 50%;
+    height: 30px;
+    margin-left: 25%;
+    background-color: whitesmoke;
+    margin-bottom: 5%;
+}
+
+.mensajeError{
+    color: #ed1c24;
+    height: 30px;
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+}
+
+.respuestas{
+    color: white;
+    height: 30px;
+    font-weight: 600;
+    font-size: 18px;
+    text-align: center;
+    background-color: #ed1c24;
+    margin-top: 5%;
+    width: 80%;
+    height: 30px;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-color: #002156;
+    border-style: solid;
+    border-width: 5px;
+    line-height: 1.5;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.respuestaSelecionada{
+    background-color: #002156; 
+    border-color: #ed1c24;
+}
+
+.oculto{
+    display: none;
+}
+
+.mostrar{
+    display: inline-block;
+}
+
+.centrado{
+    text-align: center;
+    align-content: center;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+    line-height: 1.5;
+    vertical-align: middle;
+}
+
+.video{
+    width: 76%;
+    margin-left: 12%;
+}
+
+.video2{
+    padding-top: 10px;
+    padding-bottom: 10px;   
+    display: flex;
+    justify-content: center;
+    margin: auto;
+}
+
+.grande{
+    font-weight: 800;
+    font-size: 32px;
+}
+
+.qrcode2{
+    padding-top: 0px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+@media (min-width: 800px){
+    .texto{
+        margin-top: 0%;
+        margin-bottom: 2%;
+    }
+    .logoPortada{
+        margin-bottom: 2%;
+        margin-top: 2%;
+    }
+
+    .logoTitulo{
+        margin-top: 2%;
+        margin-bottom: 0%;
+    }
+    .boton{
+        margin-left: 0px;
+        align-self: center;
+        align-items: center;
+        align-content: center;
+        text-align: center;
+        margin-left: auto;
+    }
+    .divisionRojaArriba{
+        margin-top: 2%;
+    }
+    .divisionRojaAbajo{
+        margin-bottom: 2%;
+    }
+    .inputDatos{
+        margin-bottom: 2%;
+    }
+    .logoTituloPreguntas{
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+    .video{
+        max-width: 320px;
+        margin-left: 0px;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 1%;
+    }
+
+    .video2{
+        display: flex;
+        justify-content: center;
+        margin: auto;
+    }
+    .respuestas{
+        margin-top: 2%;
+        margin-bottom: 2%;
+    }
+    .qrcode{
+        
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 16%;
+    }
+
+    .qrcode2{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: center;
+    }
+}

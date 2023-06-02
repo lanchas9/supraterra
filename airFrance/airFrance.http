@@ -1,0 +1,45 @@
+@local = http://localhost:4000/
+@server =   https://mosaico.app:4000/
+@hostname = {{server}}
+
+### helloNode
+GET {{hostname}}
+Content-Type: application/json
+
+### helloMySql
+GET {{hostname}}helloMySql
+Content-Type: application/json
+
+### reenvia Mail a usuario 
+POST {{hostname}}airFrance/guardaUsuario
+Content-Type: application/json
+
+{
+    "nombreUsuario" : "Manuel Medina",
+    "correoUsuario" : "mmedina@itbm.mx",
+    "celularUsuario" : 7773102030
+}
+
+### dame Mis Preguntas
+GET {{hostname}}airFrance/dameMisPreguntas
+Content-Type: application/json
+
+###Guarda usuario Ganador 
+POST {{hostname}}airFrance/guardaGanador
+Content-Type: application/json
+
+{
+    "idUsuario" : 1000
+}
+
+### dame Mis Preguntas
+GET {{hostname}}airFrance/dameTotalDeUsuarios
+Content-Type: application/json
+
+### dame Mis Preguntas
+GET {{hostname}}airFrance/dameTodosLosUsuarios
+Content-Type: application/json
+
+### existeUsuarioConEsteCelular
+GET {{hostname}}airFrance/existeUsuarioConEsteCelular?numeroCelular=7775640845
+Content-Type: application/json

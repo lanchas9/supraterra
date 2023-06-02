@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/contador2.css">
+<link rel="icon" type="image/jpg" href="assets/images/70aniversario.jpg" />
+    <title>AirFrance México - Paris 70 aniversario</title>
+</head>
+<body onload="cargaPreguntas()">
+    <div class="centrado">
+        <img src="assets/images/Logo.png" alt="" srcset="" class="logoTitulo">
+    </div>
+    <!-- <div class="container"></div> -->
+    <div id="app" class="app"></div>
+    <br>
+    <p class="textoTitulo3" id="tituloPregunta">Título pregunta</p>
+    <p class="respuestas" id="respuestas01" onclick="asignaRespuesta(1)">Opción respuesta 1</p>
+    <p class="respuestas" id="respuestas02" onclick="asignaRespuesta(2)">Opción respuesta 2</p>
+    <p class="respuestas" id="respuestas03" onclick="asignaRespuesta(3)">Opción respuesta 3</p>
+    <div class="centrado">
+        <button class="boton" onclick="paraCronometro()">Siguiente</button>
+    </div>
+    <script type="text/javascript">
+        let preguntaActual = -1;
+        let preguntas;
+        let respuestas = [];
+        let idUsuario = 0;
+        let numPreguntas = 0;
+
+        function paraCronometro(){
+            timeLeft=0;
+            onTimesUp() ; //en cronometro2.js
+        }
+
+        function asignaRespuesta(resp){
+            respuestas[preguntaActual] = resp
+            document.getElementById("respuestas01").className = "respuestas"
+            document.getElementById("respuestas02").className = "respuestas"
+            document.getElementById("respuestas03").className = "respuestas"
+            document.getElementById("respuestas0"+resp).className = "respuestas respuestaSelecionada"
+        }
+
+        function siguientePregunta(){
+            preguntaActual +=  1
+            if (preguntaActual < numPreguntas){
+                document.getElementById("respuestas01").className = "respuestas"
+                document.getElementById("respuestas02").className = "respuestas"
+                document.getElementById("respuestas03").className = "respuestas"
+                configuraPreguntas();
+            }else{
+                evaluaRespuestas()
+            }
+        }
+
+        function evaluaRespuestas(){
+            console.log("Respuestas : " + respuestas);
+            let contador = 0;
+            
+            preguntas.forEach((element,index) => {
+                if(element.respuestaCorrecta == respuestas[index]){
+                contador +=1
+                }
+            });
+            guardaCookie(true, contador, numPreguntas)
+            window.location.href = `resultado.html?idUsuario=${idUsuario}&numAciertos=${contador}&numPreguntas=${numPreguntas}`;  
+        }
+
+        function guardaCookie(yaContesto, numAciertos, numPreguntas){
+            setCookie("yaContesto", yaContesto, 10);
+            setCookie("numAciertos", numAciertos, 10);
+            setCookie("numPreguntas", numPreguntas, 10);
+        }
+
+        async function cargaPreguntas(){
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            idUsuario = urlParams.get('idUsuario') 
+            console.log({idUsuario})
+
+            let yaContesto = getCookie("yaContesto")
+            let numAciertosCookie = getCookie("numAciertos")
+            let numPreguntasCookie = getCookie("numPreguntas")
+
+            if (yaContesto){
+                setCookie("botonRegresar", true, 10);
+                window.location.href = `resultado.html?idUsuario=${idUsuario}&numAciertos=${numAciertosCookie}&numPreguntas=${numPreguntasCookie}`;  
+            }
+            
+            const settings = {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                 };
+                try {
+                    const fetchResponse = await fetch(`https://mosaico.app:4000/airFrance/dameMis6Preguntas`, settings);
+                    const data = await fetchResponse.json();
+                    preguntas = data.preguntasData
+                    console.log("# Preguntas: " + preguntas.length)
+                    numPreguntas =  preguntas.length
+                    respuestas = Array(numPreguntas).fill(0)
+
+                    // console.log(JSON.stringify(preguntas))
+                   console.log("Preguntas: " + preguntas[0].idPregunta + ", "  + preguntas[1].idPregunta + ", "  + preguntas[2].idPregunta)
+                    siguientePregunta()
+                } catch (e) {
+                    console.log("Error" + e)
+                }
+        }
+
+        function configuraPreguntas(){
+            document.getElementById("tituloPregunta").innerHTML = preguntas[preguntaActual].textoPregunta
+            document.getElementById("respuestas01").innerHTML = preguntas[preguntaActual].textoRespuesta1
+            document.getElementById("respuestas02").innerHTML = preguntas[preguntaActual].textoRespuesta2
+            document.getElementById("respuestas03").innerHTML = preguntas[preguntaActual].textoRespuesta3
+            startTimer();
+        }
+        </script>
+    
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"type="text/javascript"></script> -->
+        <script src="assets/js/cronometro2.js"type="text/javascript"></script>
+        <script src="assets/js/cookie.js"type="text/javascript"></script>
+</body>
+</html>
