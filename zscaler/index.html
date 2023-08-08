@@ -49,7 +49,7 @@
         let velocidadAnimacionFactor = 4;
         let alphaCuadricula = 0.20;
         let catalogoTiposPantalla = {"vertical" : 1, "horizontal":2}
-        let tipoPantalla = catalogoTiposPantalla.horizontal
+        let tipoPantalla = catalogoTiposPantalla.vertical
         // console.log('prueba')
         // if (canvasWidth >= canvasHeight) {
         //     //Computadora de escritorio - Horizontal
@@ -105,7 +105,7 @@
     var arrayPosicionesMosaico = [];
     var arrayScreenSaver = [];
     var ganadorTrivia = {
-        id: 80
+        id: 48
     };
 
     function hayactualizacionJSON(){
@@ -221,8 +221,8 @@
         let indexScreenSaver = 0;
         let contadorScreensaver = 0
         let primeraVezLoading = true;
-        const cuadriculaHorizontal = 16;
-        const cuadriculaVertial = 9;
+        const cuadriculaHorizontal = 9;
+        const cuadriculaVertial = 16;
         const porcentajePopImagen = .8;
         let terminamosLoading = 0;
         let hayBanner = false;
@@ -1020,7 +1020,7 @@
         }
 
         function agregaBackground() {
-                const texture = PIXI.Texture.from('zscaler.jpg');
+                const texture = PIXI.Texture.from('zscaler2.jpg');
                 //const texture = PIXI.Texture.from('coordenadasWEB/Diapositiva' + index + '.JPG');
                 const img = new PIXI.Sprite(texture);
                 
@@ -1044,7 +1044,7 @@
             }
 
         function agregaOverlayImagen() {
-                const texture = PIXI.Texture.from('zscaler.jpg');
+                const texture = PIXI.Texture.from('zscaler2.jpg');
                 //const texture = PIXI.Texture.from('coordenadasWEB/Diapositiva' + index + '.JPG');
                 const img = new PIXI.Sprite(texture);   
                 //img.x = (app.renderer.width - maxsize) / 2;
