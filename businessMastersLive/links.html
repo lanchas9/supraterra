@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body onload="carga()">
+    
+    <script>
+        let lista = [
+        "https://consumer.hotmart.com/eticket/9f5f1892-99ce-452f-8c80-c409e622f14e",
+        "https://consumer.hotmart.com/eticket/367583fc-4043-40e8-be9b-8563b7794ff8",
+        "https://consumer.hotmart.com/eticket/34b6c6b1-c0db-409f-adc8-47480785c077",
+        "https://consumer.hotmart.com/eticket/69e09013-76ea-4ff3-866e-738b66b3a5ca",
+        "https://consumer.hotmart.com/eticket/18b6101e-74d3-4157-8e9d-3759ee2a43eb",
+        "https://consumer.hotmart.com/eticket/0415c602-8cdf-49e4-92b8-cb5ebec4ec7d",
+        "https://consumer.hotmart.com/eticket/6d14ad9e-9149-4a22-8102-b3f57425e848",
+        "https://consumer.hotmart.com/eticket/320a9ec9-bbbf-4f17-b9fd-ef3d61593505",
+        "https://consumer.hotmart.com/eticket/b55cae04-1b88-42ba-80da-388efd41983d",
+        "https://consumer.hotmart.com/eticket/7ec940fd-d805-4a99-9284-ae21adcbaf63",
+        "https://consumer.hotmart.com/eticket/9b27762b-de27-45fa-996a-e7f9b468248b",
+        "https://consumer.hotmart.com/eticket/18886e9d-5a0d-4c43-9730-3818cdaaadc2",
+        "https://consumer.hotmart.com/eticket/0358251b-ebc8-494d-9347-abbc38d9a5fe",
+        "https://consumer.hotmart.com/eticket/99bd5136-9009-41da-97ff-eb7ee0d29538",
+        "https://consumer.hotmart.com/eticket/e1466a4f-3ecf-4f63-814b-e12b46771d47",
+        "https://consumer.hotmart.com/eticket/defc68dc-ca38-4e63-9278-f62f16ca9c2c",
+        "https://consumer.hotmart.com/eticket/de0e99d4-abc7-48e3-bba3-c860c5b726b4",
+        "https://consumer.hotmart.com/eticket/1b1ceb3d-263c-4cf0-8e91-a83f30f900cb",
+        "https://consumer.hotmart.com/eticket/8a8b493c-e5ec-4d17-b34a-08cc70d04d16",
+        "https://consumer.hotmart.com/eticket/47ae9286-556e-461f-8cfb-13ce67b351f4",
+        "https://consumer.hotmart.com/eticket/1872bccc-8354-4784-92db-bf39e88f9a5a",
+        "https://consumer.hotmart.com/eticket/5c248d8f-a739-42ad-bf7c-4661cc0000ce",
+        "https://consumer.hotmart.com/eticket/6cf75422-6763-4a23-878a-0e257a0c261b",
+        "https://consumer.hotmart.com/eticket/b4d3d8ae-ff2f-4c4c-ba06-2415cc9a0a1f",
+        "https://consumer.hotmart.com/eticket/25b29d2e-cd38-4313-ab1e-579c6f7f7caa",
+        "https://consumer.hotmart.com/eticket/cebfd508-38e9-406b-9852-425ca7cd966e",
+        "https://consumer.hotmart.com/eticket/6bace17c-ad8f-46bd-9dbb-df0540e37168",
+        "https://consumer.hotmart.com/eticket/acc6d080-e471-4d85-b292-e61a73bba281",
+        "https://consumer.hotmart.com/eticket/c1811c32-4f64-4175-8621-e17fe7297f98",
+        "https://consumer.hotmart.com/eticket/391dba18-cc3e-4ed5-a15e-48106ac0dd36",
+        "https://consumer.hotmart.com/eticket/8634fa10-b05f-4e63-98f4-b8251543cf9f",
+        "https://consumer.hotmart.com/eticket/ccae1591-7ee5-4967-8238-17ed7b980dd3",
+        "https://consumer.hotmart.com/eticket/5f0a189d-4168-4691-bcf9-1bb5b53345e3",
+        "https://consumer.hotmart.com/eticket/570af3fb-9282-48a0-bf82-c9f134bccb41",
+        "https://consumer.hotmart.com/eticket/09330f43-a121-47ba-a895-ffdaf75b9f64",
+        "https://consumer.hotmart.com/eticket/1ed2d030-d6d4-41df-a5a8-1d7f0ec4e86b",
+        "https://consumer.hotmart.com/eticket/bd629c18-68cc-46d6-8915-5f8e843bbe02",
+        "https://consumer.hotmart.com/eticket/5fdd01ee-3169-419c-919b-07bdd55c79d3",
+        "https://consumer.hotmart.com/eticket/083da431-755c-4bb3-abf1-3b196736a9f1",
+        "https://consumer.hotmart.com/eticket/7c4bda58-a70f-4033-b2a0-57e04e511b2b",
+        "https://consumer.hotmart.com/eticket/f813860f-1307-4bcd-a1c2-fa91dd096880",
+        "https://consumer.hotmart.com/eticket/95ce4331-8e7d-4eac-b519-3efc8cc5a6b6",
+        "https://consumer.hotmart.com/eticket/7aee9788-ec03-4356-aaad-742e2d0f5fb9",
+        "https://consumer.hotmart.com/eticket/78a34414-e79c-4969-bfd4-1584eafe615f",
+        "https://consumer.hotmart.com/eticket/1500aa5d-a87d-4a57-9cf3-ab71adcbbdf0",
+        "https://consumer.hotmart.com/eticket/ae54462a-9f35-4e7e-b8ff-1e827a9c7bd6",
+        "https://consumer.hotmart.com/eticket/938fcedc-5d50-46e1-8b64-869780e2b71d",
+        "https://consumer.hotmart.com/eticket/ead2ad11-db73-4c03-8281-f239a89fa70e",
+        "https://consumer.hotmart.com/eticket/28c22b50-79b7-4343-a9ea-2e55d28c40ac",
+        "https://consumer.hotmart.com/eticket/f31f0cca-a64b-43c8-bfea-a347835ec37e",
+        "https://consumer.hotmart.com/eticket/b16959db-e018-47c2-b714-1e77a2b9a302",
+        "https://consumer.hotmart.com/eticket/a7d5242b-3470-449c-948a-d2d65f60f039",
+        "https://consumer.hotmart.com/eticket/9976f4d4-42e1-4f18-9dcf-9f699be6a867",
+        "https://consumer.hotmart.com/eticket/7b6e9928-10bc-4c00-ab29-5ab7376bec2c",
+        "https://consumer.hotmart.com/eticket/01f62330-d19a-4885-86ee-cc20069ea4c8",
+        "https://consumer.hotmart.com/eticket/f7324bfb-b0f3-4016-a668-1f8713d59231",
+        "https://consumer.hotmart.com/eticket/676e0cc3-a921-4875-bbcf-b16fc492ce99",
+        "https://consumer.hotmart.com/eticket/36a8cda6-45da-41bd-bf88-6c850fd327f4",
+        "https://consumer.hotmart.com/eticket/3291f569-6c13-4eaf-ac91-534b32182044",
+        "https://consumer.hotmart.com/eticket/448dff77-7511-4274-a992-2fdbf0c73996",
+        "https://consumer.hotmart.com/eticket/63e2cc19-2a73-40a7-b713-ee72a6600f2d",
+        "https://consumer.hotmart.com/eticket/d1b5933a-5247-4cd9-915d-74bb18408722",
+        "https://consumer.hotmart.com/eticket/0ddaee53-5e26-4953-8717-554f1226bdfb",
+        "https://consumer.hotmart.com/eticket/e73168ad-6d30-4c1f-acae-860aae412c4d",
+        "https://consumer.hotmart.com/eticket/8476ad6a-97c3-4a2c-b81c-c11eb1c30967",
+        "https://consumer.hotmart.com/eticket/dd02e02a-5416-46a8-b483-e8e58282b447",
+        "https://consumer.hotmart.com/eticket/f3604d91-2911-4ab8-8f3f-df672255a639",
+        "https://consumer.hotmart.com/eticket/3e5216db-b371-49a5-b166-bb91dd93a40c",
+        "https://consumer.hotmart.com/eticket/651d2a95-9dee-492d-b0f6-e981030e141f",
+        "https://consumer.hotmart.com/eticket/0ccb04de-c2a0-4494-a2ba-ec1e422a7ffd",
+        "https://consumer.hotmart.com/eticket/d84d4bf3-3b38-4850-a9b1-74474ee4b388",
+        "https://consumer.hotmart.com/eticket/c2612fe8-bd43-478d-be63-77fa020dd219",
+        "https://consumer.hotmart.com/eticket/b996fe6d-60cc-46dc-8d39-4881dc40daf4",
+        "https://consumer.hotmart.com/eticket/8cd88677-6d61-4963-b64f-f4efc43bb091",
+        "https://consumer.hotmart.com/eticket/4c264098-881c-4707-9b17-d30c3f4e2a9b",
+        "https://consumer.hotmart.com/eticket/5b1089a2-8c37-4688-bdb3-45b11c8b6bb1",
+        "https://consumer.hotmart.com/eticket/c5bd898c-9af9-435c-ab14-cade5d96355e",
+        "https://consumer.hotmart.com/eticket/4be4d2cb-d548-4168-a871-938af7acd1f6",
+        "https://consumer.hotmart.com/eticket/e4cb4e36-403c-4566-a65c-334a7b4ee615",
+        "https://consumer.hotmart.com/eticket/7b477b49-a41d-46ea-82a6-a384d672bbfb",
+        "https://consumer.hotmart.com/eticket/74f459a7-e50a-4211-a47a-6680bbc1b099",
+        "https://consumer.hotmart.com/eticket/40f1f3d9-3583-4382-8a45-0ef0c792c478",
+        "https://consumer.hotmart.com/eticket/b521e9da-1db4-4e88-bf1c-e332a89abd1e",
+        "https://consumer.hotmart.com/eticket/f1bdec6b-e831-4037-80a8-9b376c052663",
+        "https://consumer.hotmart.com/eticket/5882ed95-a852-42e5-873d-0879f3501364",
+        "https://consumer.hotmart.com/eticket/369f59a2-bfe3-4a8b-a5d3-f1a5a321f33c",
+        "https://consumer.hotmart.com/eticket/db5d5311-8eb2-4d15-8551-d8e5d8fff894",
+        "https://consumer.hotmart.com/eticket/7e905824-85d3-4fef-a169-b83c037fa7a9",
+        "https://consumer.hotmart.com/eticket/1646f946-d709-42ea-8936-04903f36cc1c",
+        "https://consumer.hotmart.com/eticket/4c72db9f-d1df-43e5-b38a-da30712bfe78",
+        "https://consumer.hotmart.com/eticket/10bd6e8b-5032-4686-9aa1-887824039f53",
+        "https://consumer.hotmart.com/eticket/19a5fd17-f932-4fe5-9536-a5c344c52dca",
+        "https://consumer.hotmart.com/eticket/2505d7c1-56f4-4c42-99e7-bd38c17f28ef",
+        "https://consumer.hotmart.com/eticket/0de54b37-0185-41ad-a2cb-b0efcf4f3a2c",
+        "https://consumer.hotmart.com/eticket/a8a9d2db-62c9-4c96-a98a-2f556ce46a7e",
+        "https://consumer.hotmart.com/eticket/a0a3f2fc-965d-47dd-95f3-addf7eb61a88",
+        "https://consumer.hotmart.com/eticket/5146dd92-6033-4fbe-a6d6-3c7a458c1f45",
+        "https://consumer.hotmart.com/eticket/963abcd6-c45b-4039-9adb-ad78eabe67df",
+        "https://consumer.hotmart.com/eticket/e865730b-1b7f-4c33-ae4e-dc185df0be82",
+        "https://consumer.hotmart.com/eticket/fcc803d1-4b6e-4d0b-9058-547fe7af0cdc",
+        "https://consumer.hotmart.com/eticket/c0bca8a5-806f-420e-adc7-022871212965",
+        "https://consumer.hotmart.com/eticket/b15a8cc6-4305-429e-a75c-ce0b31b177a3",
+        "https://consumer.hotmart.com/eticket/9dc0b563-6998-4a9d-a8d1-0c2d97472db4",
+        "https://consumer.hotmart.com/eticket/8feadda5-f874-4509-b1f6-03caf03aac7c",
+        "https://consumer.hotmart.com/eticket/0284b66e-5221-4543-89cd-f56a81d8f2e7",
+        "https://consumer.hotmart.com/eticket/309bb354-be42-4d99-81b8-ce3488005306",
+        "https://consumer.hotmart.com/eticket/360576a5-b6f3-4a66-82a7-aca1b4b1403c",
+        "https://consumer.hotmart.com/eticket/526f3b08-657b-4a76-b6d8-358c718110c3",
+        "https://consumer.hotmart.com/eticket/3ab10308-58e8-4761-9cd6-958b0067afc2",
+        "https://consumer.hotmart.com/eticket/518365cb-c078-4949-b8f2-a6cfdbc563f6",
+        "https://consumer.hotmart.com/eticket/851f292d-c02d-4bbc-b90c-0b104663986b",
+        "https://consumer.hotmart.com/eticket/f6d8d204-4b3a-4e65-8f38-0356d9ec708c",
+        "https://consumer.hotmart.com/eticket/0d1d7290-325f-4ffb-ae60-03048ac0ee13",
+        "https://consumer.hotmart.com/eticket/5c889553-e23b-4b0b-85cf-4278b100a805",
+        "https://consumer.hotmart.com/eticket/40f96615-97fd-4c65-84db-dd44b9757c84"
+        ] 
+
+        lista.forEach(element => {
+            let a = document.createElement("a")
+            a.href = element
+            a.innerHTML = element
+            let br = document.createElement("br")
+            let br2 = document.createElement("br")
+            document.body.appendChild(a)
+            document.body.appendChild(br)
+            document.body.appendChild(br2)
+        });
+    </script>
+</body>
+</html>
