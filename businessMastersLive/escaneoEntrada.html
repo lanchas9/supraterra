@@ -16,7 +16,7 @@
 </head>
 <body style="font-family:'Avenir',sans-serif;" onload="creaEventosTeclado()">
     <div class="cuerpo">
-        <img class="imagenEncabezado" src="logo2.jpg" alt="" srcset="">
+        <img class="imagenEncabezado2" src="logo2.jpg" alt="" srcset="">
         <p class="titulo3">SISTEMA ESCANEO ACCESO</p><br>
         <div id="detalleUsuario">
             <p class="elmentoFormularioTitulo2 centrado"> Nombre completo: </p>
@@ -150,7 +150,7 @@
 
         function mostrarDetalle(datosUsuario){
             let etiqueta = document.getElementById("nombreCompleto")
-            etiqueta.innerHTML = datosUsuario[0].nombre.toUpperCase() + "<br><br>" + datosUsuario[0].entrada.toUpperCase()  
+            etiqueta.innerHTML = datosUsuario[0].nombre.toUpperCase() + "<br>" + datosUsuario[0].entrada.toUpperCase()  
 
             let icono = document.getElementById("iconoAcceso")
             icono.src = "verde.png"

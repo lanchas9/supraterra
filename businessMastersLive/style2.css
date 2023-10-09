@@ -32,16 +32,16 @@ body{
 }
 
 .titulo{
-    width: 60%;
+    width: 80%;
     background-color: #3E0775;
     color: white;
     /* height: 40px; */
-    margin-left: 20%;
+    margin-left: 10%;
     padding-top: 10px;
     padding-bottom: 10px;
     border-radius: 10px;
     text-align: center;
-    font-size: 60px;
+    font-size: 40px;
 }
 
 .titulo3{
