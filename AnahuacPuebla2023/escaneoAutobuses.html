@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día OV 2023</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./assets/js/qrscanner/jsqrscanner.nocache.js"></script>
+    <script>
+        let idAdministrador
+        async function compruebaUsuario(correoAdministrador){
+                const data = {
+                    correoAdministrador : correoAdministrador
+                }
+                let url1 = 'https://mosaico.app:4000/Anahuac2023/validaAdministradorConMail'
+                const response = await fetch(url1, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
+                body: JSON.stringify(data)
+                })
+                
+                const dataFinal = await response.json();
+                let result = dataFinal.result
+                if (result == "True"){
+                    idAdministrador = dataFinal.message[0].idAdministrador
+                    return dataFinal.message[0].correoAdministrador
+                }else{
+                    return ''
+                }
+            }
+    </script>
+</head>
+<body style="font-family:'Avenir',sans-serif;"">
+    <div class="cuerpo" id="cuerpo">
+        <img class="imagenEncabezado2" src="assets/img/logo.jpg" alt="" srcset="" onclick="borraCookie()">
+        <p id="botonAbreCamara" class="titulo2" onclick="creaLinks()">Sistema de Escaneo QR - dar click para abrir cámara</p><br>
+        <div id="divVideoFeed"></div>
+        <!-- <div id="emilio"></div> -->
+        <!-- <input type="text" id="scannedTextMemo" class=""> -->
+        <div id="detalleUsuario">
+            <p class="elmentoFormularioTitulo2 centrado"> Nombre completo: </p>
+            <p class="titulo" id="nombreCompleto"></p><br>
+            <img src="assets/img/listo.png" alt="" class="imagen" id="iconoAcceso">
+        </div>
+        <br><br>
+    </div>
+    <script>
+        let urlServer = "https://mosaico.app:4000/Anahuac2023/"
+        let idQRparaEditar = ''
+
+        let datosRelaciones
+        let strInput = ""
+        let index = 0
+        let fuePorBotonUsuario = false
+        let correoAdministrador
+
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires="+d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            let name = cname + "=";
+            let ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function borraCookie(){
+            setCookie("correoAdministrador", '', 60);
+            alert("Borramos usuario")
+        }
+
+        async function checkCookie() {
+            correoAdministrador = getCookie("correoAdministrador");
+            if (correoAdministrador != "") {
+                let resultado = await compruebaUsuario(correoAdministrador)
+                if (resultado != ''){
+                    //TRUE ponemos links
+                    fuePorBotonUsuario=true
+                }else{
+                    //FALSE borramos cookie
+                    setCookie("correoAdministrador", '', 60);
+                    checkCookie()
+                }
+            } else {
+                correoAdministrador = prompt("Ingresa correo electrónico de Administrador", "");
+                if (correoAdministrador != "" && correoAdministrador != null) {
+                    let resultado = await compruebaUsuario(correoAdministrador)
+                    if (resultado != ''){
+                        //TRUE guardamos QR y ponemos links
+                        setCookie("correoAdministrador", correoAdministrador, 60);
+                        fuePorBotonUsuario=true
+                    }else{
+                        //FALSE pagina en blanco
+                        creaMensaje()
+                    }
+                }else{
+                    //FALSE pagina en blanco
+                    creaMensaje()
+                }
+            }
+        }
+        
+        function creaLinks(){
+            //let nuevo = document.getElementById("cuerpo2")
+            // <div class="cuerpo2" id="scanner">
+            //     <!-- <video class="qrPreviewVideo" autoplay="" tabindex="0" src=""></video> -->
+            // </div>
+            
+            let video = document.createElement("div")
+            video.className = "qrPreviewVideo"
+            video.id = "scanner"
+            video.style.width=500
+            video.style.height=500
+            document.getElementById("botonAbreCamara").innerHTML = "Sistema de Escaneo QR"
+            document.getElementById("divVideoFeed").appendChild(video)
+            JsQRScannerReady()
+        }
+        function creaMensaje(){
+            let nuevo = document.getElementById("cuerpo")
+            nuevo.innerHTML = `
+                <h1>Area restringida con contraseña</h1>
+            `;     
+        }
+        (async() => {
+        // console.log('before start');
+        await checkCookie();
+        // console.log('after start');
+        })();
+    </script>
+       <script type="text/javascript">
+        let ocupado = false
+        function onQRCodeScanned(scannedText)
+        {
+            //var scannedTextMemo = document.getElementById("scannedTextMemo");
+            if(ocupado == false)
+            {
+                // scannedTextMemo.value = scannedText;
+                ocupado = true
+                setTimeout(() => {
+                    console.log("Tiempo sin leer códigos QR 10 seg");
+                    ocupado = false
+                    loading()
+                }, "5000")
+                tenemosQR(scannedText)
+
+            }
+        }
+
+        async function tenemosQR(idQR){
+            let datosUsuario
+            let data = {
+                "idQR" : idQR,
+                "metodoRegistro" : "Escaneo Autobuses",
+                "idAdministrador" : idAdministrador
+            }
+            const dataJson = JSON.stringify(data)
+            const settings = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: 
+                dataJson
+        };
+            try{ 
+                    let datos = await fetch(urlServer + "guardaIngreso",settings) 
+                    let json = await datos.json()
+
+                    if (json.statusCode == 200 ){ 
+                            let temp = json.message
+                            datosUsuario = temp
+                            mostrarDetalle(datosUsuario)
+                    }else{
+                        let etiqueta = document.getElementById("nombreCompleto")
+                        etiqueta.innerHTML = json.message
+
+                        let icono = document.getElementById("iconoAcceso")
+                        icono.src = "assets/img/rojo.png"
+                    }
+            }catch(error){
+                console.log({error})
+            }
+        }
+
+        function mostrarDetalle(datosUsuario){
+            let etiqueta = document.getElementById("nombreCompleto")
+            etiqueta.innerHTML = datosUsuario.nombreUsuario + " " + datosUsuario.apellidoUsuario
+
+            let icono = document.getElementById("iconoAcceso")
+            icono.src = "assets/img/verde.png"
+
+        }
+
+        function loading(){
+            let etiqueta = document.getElementById("nombreCompleto")
+            etiqueta.innerHTML = ""
+
+            
+            let icono = document.getElementById("iconoAcceso")
+            icono.src = "assets/img/loading.gif"
+        }
+        
+        //funtion returning a promise with a video stream
+        function provideVideoQQ()
+        {
+            return navigator.mediaDevices.enumerateDevices()
+            .then(function(devices) {
+                var exCameras = [];
+                devices.forEach(function(device) {
+                if (device.kind === 'videoinput') {
+                  exCameras.push(device.deviceId)
+                }
+             });
+                
+                return Promise.resolve(exCameras);
+            }).then(function(ids){
+                if(ids.length === 0)
+                {
+                  return Promise.reject('Could not find a webcam');
+                }
+                
+                return navigator.mediaDevices.getUserMedia({
+                    video: {
+                    //   'optional': [{
+                    //     'sourceId': ids.length === 1 ? ids[0] : ids[1]//this way QQ browser opens the rear camera
+                    //     }]
+                    facingMode: "environment"
+                    }
+                });        
+            });                
+        }  
+      
+        //this function will be called when JsQRScanner is ready to use
+        function JsQRScannerReady()
+        {
+            //create a new scanner passing to it a callback function that will be invoked when
+            //the scanner succesfully scan a QR code
+            var jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ);
+            //reduce the size of analyzed images to increase performance on mobile devices
+            jbScanner.setSnapImageMaxSize(300);
+            var scannerParentElement = document.getElementById("scanner");
+            if(scannerParentElement)
+            {
+                //append the jbScanner to an existing DOM element
+                jbScanner.appendTo(scannerParentElement);
+            }        
+        }
+
+        function provideVideo()
+        {
+            var n = navigator;
+
+            if (n.mediaDevices && n.mediaDevices.getUserMedia)
+            {
+            return n.mediaDevices.getUserMedia({
+                video: {
+                facingMode: "environment"
+                },
+                audio: false
+            });
+            } 
+            
+            return Promise.reject('Your browser does not support getUserMedia');
+        }
+      </script> 
+</body>
+</html>

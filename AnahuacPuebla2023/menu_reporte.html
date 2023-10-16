@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día OV 2022</title>
+    <link rel="stylesheet" href="./assets/css/reportes.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
+    <script>
+        async function compruebaUsuario(correoAdministrador){
+                const data = {
+                    correoAdministrador : correoAdministrador
+                }
+                let url1 = 'https://mosaico.app:4000/Anahuac2023/validaAdministradorConMail'
+                const response = await fetch(url1, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors', // no-cors, *cors, same-origin
+                body: JSON.stringify(data)
+                })
+                
+                const dataFinal = await response.json();
+                let result = dataFinal.result
+                if (result == "True"){
+                    return dataFinal.message[0].correoAdministrador
+                }else{
+                    return ''
+                }
+            }
+    </script>
+</head>
+<body>        
+    <img class="imagenLogo center" src="./assets/img/logo.jpg" alt="" srcset="">
+    <br>
+    <div id="cuerpo">
+        <script>
+            function setCookie(cname, cvalue, exdays) {
+                const d = new Date();
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                let expires = "expires="+d.toUTCString();
+                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+            }
+
+            function getCookie(cname) {
+                let name = cname + "=";
+                let ca = document.cookie.split(';');
+                for(let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
+
+            async function checkCookie() {
+                let correoAdministrador = getCookie("correoAdministrador");
+                if (correoAdministrador != "") {
+                    let resultado = await compruebaUsuario(correoAdministrador)
+                    if (resultado != ''){
+                        //TRUE ponemos links
+                        creaLinks()
+                    }else{
+                        //FALSE borramos cookie
+                        setCookie("correoAdministrador", '', 60);
+                        checkCookie()
+                    }
+                } else {
+                    correoAdministrador = prompt("Ingresa correo electrónico de Administrador", "");
+                    if (correoAdministrador != "" && correoAdministrador != null) {
+                        let resultado = await compruebaUsuario(correoAdministrador)
+                        if (resultado != ''){
+                            //TRUE guardamos QR y ponemos links
+                            setCookie("correoAdministrador", correoAdministrador, 60);
+                            creaLinks()
+                        }else{
+                            //FALSE pagina en blanco
+                            creaMensaje()
+                        }
+                    }else{
+                        //FALSE pagina en blanco
+                        creaMensaje()
+                    }
+                }
+            }
+            
+            function creaLinks(){
+                let nuevo = document.getElementById("cuerpo")
+                nuevo.innerHTML = `
+                <h2>
+                <ol>
+                    <h2>Reportes en Tablas Registros</h2>
+                    <li><a href="reporte.html?reporte=reporteUsuariosRegistrados">reporteUsuariosRegistrados</a></li>
+                    <li><a href="reporte.html?reporte=reporteUsuariosRegistradosPorEstadoDeLaRepublica">reporteUsuariosRegistradosPorEstadoDeLaRepublica</a></li>
+                    <li><a href="reporte.html?reporte=reporteUsuariosRegistradosAnteriormente">reporteUsuariosRegistradosAnteriormente</a></li>
+                    <li><a href="reporte.html?reporte=reporteUsuariosRegistradosSitioWebPreUniversitarios">reporteUsuariosRegistradosSitioWebPreUniversitarios</a></li>
+                    <li><a href="reporte.html?reporte=reporteUsuariosRegistradosSitioWebOtrosPerfiles">reporteUsuariosRegistradosSitioWebOtrosPerfiles</a></li>
+                    <li><a href="reporte.html?reporte=reporteUsuariosRegistradosEnTallerHorario1">reporteUsuariosRegistradosEnTallerHorario1</a></li>
+                    <li><a href="reporte.html?reporte=reporteUsuariosRegistradosEnTallerHorario2">reporteUsuariosRegistradosEnTallerHorario2</a></li>
+                    <li><a href="reporte.html?reporte=reporteUsuariosRegistradosEnTallerHorario3">reporteUsuariosRegistradosEnTallerHorario3</a></li>
+                    </ol>
+                <ol>
+                    <h2>Reportes en Tablas Accesos</h2>
+                    <li><a href="reporte.html?reporte=reporteUsuariosConAccesos">reporteUsuariosConAccesos</a></li>
+                </ol>
+                <ol>
+                    <h2>Reportes en Gráficas</h2>
+                    <li><a href="grafica1.html?grafica=graficaUsuariosRegistrados&titulo=RegistrosPorDía">graficaUsuariosRegistrados</a></li>
+                    <li><a href="grafica3.html?grafica=graficaUsuariosRegistradosPorEstadoDeLaRepublica&titulo=RegistrosPorEstadoDeLaRepublica">graficaUsuariosRegistradosPorEstadoDeLaRepublica</a></li>
+                    <li><a href="grafica2.html?grafica=graficaUsuariosConAccesos&titulo=AccesosPorDíaYPorHora">graficaUsuariosConAccesos</a></li>
+                </ol>
+                </h2>
+                `;     
+            }
+            function creaMensaje(){
+                let nuevo = document.getElementById("cuerpo")
+                nuevo.innerHTML = `
+                    <h1>Area restringida con contraseña</h1>
+                `;     
+            }
+            (async() => {
+            // console.log('before start');
+            await checkCookie();
+            // console.log('after start');
+            })();
+        </script>
+        </div>
+</body>
+</html>

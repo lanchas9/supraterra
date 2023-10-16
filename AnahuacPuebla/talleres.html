@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body onload="talleres()">
+    <div id="talleres"></div>
+    <script>
+        function talleres(){
+            let json = fetch("/AnahuacPuebla/assets/json/talleres.json")
+            .then(response => response.json())
+            .then(data => {
+                let talleres = document.getElementById("talleres");
+                let html = "";
+                let data2 = data.form.formFieldGroups[5].fields[0].dependentFieldFilters[5].dependentFormField.options.map((element) => {
+                    console.log("talleres");
+                    return element.label
+                });
+                data2.forEach(element => {
+                    html += `
+                    <div class="taller">
+                        
+                        <div class="taller__info">
+                            <h3>${element}</h3>
+                        </div>
+                    </div>
+                    `;
+                });
+                talleres.innerHTML = html;
+            });
+        }
+    </script>
+</body>
+</html>

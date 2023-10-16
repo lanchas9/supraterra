@@ -1,0 +1,229 @@
+@font-face {
+    font-family: "Super-Squad-Italic";
+    src: url('../font/regular.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: "Super-Squad";
+    src: url('../font/Super-Squad.otf') format('opentype');
+}
+
+body{
+    background-color: #E6EEF2;
+    font-family: "Super-Squad";
+}
+
+.cuerpo{
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 40px;
+    max-width: 900px;
+}
+
+.imagenEncabezado{
+    margin-top: 20px;
+    margin-bottom: 2%;
+    width: 80%;
+    margin-left: 10%;
+}
+
+.detalleEvento{
+    margin-left: 5%
+}
+
+.titulo{
+    width: 60%;
+    /* background-color: #FF5900; */
+    color: #FF5900;
+    /* height: 40px; */
+    margin-left: 20%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: xx-large;
+    text-shadow: 2px 2px 2px black;
+}
+
+.elmentoFormularioTitulo{
+    font-weight: 300;
+    font-size: xx-large;
+    margin-bottom: 5px;
+    color: #FF5900;
+    font-family: "Super-Squad-Italic";
+}
+
+.asterisc {
+    color: #FF5900;
+    font-size: larger;
+}
+
+.mensajeError {
+    color: red;
+    font-size: larger;
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+.elmentoFormularioinput{
+    width: 90%;
+    margin-top: 0px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: none;
+    color: darkgrey;
+    font-size: larger;
+    font-family: "Super-Squad-Italic";
+}
+/* 
+.elmentoFormularioinput2{
+    width: 60%;
+    margin-top: 0px;
+    height: 40px;
+    background-color: #F7F7F7;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    box-shadow: none;
+    color: white;
+    font-size: larger;
+    margin-left: 20%;
+    text-align: center;
+} */
+
+.botonRegistrarse{
+    background: #333;
+    border: 0;
+    color: #f7f7f7;
+    height: 50px;
+    margin-left: 5%;
+    margin-top: 2%;
+    font-size: 20px;
+    margin-bottom: 5%;
+}
+
+.elmentoFormularioSelect{
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: none;
+    color: #787878;
+    height: 40px;
+    max-width: 90%;
+    font-size: larger;
+    font-family: "Super-Squad-Italic";
+}
+
+.elmentoFormularioSelect22{
+    font-size: larger;
+    background-color: #F7F7F7;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    box-shadow: none;
+    color: #787878;
+    height: 40px;
+    max-width: 90%;
+}
+
+.oculto{
+    display: none;
+}
+
+.visible{
+    display: block;
+}
+.elementoRadio{
+    font-size: larger;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: #FF5900;
+    width: 10%;
+}
+
+.textoExplicacion3Izq{
+    font-family: "Super-Squad-Italic";
+	margin-left: 10%;
+	width: 80%;
+	font-size: x-large;
+	font-weight: 100;
+	text-align: left;
+	color: black	;
+    margin-top: 5px;
+	margin-bottom: 20px;
+}
+
+.qr{
+	width: 30%;
+	margin-left: 35%;
+	margin-top: 0%;
+	margin-bottom: 0%;
+}
+
+.imagen{
+    width: 30%;
+	margin-left: 35%;
+	margin-top: 0%;
+	margin-bottom: 0%;
+}
+
+.centrado{
+    text-align: center;
+}
+
+.elmentoFormularioTitulo2{
+    margin-top: 0px;
+    font-weight: bold;
+    font-size: xx-large;
+    margin-bottom: 5px;
+}
+
+.qrscanner video {
+    max-width: 50%;
+    max-height: 75%;
+  }
+
+.qrPreviewVideo{
+    margin-left: 15%;
+    width: 70%;
+  }
+
+  .titulo2{
+    width: 60%;
+    background-color: #FF5900;
+    color: white;
+    /* height: 40px; */
+    margin-left: 20%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: large;
+    font-weight: 600;
+}
+
+.imagenEncabezado2{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 40%;
+    margin-left: 30%;
+}
+
+.tituloBoton{
+    width: 30%;
+    background-color: #FF5900;
+    color: white;
+    /* height: 40px; */
+    margin-left: 35%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: xx-large;
+    font-family: "Super-Squad-Italic";
+    border-color: #787878;
+}

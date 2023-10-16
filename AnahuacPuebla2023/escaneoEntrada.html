@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día OV 2022</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body style="font-family:'Avenir',sans-serif;" onload="creaEventosTeclado()">
+    <div class="cuerpo">
+        <img class="imagenEncabezado" src="assets/img/logo.jpg" alt="" srcset="">
+        <p class="titulo">SISTEMA ESCANEO CÓDIGO QR ACCESO</p><br>
+        <div id="detalleUsuario">
+            <p class="elmentoFormularioTitulo2 centrado"> Nombre completo: </p>
+            <p class="titulo" id="nombreCompleto"></p><br>
+            <img src="assets/img/listo.png" alt="" class="imagen" id="iconoAcceso">
+        </div>
+        <br><br>
+    </div>
+    <script>
+        let urlServer = "https://mosaico.app:4000/Anahuac2023/"
+        let idQRparaEditar = ''
+
+        let datosRelaciones
+        let strInput = ""
+        let index = 0
+        let idAdministrador = ''
+
+        async function creaEventosTeclado(){
+            addEvent(document, "keypress", function (e) {
+                e = e || window.event;
+                console.log("**Leemos teclado**")
+                console.log({strInput})
+                console.log({index})
+                // strInput += e.key
+                // index +=1
+                
+                if(index < 36){
+                    strInput += e.key
+                    index +=1
+                }else if(index == 36){
+                    console.log("**Entramos con: **")
+                    let temp  = strInput;
+                    idQRparaEditar = temp
+                    console.log({idQRparaEditar})
+                    tenemosQR(idQRparaEditar)
+                    index = 0
+                    strInput = ""
+                }else if(index > 37){
+                    index = 0
+                    strInput = ""
+                }
+
+                if(index == 1){
+                    loading()
+                }
+            });
+
+            document.addEventListener('paste', (event) => {
+                event.preventDefault();
+                let nuevo = (event.clipboardData.getData('text/plain'));
+                let paste = nuevo;
+                index = paste.length
+                if(index == 36){
+                    let idQR = paste
+                    tenemosQR(paste)
+                    index = 0
+                }
+            });
+   
+        }
+
+        async function tenemosQR(idQR){
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            idAdministrador = urlParams.get('idAdministrador')
+
+            let datosUsuario
+            let data = {
+                "idQR" : idQR,
+                "metodoRegistro" : "Acceso Principal",
+                "idAdministrador" : idAdministrador
+            }
+            const dataJson = JSON.stringify(data)
+            const settings = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: 
+                dataJson
+        };
+            try{ 
+                    let datos = await fetch(urlServer + "guardaIngreso",settings) 
+                    let json = await datos.json()
+
+                    if (json.statusCode == 200 ){ 
+                            let temp = json.message
+                            datosUsuario = temp
+                            mostrarDetalle(datosUsuario)
+                    }else{
+                        let etiqueta = document.getElementById("nombreCompleto")
+                        etiqueta.innerHTML = json.message
+
+                        let icono = document.getElementById("iconoAcceso")
+                        icono.src = "assets/img/rojo.png"
+                    }
+            }catch(error){
+                console.log({error})
+            }
+        }
+
+        function addEvent(element, eventName, callback) {
+            if (element.addEventListener) {
+                element.addEventListener(eventName, callback, false);
+            } else if (element.attachEvent) {
+                element.attachEvent("on" + eventName, callback);
+            } else {
+                element["on" + eventName] = callback;
+            }
+        }
+
+        function mostrarDetalle(datosUsuario){
+            let etiqueta = document.getElementById("nombreCompleto")
+            etiqueta.innerHTML = datosUsuario.nombreUsuario + " " + datosUsuario.apellidoUsuario
+
+            let icono = document.getElementById("iconoAcceso")
+            icono.src = "assets/img/verde.png"
+
+        }
+
+        function loading(){
+            let etiqueta = document.getElementById("nombreCompleto")
+            etiqueta.innerHTML = ""
+
+            
+            let icono = document.getElementById("iconoAcceso")
+            icono.src = "assets/img/loading.gif"
+        }
+    </script>
+</body>
+</html>
