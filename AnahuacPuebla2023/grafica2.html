@@ -129,7 +129,7 @@
         const response =  await fetch(urlReporte);
         const tabledata = await response.json();
         let horariosFinales = []
-        if (tabledata.result == 'True'){
+        if (tabledata.result == true){
             let horarios = tabledata.message[2]
             let fechaInicio = new Date(horarios.fechaInicio)
             let fechaFin = new Date(horarios.fechaFin)
