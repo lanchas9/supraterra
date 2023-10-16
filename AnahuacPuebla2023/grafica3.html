@@ -33,7 +33,7 @@
             let urlReporte = server
             const response =  await fetch(urlReporte);
             const tabledata = await response.json();
-            if (tabledata.result == 'True'){
+            if (tabledata.result == true){
                 
                 const etiqueta = dameTitulo(tituloReporte)
                 const labelsFromTable = tabledata.message.map(data => data.Estado)

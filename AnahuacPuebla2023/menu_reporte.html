@@ -25,7 +25,7 @@
                 
                 const dataFinal = await response.json();
                 let result = dataFinal.result
-                if (result == "True"){
+                if (result == true){
                     return dataFinal.message[0].correoAdministrador
                 }else{
                     return ''
@@ -33,7 +33,7 @@
             }
     </script>
 </head>
-<body>        
+<body style="font-family:'Avenir',sans-serif;">        
     <img class="imagenLogo center" src="./assets/img/logo.jpg" alt="" srcset="">
     <br>
     <div id="cuerpo">

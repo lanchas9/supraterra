@@ -1,22 +1,10 @@
-@font-face {
-  font-family: "Super-Squad-Italic";
-  src: url('../font/Super-Squad-Italic.otf') format('opentype');
-}
-
-@font-face {
-  font-family: "Super-Squad";
-  src: url('../font/Super-Squad.otf') format('opentype');
-}
-
 body{
   background-color: #E6EEF2;
-  font-family: "Super-Squad";
 }
 
 
 * {
     box-sizing: border-box;
-    font-family: "Super-Squad";
   }
   
   .titulo2 {

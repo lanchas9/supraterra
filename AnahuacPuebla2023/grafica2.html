@@ -32,7 +32,7 @@
             let urlReporte = server
             const response =  await fetch(urlReporte);
             const tabledata = await response.json();
-            if (tabledata.result == 'True'){
+            if (tabledata.result == true){
                 
                 // let dataManual = '{"Registros":2,"DIA":"09","MES":"07","AÑO":"20"},{"Registros":6,"DIA":"10","MES":"07","AÑO":"20"},{"Registros":6,"DIA":"11","MES":"07","AÑO":"20"},{"Registros":16,"DIA":"12","MES":"07","AÑO":"20"},{"Registros":12,"DIA":"13","MES":"07","AÑO":"20"},{"Registros":9,"DIA":"14","MES":"07","AÑO":"20"},{"Registros":12,"DIA":"15","MES":"07","AÑO":"20"},{"Registros":3,"DIA":"16","MES":"07","AÑO":"20"},{"Registros":9,"DIA":"17","MES":"07","AÑO":"20"}'
 

@@ -162,26 +162,26 @@
         let hayErrror = false;
         let datosRegistro = {}
         let datosPreUniversitarios = {}
-        arrayPreguntasServer.forEach((element, index) => {
+        arrayPreguntasServer.forEach((element) => {
             if(!hayErrror){
                 let resultadoStr = "Perfil no seleccionado"
                 let dato = -1
-                if(index == 11){
+                if(element.idEstructuraPreguntas == 21){
                     if(radioOpcionSeleccionada >= 0){
                         dato = radioOpcionSeleccionada
                         resultadoStr = ""
                     }
                 }else{
                     let valor = document.getElementById(`elementoFormulario${element.idEstructuraPreguntas}`);
-                    console.log(valor.value + " en index: " + index)
+                    console.log(valor.value + " en idEstructuraPreguntas: " + element.idEstructuraPreguntas)
                     dato = valor.value.trim()
                     resultadoStr = validaElemento(dato, element.textoTipoValidaciones, element.tituloEstructuraPreguntas, element.obligatorioEstructuraPreguntas);
-                    if((index >= 12) && (radioOpcionSeleccionada!=1)){
+                    if((element.idEstructuraPreguntas >= 22) && (radioOpcionSeleccionada!=1)){
                         resultadoStr = ""
                     }
                 }
                 if(resultadoStr == ""){
-                    if(index >= 12){
+                    if(element.idEstructuraPreguntas >= 22){
                         let key = `{"${element.tooltipEstructuraPreguntas}" : "${dato}"}`;
                         datosPreUniversitarios =  Object.assign(datosRegistro, JSON.parse(key));
                     }else{

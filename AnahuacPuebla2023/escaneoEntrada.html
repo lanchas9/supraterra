@@ -102,7 +102,7 @@
                             mostrarDetalle(datosUsuario)
                     }else{
                         let etiqueta = document.getElementById("nombreCompleto")
-                        etiqueta.innerHTML = json.message
+                        etiqueta.innerHTML = json.message.toUpperCase();
 
                         let icono = document.getElementById("iconoAcceso")
                         icono.src = "assets/img/rojo.png"
@@ -124,7 +124,8 @@
 
         function mostrarDetalle(datosUsuario){
             let etiqueta = document.getElementById("nombreCompleto")
-            etiqueta.innerHTML = datosUsuario.nombreUsuario + " " + datosUsuario.apellidoUsuario
+            let str = datosUsuario.nombreUsuario + " " + datosUsuario.apellidoUsuario
+            etiqueta.innerHTML = str.toUpperCase();
 
             let icono = document.getElementById("iconoAcceso")
             icono.src = "assets/img/verde.png"

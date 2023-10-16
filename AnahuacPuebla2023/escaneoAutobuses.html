@@ -28,7 +28,7 @@
                 
                 const dataFinal = await response.json();
                 let result = dataFinal.result
-                if (result == "True"){
+                if (result == true){
                     idAdministrador = dataFinal.message[0].idAdministrador
                     return dataFinal.message[0].correoAdministrador
                 }else{
