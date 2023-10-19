@@ -161,7 +161,7 @@
                                 
                                 preparatoriasDeEsteEstado.forEach(element2 => {
                                     var opt = document.createElement('option');
-                                    opt.value = element2.id;
+                                    opt.value = element2.value;
                                     opt.innerHTML = element2.texto;
                                     input.appendChild(opt)
                                 });
@@ -235,7 +235,7 @@
                     let valor = document.getElementById(`elementoFormulario${element.idEstructuraPreguntas}`);
                     console.log(valor.value + " en idEstructuraPreguntas: " + element.idEstructuraPreguntas)
                     if(isNumeric(valor.value)){
-                        let objeto = preparatorias.find(x => x.value == (""+valor.value))
+                        let objeto = preparatorias.find(x => x.value.localeCompare(valor.value)  == 0)
                         let nombre = objeto.texto
                         // if(!isUndefined(valor,"texto")){
                         //     nombre = valor.texto

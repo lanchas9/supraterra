@@ -241,7 +241,7 @@
 
         })
         .then(function(json) {
-            if(json.result == "True"){
+            if(json.result == true){
                 alert('La actualización de idUsuario: ' + json.message + ' se realizó con éxito');
             }else{
                 alert('Error desconocido en la actualización');
@@ -276,7 +276,7 @@
 
         })
         .then(function(json) {
-            if(json.result == "True"){
+            if(json.result == true){
                 alert('El reenvío a: ' + correoUsuario + ' se realizó con éxito');
             }else{
                 alert('Error desconocido en el reenvío del mail');
