@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="js/jquery.min.js"  type='text/javascript'></script>
+    <script src="js/qrcode.js"  type='text/javascript'></script>
+</head>
+<body onload="cargaDatos()">
+    
+    <!-- <img src="jpg/logo/1216_Kia_basic_logo_White_no_background.png" alt="" srcset="" class="logo"> -->
+    <img src="jpg/imagen_fondo_kia_LOW.jpg" alt="" srcset="" id="imagenPortada" class="imagenPortada">
+    <div class="cuerpo">
+        <div class="titulo">Gracias por registrarte con nosotros <br><span id="nombre" class="nombre"></span></div>
+        <div class="titulo">A continuación presentamos tu código QR con el que podrás participar por un premio en nuestra ruleta</div>
+        <br>
+        <div class="centrado">
+            <div id="qrcode1"  class="qr"></div>
+        </div>
+        <br>
+        <button class="boton" onclick="regresa()">Salir</button>
+    </div>
+
+    <script type="text/javascript">
+        async function regresa(){
+            window.location.href = `https://www.kia.com/mx/main.html`;
+        }
+
+        async function cargaDatos(){
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            let nombre = urlParams.get('nombre');
+            let id = urlParams.get('id');
+            document.getElementById("nombre").innerHTML = nombre
+            let idFinal = ('000000'+id).slice(-6);
+            //let nombreFinal = (nombre + "                         ").substring(0,25);
+            let urlImagenQR = `///KIA///ID///${idFinal}`
+            // let imagen = document.getElementById("qr")
+            // imagen.src = urlImagenQR
+            try{
+                new QRCode(document.getElementById('qrcode1'), urlImagenQR);
+                document.getElementById("qrcode1").className = "qr"
+            }catch(err){
+                console.log(err)
+            }
+        }
+    </script>
+</body>
+</html>
