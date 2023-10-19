@@ -18,6 +18,8 @@
         <br><br>
     </div>
     <script type="text/javascript">
+        let preparatorias = []
+        let divPadrePreparatorias
         let urlServer = "https://mosaico.app:4000/Anahuac2023/"
         let tipoValidaciones = { 
             existeValor: "existeValor",
@@ -133,7 +135,55 @@
                     input = document.createElement("select");
                     input.setAttribute("class", "elmentoFormularioSelect");
                     input.setAttribute("id", `elementoFormulario${element.idEstructuraPreguntas}`);
+                    if(element.idEstructuraPreguntas == 18){
+                        input.addEventListener('change', function(e){
+                            var item = event.target.value;
+                            let lista = [12,13,17,20,21,27,29,30]
+                            let existe = lista.includes(Number(item))
+                            if(existe){
+                                let preparatoriasDeEsteEstado = preparatorias.filter(function (el) {
+                                    return el.idEstadosRepublica ==Number(item);
+                                });
+                                
+                                divPadrePreparatorias.innerHTML = ""
+                                let titulo = document.createElement("p");
+                                titulo.setAttribute("class", "elmentoFormularioTitulo");
 
+                                titulo.innerHTML = "Preparatoria de Procedencia" + '<b class="asterisc"> *</b>'
+
+                                input = document.createElement("select");
+                                input.setAttribute("class", "elmentoFormularioSelect");
+                                input.setAttribute("id", `elementoFormulario${20}`);
+                                var optDefault = document.createElement('option');
+                                optDefault.value = 0;
+                                optDefault.innerHTML = "";
+                                input.appendChild(optDefault)
+                                
+                                preparatoriasDeEsteEstado.forEach(element2 => {
+                                    var opt = document.createElement('option');
+                                    opt.value = element2.id;
+                                    opt.innerHTML = element2.texto;
+                                    input.appendChild(opt)
+                                });
+                                divPadrePreparatorias.appendChild(titulo)
+                                divPadrePreparatorias.appendChild(input)
+                            }else{
+                                divPadrePreparatorias.innerHTML = ""
+                                let titulo = document.createElement("p");
+                                titulo.setAttribute("class", "elmentoFormularioTitulo");
+
+                                titulo.innerHTML = "Preparatoria de Procedencia" + '<b class="asterisc"> *</b>'
+
+                                input = document.createElement("input");
+                                input.setAttribute("class", "elmentoFormularioinput");
+                                input.setAttribute("id", `elementoFormulario${20}`);
+                                
+                                divPadrePreparatorias.appendChild(titulo)
+                                divPadrePreparatorias.appendChild(input)
+                            }
+                        })      
+                    }   
+                    
                     var optDefault = document.createElement('option');
                     optDefault.value = 0;
                     optDefault.innerHTML = "";
@@ -142,12 +192,27 @@
                     fetch(urlServer + element.nombreCatalogo)
                     .then((response) => response.json())
                     .then((json) => {
-                        if (json.statusCode = 200 ){ 
+                        if (json.statusCode = 200 ){
+                        
                         json.message.forEach(element2 => {
-                            var opt = document.createElement('option');
-                            opt.value = element2.id;
-                            opt.innerHTML = element2.texto;
-                            input.appendChild(opt)
+                            if(element.idEstructuraPreguntas != 20){
+                                var opt = document.createElement('option');
+                                opt.value = element2.id;
+                                opt.innerHTML = element2.texto;
+                                input.appendChild(opt)
+                            }else{
+                                preparatorias = json.message
+                                divPadrePreparatorias = divPadre
+                                divPadrePreparatorias.innerHTML = ""
+                                let titulo = document.createElement("p");
+                                titulo.setAttribute("class", "elmentoFormularioTitulo");
+
+                                titulo.innerHTML = "Preparatoria de Procedencia" + '<b class="asterisc"> *</b>'
+
+                                input = document.createElement("input");
+                                input.setAttribute("class", "elmentoFormularioinput");
+                                input.setAttribute("id", `elementoFormulario${element.idEstructuraPreguntas}`);
+                            }
                         });
                     }
                     });
@@ -166,7 +231,41 @@
             if(!hayErrror){
                 let resultadoStr = "Perfil no seleccionado"
                 let dato = -1
-                if(element.idEstructuraPreguntas == 21){
+                if(element.idEstructuraPreguntas == 20){
+                    let valor = document.getElementById(`elementoFormulario${element.idEstructuraPreguntas}`);
+                    console.log(valor.value + " en idEstructuraPreguntas: " + element.idEstructuraPreguntas)
+                    if(isNumeric(valor.value)){
+                        let objeto = preparatorias.find(x => x.value == (""+valor.value))
+                        let nombre = objeto.texto
+                        // if(!isUndefined(valor,"texto")){
+                        //     nombre = valor.texto
+                        // }
+                        
+                        let keyNombre = { 
+                            nombrePreparatoria : nombre
+                        }
+                        datosRegistro =  Object.assign(datosRegistro, keyNombre);
+                        dato = objeto.idEstadosRepublica
+                        let keyId = { 
+                            idPreparatoria : dato
+                        }
+                        datosRegistro =  Object.assign(datosRegistro, keyId);
+                    }else{
+                        dato = valor.value.trim()
+                        let keyId = { 
+                            idPreparatoria : 0
+                        }
+                        datosRegistro =  Object.assign(datosRegistro, keyId);
+                        let keyNombre = { 
+                            nombrePreparatoria : dato
+                        }
+                        datosRegistro =  Object.assign(datosRegistro, keyNombre);
+                    }
+                    
+                    
+                    
+                    resultadoStr = ""
+                }else if(element.idEstructuraPreguntas == 21){
                     if(radioOpcionSeleccionada >= 0){
                         dato = radioOpcionSeleccionada
                         resultadoStr = ""
@@ -181,7 +280,9 @@
                     }
                 }
                 if(resultadoStr == ""){
-                    if(element.idEstructuraPreguntas >= 22){
+                    if(element.idEstructuraPreguntas == 20){
+                        console.log("Aqui toca grabas la preparatoria")
+                    }else if(element.idEstructuraPreguntas >= 22){
                         let key = `{"${element.tooltipEstructuraPreguntas}" : "${dato}"}`;
                         datosPreUniversitarios =  Object.assign(datosRegistro, JSON.parse(key));
                     }else{
@@ -362,6 +463,20 @@
         
         return true;
     }
+
+    // function isUndefined(value, propiedad) {
+    
+    //     if(typeof value === 'undefined'){
+    //         return true
+    //     }else if(typeof value === 'undefined'){
+    //         return true
+    //     }else{
+    //         return false
+    //     }
+    // }
+    function isUndefined(obj, prop) {
+        return !obj.hasOwnProperty('name');
+    }    
 </script>
 </body>
 </html>

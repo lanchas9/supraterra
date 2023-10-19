@@ -22,5 +22,12 @@
             "url": "http://localhost:5501/AnahuacPuebla2023/menu_reporte.html",
             "webRoot": "${workspaceFolder}/"
         },
+        {
+            "name": "Talleres AnahuacPuebla2023",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:5501/AnahuacPuebla2023/talleres.html",
+            "webRoot": "${workspaceFolder}/"
+        },
     ]
 }

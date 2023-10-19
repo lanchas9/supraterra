@@ -14,16 +14,18 @@
             .then(data => {
                 let talleres = document.getElementById("talleres");
                 let html = "";
-                let data2 = data.form.formFieldGroups[5].fields[0].dependentFieldFilters[2].dependentFormField.options.map((element) => {
-                    console.log("talleres");
-                    return element.label
+                let data2 = data.form.formFieldGroups[4].fields[0].dependentFieldFilters[8].dependentFormField.options.map((element) => {
+                    console.log("elementos");
+                    return {
+                        "value": element.value,
+                        "label": element.label
+                    }
                 });
                 data2.forEach(element => {
                     html += `
                     <div class="taller">
-                        
                         <div class="taller__info">
-                            <h3>${element}</h3>
+                            <h3>${element.value},${element.label}</h3>
                         </div>
                     </div>
                     `;
