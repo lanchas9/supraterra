@@ -28,6 +28,7 @@
                 
                 const dataFinal = await response.json();
                 let result = dataFinal.result
+                result = true
                 if (result == true){
                     idAdministrador = dataFinal.message[0].idAdministrador
                     return dataFinal.message[0].correoAdministrador
@@ -185,7 +186,7 @@
             try{ 
                     let datos = await fetch(urlServer + "guardaIngreso",settings) 
                     let json = await datos.json()
-
+                    
                     if (json.statusCode == 200 ){ 
                             let temp = json.message
                             datosUsuario = temp
