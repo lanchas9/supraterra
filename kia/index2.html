@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body onload="cargaDatos()">
+    
+    <div class="banner">
+        <img src="jpg/imagen_fondo_kia_LOW.jpg" alt="" srcset="" id="imagenBack" class="imagenPortada">
+        <!-- <img src="jpg/logo/1216_Kia_basic_logo_White_no_background.png" alt="" srcset="" class="logo" id="imagenLogo"> -->
+    </div>
+    <div class="cuerpo">
+        <div class="centrado">
+            <div class="titulo">Llena esta forma por favor</div>
+        </div>
+        
+        <input type="text" class="inputDatos" id="Nombre" placeholder="Nombre*">
+        <input type="text" class="inputDatos" id="ApellidoPaterno" placeholder="Apellido Paterno*">
+        <input type="text" class="inputDatos" id="correoElectronico" placeholder="Correo Electrónico*">
+        <input type="text" class="inputDatos" id="correoConfirmacion" placeholder="Confirmación de Correo*">
+        <input type="number" class="inputDatos" id="Telefono" placeholder="Teléfono*">
+        <input type="number" class="inputDatos" id="CodigoPostal" placeholder="Código Postal*">
+        <select name="seleccioneEstado" id="SeleccioneEstado" class="inputDatosSelect" onchange="llenaDistribuidor()">
+            <option value="" disabled selected>Seleccione Estado*</option>
+        </select>
+        <select name="seleccioneDistribuidor" id="SeleccioneDistribuidor" class="inputDatosSelect">
+            <option value="" disabled selected>Seleccione Distribuidor*</option>
+        </select>
+        <div class="checkbox">
+            <input type="checkbox" name="checkbox1" id="checkbox1" class="checkboxIcon">
+            <!-- Si marca esta casilla no recibirá comunicaciones de productos y servicios de Kia. -->
+            Deseo recibir información de Kia
+        </div>
+
+        <div class="checkbox">
+            <input type="checkbox" name="checkbox1" id="checkbox2" class="checkboxIcon">
+            Acepto la <span class="privacidad">
+                <a href="https://bit.ly/3nFNEyp">
+                politica de privacidad</a></span>.
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" name="checkbox3" id="checkbox3" class="checkboxIcon">
+            Confirmo que soy mayor de 18 años
+        </div>
+        <div id="mensajeError" class="mensajeError"></div>
+        <button class="boton" onclick="validaDatos()">Registrarme ahora</button>
+    </div>
+
+    <script type="text/javascript">
+        let serverLibre = true;
+        let tipoValidaciones = { 
+            existeValor: "existeValor",
+            esNumero: "esNumero",
+            email: "email",
+            celular: "celular",
+            paginaWeb: "paginaWeb",
+            esNumeroMayorAcero: "esNumeroMayorQueCero"
+        }
+
+        var estados = [
+            "Aguascalientes",
+            "Baja California",
+            "Baja California Sur",
+            "Campeche",
+            "Chiapas",
+            "Chihuahua",
+            "Ciudad de México",
+            "Coahuila",
+            "Colima",
+            "Durango",
+            "Estado de México",
+            "Guanajuato",
+            "Guerrero",
+            "Hidalgo",
+            "Jalisco",
+            "Michoacan",
+            "Morelos",
+            "Nuevo Leon",
+            "Oaxaca",
+            "Puebla",
+            "Querétaro",
+            "Quintana Roo",
+            "San Luis Potosí",
+            "Sinaloa",
+            "Sonora",
+            "Tabasco",
+            "Tamaulipas",
+            "Tlaxcala",
+            "Veracruz",
+            "Yucatán",
+            "Zacatecas"
+        ]
+
+        var sucursales = [
+            ["Aguascalientes","KIA ALTARIA"],
+            ["Baja California","KIA INNOVA"],
+            ["Baja California","KIA FUTURA"],
+            ["Baja California","KIA VISIÓN"],
+            ["Baja California Sur","KIA CABOS"],
+            ["Baja California Sur","KIA BAJA SUR"],
+            ["Campeche","KIA BAHÍA"],
+            ["Chiapas","KIA SURESTE"],
+            ["Chihuahua","KIA JUVENTUD"],
+            ["Chihuahua","KIA JUÁREZ"],
+            ["Ciudad de México","KIA MARIANO ESCOBEDO"],
+            ["Ciudad de México","KIA AEROPUERTO"],
+            ["Ciudad de México","KIA COAPA"],
+            ["Ciudad de México","KIA SANTA FE"],
+            ["Ciudad de México","KIA TLÁHUAC"],
+            ["Ciudad de México","KIA IZTAPALAPA"],
+            ["Ciudad de México","KIA DEL VALLE"],
+            ["Ciudad de México","KIA VALLEJO"],
+            ["Ciudad de México","KIA SAN JOAQUÍN"],
+            ["Ciudad de México","KIA PEDREGAL"],
+            ["Ciudad de México","KIA DIVISIÓN DEL NORTE"],
+            ["Coahuila","KIA MAX"],
+            ["Coahuila","KIA LAGUNA"],
+            ["Coahuila","KIA PAPE"],
+            ["Colima","KIA LAS BRISAS"],
+            ["Colima","KIA COLIMÁN"],
+            ["Durango","KIA GUADIANA"],
+            ["Estado de México","KIA INTERLOMAS"],
+            ["Estado de México","KIA CUAUTITLÁN"],
+            ["Estado de México","KIA METEPEC"],
+            ["Estado de México","KIA SATÉLITE"],
+            ["Estado de México","KIA TEXCOCO"],
+            ["Estado de México","KIA ECATEPEC"],
+            ["Estado de México","KIA COACALCO"],
+            ["Estado de México","KIA ESMERALDA"],
+            ["Estado de México","KIA LOMAS VERDES"],
+            ["Estado de México","KIA IXTAPALUCA"],
+            ["Guanajuato","KIA POLIFORUM"],
+            ["Guanajuato","KIA VÍA ALTA"],
+            ["Guanajuato","KIA CAMPESTRE"],
+            ["Guanajuato","KIA CAPITAL"],
+            ["Guanajuato","KIA VILLAS"],
+            ["Guanajuato","KIA BAJIO"],
+            ["Guerrero","KIA DIAMANTE"],
+            ["Hidalgo","KIA CENTER"],
+            ["Jalisco","KIA VALLARTA"],
+            ["Jalisco","KIA GALERÍAS"],
+            ["Jalisco","KIA PATRIA"],
+            ["Jalisco","KIA LÓPEZ MATEOS"],
+            ["Jalisco","KIA GONZALEZ GALLO"],
+            ["Jalisco","KIA COUNTRY CLUB"],
+            ["Jalisco","KIA SANTA ANITA"],
+            ["Michoacan","KIA PARICUTIN"],
+            ["Michoacan","KIA DEL DUERO"],
+            ["Michoacan","KIA MIL CUMBRES"],
+            ["Morelos","KIA PRIMAVERA"],
+            ["Morelos","KIA MORELOS SUR"],
+            ["Nuevo Leon","KIA GONZALITOS"],
+            ["Nuevo Leon","KIA CUMBRES"],
+            ["Nuevo Leon","KIA SENDERO"],
+            ["Nuevo Leon","KIA CARRETERA NACIONAL"],
+            ["Nuevo Leon","KIA VALLE ORIENTE"],
+            ["Nuevo Leon","KIA LINDA VISTA"],
+            ["Oaxaca","KIA SALINA CRUZ"],
+            ["Oaxaca","KIA PLAZA DEL VALLE"],
+            ["Oaxaca","KIA PUERTO ESCONDIDO"],
+            ["Puebla","KIA LOS FUERTES"],
+            ["Puebla","KIA SERDÁN"],
+            ["Puebla","KIA ANGELOPOLIS"],
+            ["Puebla","KIA CHOLULA"],
+            ["Puebla","KIA MANANTIAL"],
+            ["Querétaro","KIA NOVA QRO"],
+            ["Querétaro","KIA SAN JUAN"],
+            ["Querétaro","KIA CORREGIDORA"],
+            ["Quintana Roo","KIA BONAMPAK"],
+            ["Quintana Roo","KIA PLAYACAR"],
+            ["San Luis Potosí","KIA LOMAS"],
+            ["San Luis Potosí","KIA CARRETERA 57"],
+            ["Sinaloa","KIA PACIFIC"],
+            ["Sinaloa","KIA COUNTRY"],
+            ["Sinaloa","KIA AHOME"],
+            ["Sonora","KIA MORELOS"],
+            ["Sonora","KIA CAJEME"],
+            ["Tabasco","KIA RUIZ CORTINES"],
+            ["Tamaulipas","KIA VICTORIA"],
+            ["Tamaulipas","KIA AVENIDA"],
+            ["Tamaulipas","KIA FRONTERA"],
+            ["Tamaulipas","KIA LAREDO"],
+            ["Tlaxcala","KIA MALINCHE"],
+            ["Veracruz","KIA ANIMAS"],
+            ["Veracruz","KIA COATZA"],
+            ["Veracruz","KIA BOCA"],
+            ["Veracruz","KIA TAJÍN"],
+            ["Veracruz","KIA ALTAS MONTAÑAS"],
+            ["Yucatán","KIA NORTE"],
+            ["Yucatán","KIA PENÍNSULA"],
+            ["Zacatecas","KIA BERNARDEZ"],
+            ["Zacatecas","KIA FRESNILLO"]	
+        ]
+        async function cargaDatos(){
+            // let back = document.getElementById("imagenBack")
+            // let logo = document.getElementById("imagenLogo")
+
+            // let backCoor = back.getBoundingClientRect();
+            // let logoCoor = logo.getBoundingClientRect();
+
+            // logo.style.top = backCoor.bottom - (logoCoor.bottom - logoCoor.top ) - 100  
+
+
+            let menu = document.getElementById("SeleccioneEstado")
+            
+            estados.forEach(element => {
+                let opt = document.createElement("option")
+                opt.value = element
+                opt.innerHTML = element
+                menu.appendChild(opt)
+            });
+        }
+
+        async function llenaDistribuidor(){
+            let menu = document.getElementById("SeleccioneEstado")
+            let menu2 = document.getElementById("SeleccioneDistribuidor")
+            let valor = menu.value
+            let distribuidores = sucursales.filter(element => element[0] == valor);
+            menu2.innerHTML = '<option value="" disabled selected>&nbsp;&nbsp;&nbsp;Seleccione Distribuidor*</option>'
+            distribuidores.forEach(element => {
+                let opt = document.createElement("option")
+                opt.value = element[1]
+                opt.innerHTML = element[1]
+                menu2.appendChild(opt)
+            });
+
+        }
+
+        async function validaDatos() {
+            if(serverLibre){
+                serverLibre = false
+            
+                document.getElementById("mensajeError").innerHTML = ""
+                let nombre = new String(document.getElementById("Nombre").value);
+                let apellido = new String(document.getElementById("ApellidoPaterno").value);
+                let correoElectronico = new String(document.getElementById("correoElectronico").value);
+                let correoConfirmacion = new String(document.getElementById("correoConfirmacion").value);
+                let telefono = new String(document.getElementById("Telefono").value);
+                let codigoPostal = new String(document.getElementById("CodigoPostal").value);
+                let seleccioneEstado = document.getElementById("SeleccioneEstado").value;
+                let seleccioneDistribuidor = document.getElementById("SeleccioneDistribuidor").value;
+
+                
+                let checkbox1 = document.getElementById("checkbox1").checked;
+                let checkbox2 = document.getElementById("checkbox2").checked;
+                let checkbox3 = document.getElementById("checkbox3").checked;
+                
+                
+                let valido = true
+                let mensaje = ""
+
+                // if (!checkbox1) {
+                //     valido = false
+                //     mensaje = "No se ha marcado la casilla sobre envío de información"
+                // }
+                if (!checkbox3) {
+                    valido = false
+                    mensaje = "Se requiere que sea mayor de edad para el registro"
+                }
+
+                if (!checkbox2) {
+                    valido = false
+                    mensaje = "No se ha aceptado la politica de privacidad"
+                }
+
+                if (seleccioneDistribuidor== '') {
+                    valido = false
+                    mensaje = "Seleccione el distribuidor"
+                }
+
+                if (seleccioneEstado== '') {
+                    valido = false
+                    mensaje = "Seleccione su Estado de la República"
+                }
+
+                if(isNumeric(codigoPostal)){
+                    valido = false
+                    mensaje = "Código postal debe de ser de 5 dígitos"
+                }
+
+                if (codigoPostal.length!= 5) {
+                    valido = false
+                    mensaje = "Código postal debe de ser de 5 dígitos"
+                }
+                
+                telefono = telefono.trim()
+                if(celularInValido(telefono)){
+                    valido = false
+                    mensaje = "Telefono no es de 10 dígitos"
+                }
+
+                correoElectronico = correoElectronico.trim()
+                correoConfirmacion = correoConfirmacion.trim()
+                if(correoElectronico !== correoConfirmacion){
+                    valido = false
+                    mensaje = "correo electrónico y su confirmación no coinciden"
+                }
+
+                
+                if(mailInValido(correoElectronico)){
+                    valido = false
+                    mensaje = "correo electrónico no válido"
+                }
+
+                
+
+                if (apellido.length<= 2) {
+                    valido = false
+                    mensaje = "Apellido demasiado corto"
+                }
+
+                if (nombre.length<= 2) {
+                    valido = false
+                    mensaje = "Nombre demasiado corto"
+                }
+
+
+                // correoUsuario = correoUsuario.trim()
+                // if(mailInValido(correoUsuario)){
+                //     valido = false
+                //     mensaje = "correo invalido"
+                // }
+
+                // if (nombreUsuario.length<= 5) {
+                //     valido = false
+                //     mensaje = "Nombre demasiado corto"
+                // }
+                if(valido){
+                    let respuesta = await validaMailYcelular(correoElectronico, telefono) 
+                    if (respuesta.statusCode ==200){
+                        console.log("email y celular es nuevo")        
+                    }else{
+                        valido = false
+                        if(respuesta.message == "correo repetido"){
+                            mensaje = `El correo: ${correoElectronico} ya fué utilizado para registrarse anteriormente`
+                        }else if(respuesta.message == "celular repetido"){
+                            mensaje = `El número de celular: ${telefono} ya fué utilizado para registrarse anteriormente`
+                        }
+                    }        
+                }
+                
+                if(valido){
+                    let deseaInfo = checkbox1 == true ? 1:0
+                    let aceptoPoliticas = checkbox2 == true ? 1:0
+                    let mayor18 = checkbox3 == true ? 1:0
+                    
+                    let resul = await guardaDatos( nombre ,apellido,correoElectronico, telefono,codigoPostal ,seleccioneEstado , seleccioneDistribuidor, deseaInfo, aceptoPoliticas)
+                    if (resul.statusCode ==200){
+                        window.location.href = `resultado.html?nombre=${nombre + ' ' + apellido}&id=${resul.message}`;
+                    }else{
+                        document.getElementById("mensajeError").innerHTML = resul.message
+                        serverLibre=true
+                    }
+                }else{
+                    document.getElementById("mensajeError").innerHTML = mensaje
+                    serverLibre=true
+                }
+            }
+        }
+        //validaMailYcelular
+        async function validaMailYcelular(correoElectronico,telefono){
+            let resul = {
+                error : true,
+                message: "",
+                idUsuario: 0,
+                statusCode: 0
+            }
+            const data = {
+                    "correoElectronico" : correoElectronico,
+                    "telefono" : telefono
+                }
+                const dataJson = JSON.stringify(data)
+
+                const settings = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                 body: 
+                    dataJson
+                 };
+                try {
+                    const fetchResponse = await fetch(`https://mosaico.app:4000/Kia/temporada2/validaMailYcelular`, settings);
+                    const data = await fetchResponse.json();
+                    console.log("Data" + JSON.stringify(data))
+                    
+                    if(data.statusCode == 200){
+                        resul.statusCode = data.statusCode
+                        resul.idUsuario = data.message
+                        resul.message = data.message
+                    }else{                        
+                        resul.statusCode = data.statusCode
+                        resul.message = data.message
+                    }
+                    
+                } catch (e) {
+                    console.log("Error" + e)
+                    resul.statusCode = 404
+                    resul.message = e
+                    return resul;
+                }
+                return resul    
+        }
+        
+        async function guardaDatos(nombre ,apellido ,correoElectronico,telefono,codigoPostal ,seleccioneEstado , seleccioneDistribuidor, deseaInfo, aceptoPoliticas){
+            let resul = {
+                error : true,
+                message: "",
+                idUsuario: 0,
+                statusCode: 0
+            }
+            const data = {
+                    "nombre" : nombre,
+                    "apellido" : apellido,
+                    "correoElectronico" : correoElectronico,
+                    "telefono" : telefono,
+                    "codigoPostal" : codigoPostal,
+                    "seleccioneEstado" : seleccioneEstado,
+                    "seleccioneDistribuidor" : seleccioneDistribuidor,
+                    "deseaInfo" : deseaInfo, 
+                    "aceptoPoliticas": aceptoPoliticas
+                }
+                const dataJson = JSON.stringify(data)
+
+                const settings = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                 body: 
+                    dataJson
+                 };
+                try {
+                    const fetchResponse = await fetch(`https://mosaico.app:4000/Kia/semana4/guardaUsuario`, settings);
+                    const data = await fetchResponse.json();
+                    console.log("Data" + JSON.stringify(data))
+                    
+                    if(data.statusCode == 200){
+                        resul.statusCode = data.statusCode
+                        resul.idUsuario = data.message
+                        resul.message = data.message
+                    }else{                        
+                        resul.statusCode = data.statusCode
+                        resul.message = data.message
+                    }
+                    
+                } catch (e) {
+                    console.log("Error" + e)
+                    resul.statusCode = 404
+                    resul.message = e
+                    return resul;
+                }
+                return resul    
+        }
+
+        function mailInValido(correoUsuario) {
+            let esInValido = true
+
+           if  (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(correoUsuario)) {
+                esInValido = false
+             } 
+            return esInValido
+        }
+        
+        function celularInValido(celularUsuario) {
+            let esInValido = true            
+            if( isNumeric(celularUsuario) && celularUsuario.length == 10 ){
+                esInValido = false
+            }
+            return esInValido
+        }
+
+        function isNumeric(str) {
+            if (typeof str != "string") return false // we only process strings!  
+            return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+                    !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+        }
+    </script> 
+</body>
+</html>
