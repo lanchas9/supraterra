@@ -1,0 +1,37 @@
+SELECT 
+    A.nombreUsuario "Nombres",
+    A.apellidoUsuario "Apellidos",
+    A.correoUsuario "Correo Electrónico",
+    A.celularUsuario "Número Celular",
+    A.nombreTutor "Tutor Nombres",
+    A.apellidoTutor "Tutor Apellidos",
+    A.correoTutor "Tutor Correo Electrónico",
+    A.celularTutor "Tutor Número Celular",
+    B.texto "Estado República",
+    A.nombrePreparatoria "Nombre Preparatoria",
+    C.texto "Perfil",
+    A.mensajeTexto "Mensaje",
+    E.texto "Grado Preparatoria", 
+    F.texto "Periodo para Ingresar", 
+    G.texto "Licenciatura", 
+    H.texto "Taller 01", 
+    I.texto "Taller 02", 
+    J.texto "Taller 03", 
+	CONCAT(LPAD(HOUR(A.createdAt)-1,2,'0'),':',LPAD(MINUTE(A.createdAt),2,'0'),':',LPAD(SECOND(A.createdAt),2,'0'),' ' ,  IF((HOUR(A.createdAt)-1)<12,'am','pm')) "Hora de Registro",
+    CONCAT(YEAR(A.createdAt), '-', LPAD(MONTH(A.createdAt),2,'0'), '-', LPAD(DAY(A.createdAt),2,'0')) "Fecha de Registro"
+FROM
+    anahuacPuebla2023.usuarios as A
+INNER JOIN anahuacPuebla2023.estadosRepublica as B ON A.estadoRepublica = B.id
+INNER JOIN anahuacPuebla2023.perfiles as C ON A.idPerfil = C.id 
+INNER JOIN anahuacPuebla2023.preuniversitario as D ON A.idPreUniversitario = D.idPreUniversitario
+INNER JOIN anahuacPuebla2023.gradoPreparatoria as E ON D.idGradoPreparatoria = E.id
+INNER JOIN anahuacPuebla2023.periodoParaIngresar as F ON D.idPeriodoParaIngresar = F.id
+INNER JOIN anahuacPuebla2023.licenciatura as G ON D.idLicenciatura = G.id
+INNER JOIN anahuacPuebla2023.taller as H ON D.idTaller01= H.id
+INNER JOIN anahuacPuebla2023.taller2 as I ON D.idTaller02= I.id
+INNER JOIN anahuacPuebla2023.taller3 as J ON D.idTaller03= J.id
+WHERE
+    createdAt LIKE '%%2023-10-20%%'
+
+
+

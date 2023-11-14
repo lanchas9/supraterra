@@ -1,0 +1,3 @@
+SELECT *,
+CONCAT(LPAD(HOUR(A.createdAt)-1,2,'0'),':',LPAD(MINUTE(A.createdAt),2,'0'),':',LPAD(SECOND(A.createdAt),2,'0'),' ' ,  IF((HOUR(A.createdAt))<12,'am','pm')) "Hora de Registro",
+    CONCAT(YEAR(A.createdAt), '-', LPAD(MONTH(A.createdAt),2,'0'), '-', LPAD(DAY(A.createdAt),2,'0')) "Fecha de Registro" FROM anahuacPuebla2023.usuarios as A

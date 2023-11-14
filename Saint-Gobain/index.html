@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saint-Gobain</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="cargaDatos()">
+    <div class="body">
+        <img src="logo.png" alt="" srcset="" class="logo">
+        <div class="title">Registro</div>
+        <div id="survay">
+            <!-- <input type="number" class="inputDatos" id="Telefono" placeholder="Teléfono*">
+            <input type="text" class="inputDatos" id="correoConfirmacion" placeholder="Confirmación de Correo*">
+            <input type="text" class="inputDatos" id="Empresa" placeholder="Empresa*"> -->
+            <select name="seleccioneEstado" id="seleccioneEstado" class="inputDatosSelect">
+                <option value="" disabled selected>Seleccione estado*</option>
+            </select>
+            <select name="seleccioneEdad" id="seleccioneEdad" class="inputDatosSelect">
+                <option value="" disabled selected>Seleccione rango edad*</option>
+            </select>
+            <input type="text" class="inputDatos" id="Profesion" placeholder="Profesión*">
+            <div class="inputDatosChico">De los siguientes beneficios, ¿Cuáles serían los más importantes para cambiar los vidrios de tu hogar?
+                <br><br>
+                <input type="checkbox" name="checkbox1" id="checkbox1" class="checkboxIcon">
+                Control del calor y rayos UV
+                <br>
+                <input type="checkbox" name="checkbox2" id="checkbox2" class="checkboxIcon">
+                Fácil limpieza
+                <br>
+                <input type="checkbox" name="checkbox3" id="checkbox3" class="checkboxIcon">
+                Ahorros en dinero y tiempo
+                <br>
+                <input type="checkbox" name="checkbox4" id="checkbox4" class="checkboxIcon">
+                Vidrio para duchas
+                <br>
+                <input type="checkbox" name="checkbox5" id="checkbox5" class="checkboxIcon">
+                Vidrio para balcones 
+            </div>
+            <div class="inputDatosChico">¿Estarías dispuesto en cambiar los vidrios de tu hogar por vidrios inteligentes Saint-Gobain?
+                <br>
+                <select name="seleccioneSioNo" id="seleccioneSioNo" class="inputDatosSelect">
+                    <option value="" disabled selected>Seleccione Si o No*</option>
+                </select>
+            </div>
+            <select name="seleccioneRedSocial" id="seleccioneRedSocial" class="inputDatosSelect">
+                <option value="" disabled selected>Seleccione su Red Social*</option>
+            </select>
+            <div class="inputDatosChico">De la red social seleccionada arriba, ¿Cuál es tu usuario?
+                <br>
+                <input type="text" class="inputDatos" id="usuario" placeholder="Nombre de Usuario*">
+            </div>
+            <div class="inputDatosChico">
+                <input type="checkbox" name="checkbox6" id="checkbox6" class="checkboxIcon">
+                    Autorizas que podamos contactarte por este medio para enviarte información de nuestros productos y servicios
+            </div>
+            <div id="mensajeError" class="mensajeError"></div>
+            <button class="boton" onclick="validaDatos()">Guardar</button>        
+        </div>
+    </div>
+    <script>
+        let serverLibre = true
+        let tipoValidaciones = { 
+                existeValor: "existeValor",
+                esNumero: "esNumero",
+                email: "email",
+                celular: "celular",
+                paginaWeb: "paginaWeb",
+                esNumeroMayorAcero: "esNumeroMayorQueCero"
+            }
+            
+            var opcionesSioNo = [
+            "SI",
+            "NO"
+            ]
+    
+            var redSocial = [
+            "Facebook",
+            "Instagram",
+            "Linkedin",
+            "Tiktok"
+            ]
+    
+            var rangoEdad = [
+            "Menores de 25",
+            "De 26 a 36",
+            "De 37 a 47",
+            "De 48 a 58", 
+            "Más de 59" 
+            ]
+    
+            var estados = [
+                "Aguascalientes",
+                "Baja California",
+                "Baja California Sur",
+                "Campeche",
+                "Chiapas",
+                "Chihuahua",
+                "Ciudad de México",
+                "Coahuila",
+                "Colima",
+                "Durango",
+                "Estado de México",
+                "Guanajuato",
+                "Guerrero",
+                "Hidalgo",
+                "Jalisco",
+                "Michoacan",
+                "Morelos",
+                "Nuevo Leon",
+                "Oaxaca",
+                "Puebla",
+                "Querétaro",
+                "Quintana Roo",
+                "San Luis Potosí",
+                "Sinaloa",
+                "Sonora",
+                "Tabasco",
+                "Tamaulipas",
+                "Tlaxcala",
+                "Veracruz",
+                "Yucatán",
+                "Zacatecas"
+            ]
+    
+        async function cargaDatos(){
+            
+            let estado = document.getElementById("seleccioneEstado")
+            estados.forEach(element => {
+                let opt = document.createElement("option")
+                opt.value = element
+                opt.innerHTML = element
+                estado.appendChild(opt)
+            });
+    
+            let rango = document.getElementById("seleccioneEdad")
+            rangoEdad.forEach(element => {
+                let opt = document.createElement("option")
+                opt.value = element
+                opt.innerHTML = element
+                rango.appendChild(opt)
+            });
+            
+            let SioNo = document.getElementById("seleccioneSioNo")
+            opcionesSioNo.forEach(element => {
+                let opt = document.createElement("option")
+                opt.value = element
+                opt.innerHTML = element
+                SioNo.appendChild(opt)
+            });
+    
+            
+            let red = document.getElementById("seleccioneRedSocial")
+            redSocial.forEach(element => {
+                let opt = document.createElement("option")
+                opt.value = element
+                opt.innerHTML = element
+                red.appendChild(opt)
+            }); 
+        }
+    
+        async function  validaDatos(){
+            if(serverLibre){
+                serverLibre = false
+                document.getElementById("mensajeError").innerHTML = ""
+                let estado = new String(document.getElementById("seleccioneEstado").value);
+                let edad = new String(document.getElementById("seleccioneEdad").value);
+                let profesion = new String(document.getElementById("Profesion").value);
+    
+                let checkbox1 = document.getElementById("checkbox1").checked;
+                let checkbox2 = document.getElementById("checkbox2").checked;
+                let checkbox3 = document.getElementById("checkbox3").checked;
+                let checkbox4 = document.getElementById("checkbox4").checked;
+                let checkbox5 = document.getElementById("checkbox5").checked;
+    
+                let dispuesto = new String(document.getElementById("seleccioneSioNo").value);
+                let red = new String(document.getElementById("seleccioneRedSocial").value);
+                let usuario = new String(document.getElementById("usuario").value);
+                let autoriza = document.getElementById("checkbox6").checked;
+    
+                let valido = true
+                let mensaje = ""
+    
+                if (usuario == '') {
+                    valido = false
+                    mensaje = "Proporcione un usuario"
+                }
+    
+                if (red == '') {
+                    valido = false
+                    mensaje = "Seleccione una red social"
+                }
+    
+                if (dispuesto == '') {
+                    valido = false
+                    mensaje = "Seleccione Si estaría dispuesto"
+                }
+    
+                let total = 0;
+                if (checkbox1) {
+                    total = total + 1;
+                }
+                if (checkbox2) {
+                    total = total + 1;
+                }
+                if (checkbox3) {
+                    total = total + 1;
+                }
+                if (checkbox4) {
+                    total = total + 1;
+                }
+                if (checkbox5) {
+                    total = total + 1;
+                }
+                if(total <= 1){
+                    valido = false
+                    mensaje = "Seleccione al menos 2 beneficios"
+                }
+    
+                if (profesion == '') {
+                    valido = false
+                    mensaje = "Ingrese su profesión"
+                }
+    
+                if (edad == '') {
+                    valido = false
+                    mensaje = "Ingrese su edad"
+                }
+    
+                if (estado == '') {
+                    valido = false
+                    mensaje = "Seleccione un estado"
+                }
+    
+                if(valido){
+                    let resul = await guardaDatos(estado,edad,profesion,checkbox1,checkbox2,checkbox3,checkbox4,checkbox5,dispuesto,red,usuario,autoriza)
+                    if (resul.statusCode ==200){
+                        let resultado = ""
+                        if(red == redSocial[0]){
+                            resultado = "https://www.facebook.com/stgobainmexico"
+                        }else if(red == redSocial[1]){
+                            resultado = "https://www.instagram.com/saintgobainglassmx/"
+                        }else if(red == redSocial[2]){
+                            resultado = "https://www.linkedin.com/company/saint-gobain-glass-mexico/mycompany/"
+                        }else if(red == redSocial[3]){
+                            resultado = "https://www.tiktok.com/@saintgobainglass_mx?is_from_webapp=1&sender_device=pc"
+                        }else{
+                            resultado = "https://www.facebook.com/stgobainmexico"
+                        } 
+                        window.location.href = resultado
+                    }else{
+                        document.getElementById("mensajeError").innerHTML = resul.message
+                        serverLibre=true
+                    }
+                }else{
+                    document.getElementById("mensajeError").innerHTML = mensaje
+                    serverLibre=true
+                }
+            }
+        }
+
+        async function guardaDatos(estado,edad,profesion,checkbox1,checkbox2,checkbox3,checkbox4,checkbox5,dispuesto,red,usuario,autoriza){
+            let resul = {
+                error : true,
+                message: "",
+                idUsuario: 0,
+                statusCode: 0
+            }
+            const data = {
+                estado : estado,
+                rangoEdad : edad,
+                profesion : profesion,
+                checkbox1 : checkbox1,
+                checkbox2 : checkbox2,
+                checkbox3 : checkbox3,
+                checkbox4 : checkbox4,
+                checkbox5 : checkbox5,
+                dispuesto : dispuesto,
+                red : red,
+                usuario : usuario,
+                autoriza : autoriza
+            }
+                const dataJson = JSON.stringify(data)
+
+                const settings = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                 body: 
+                    dataJson
+                 };
+                try {
+                    const fetchResponse = await fetch(`https://mosaico.app:4000/Saint-Gobain/guardaUsuario`, settings);
+                    const data = await fetchResponse.json();
+                    console.log("Data" + JSON.stringify(data))
+                    
+                    if(data.statusCode == 200){
+                        resul.statusCode = data.statusCode
+                        resul.idUsuario = data.message
+                        resul.message = data.message
+                    }else{                        
+                        resul.statusCode = data.statusCode
+                        resul.message = data.message
+                    }
+                    
+                } catch (e) {
+                    console.log("Error" + e)
+                    resul.statusCode = 404
+                    resul.message = e
+                    return resul;
+                }
+                return resul    
+        }
+    </script>
+</body>
+</html>

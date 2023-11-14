@@ -1,0 +1,23 @@
+SELECT 
+    A.nombreUsuario "Nombres",
+    A.apellidoUsuario "Apellidos",
+    A.correoUsuario "Correo Electrónico",
+    A.celularUsuario "Número Celular",
+    A.nombreTutor "Tutor Nombres",
+    A.apellidoTutor "Tutor Apellidos",
+    A.correoTutor "Tutor Correo Electrónico",
+    A.celularTutor "Tutor Número Celular",
+    B.texto "Estado República",
+    A.nombrePreparatoria "Nombre Preparatoria",
+    C.texto "Perfil",
+    A.mensajeTexto "Mensaje",
+	CONCAT(LPAD(HOUR(A.createdAt)-1,2,'0'),':',LPAD(MINUTE(A.createdAt),2,'0'),':',LPAD(SECOND(A.createdAt),2,'0'),' ' ,  IF((HOUR(A.createdAt)-1)<12,'am','pm')) "Hora de Registro",
+    CONCAT(YEAR(A.createdAt), '-', LPAD(MONTH(A.createdAt),2,'0'), '-', LPAD(DAY(A.createdAt),2,'0')) "Fecha de Registro",
+    A.createdAt
+FROM
+    anahuacPuebla2023.usuarios as A
+INNER JOIN anahuacPuebla2023.estadosRepublica as B ON A.estadoRepublica = B.id
+INNER JOIN anahuacPuebla2023.perfiles as C ON A.idPerfil = C.id 
+WHERE
+    A.createdAt LIKE '%%2023-10-20%%'
+AND idPreUniversitario = 0 AND idPerfil > 1 AND idPreparatoria = 0
