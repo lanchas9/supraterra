@@ -242,13 +242,13 @@
                         }else if(red == redSocial[1]){
                             resultado = "https://www.instagram.com/saintgobainglassmx/"
                         }else if(red == redSocial[2]){
-                            resultado = "https://www.linkedin.com/company/saint-gobain-glass-mexico/mycompany/"
+                            resultado = "https://www.linkedin.com/company/saint-gobain-glass-mexico/"
                         }else if(red == redSocial[3]){
                             resultado = "https://www.tiktok.com/@saintgobainglass_mx?is_from_webapp=1&sender_device=pc"
                         }else{
                             resultado = "https://www.facebook.com/stgobainmexico"
                         } 
-                        let espera = prompt("Gracias por su respuesta, le pedimos nos siga en " + red + ", en este momento será redirijido a la página de Saint-Gobain", "OK")
+                        let espera = prompt("Gracias por sus respuestas, le pedimos nos siga en " + red + ", en este momento será redirijido a la página de Saint-Gobain", "OK")
                         window.location.href = resultado
                     }else{
                         document.getElementById("mensajeError").innerHTML = resul.message
