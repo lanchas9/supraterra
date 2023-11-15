@@ -26,7 +26,7 @@
             "name": "Talleres AnahuacPuebla2023",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:5501/AnahuacPuebla2023/talleres.html",
+            "url": "http://127.0.0.1:5501/Saint-Gobain/index.html",
             "webRoot": "${workspaceFolder}/"
         },
     ]
