@@ -247,8 +247,45 @@
                             resultado = "https://www.tiktok.com/@saintgobainglass_mx?is_from_webapp=1&sender_device=pc"
                         }else{
                             resultado = "https://www.facebook.com/stgobainmexico"
-                        } 
-                        let espera = alert("Gracias por sus respuestas, le pedimos nos siga en " + red + ", en este momento será redirijido a la página de Saint-Gobain")
+                        }
+                        //create a fullscreen div qith 90% opacity and a loading gif with a message in white
+                        let mensaje = document.getElementById("survay")
+                        mensaje.style.opacity = "0.4"
+                        let div = document.createElement("div")
+                        div.style.position = "fixed"
+                        div.style.top = "0"
+                        div.style.left = "0"
+                        div.style.width = "100%"
+                        div.style.height = "100%"
+                        div.style.backgroundColor = "#000000"
+                        div.style.opacity = "0.9"
+                        div.style.zIndex = "9999"
+                        let img = document.createElement("img")
+                        img.src = "loading2.gif"
+                        img.style.position = "fixed"
+                        img.style.top = "50%"
+                        img.style.left = "50%"
+                        img.style.transform = "translate(-50%, -50%)"
+                        img.style.width = "300px"
+                        img.style.height = "300px"
+                        img.style.zIndex = "9999"
+                        let text = document.createElement("p")
+                        text.innerHTML = "Gracias por sus respuestas, le pedimos nos siga en " + red + ", en este momento será redirijido a la página de Saint-Gobain"
+                        text.style.position = "fixed"
+                        text.style.top = "50%"
+                        text.style.left = "50%"
+                        text.style.transform = "translate(-50%, -50%)"
+                        text.style.color = "#000000"
+                        text.style.zIndex = "9999"
+                        div.appendChild(img)
+                        div.appendChild(text)
+                        mensaje.appendChild(div)
+                        //wait 3 seconds
+                        await new Promise(r => setTimeout(r, 5000));
+                        //redirect to the page
+
+
+                        //let espera = alert("Gracias por sus respuestas, le pedimos nos siga en " + red + ", en este momento será redirijido a la página de Saint-Gobain")
                         window.location.href = resultado
                     }else{
                         document.getElementById("mensajeError").innerHTML = resul.message
