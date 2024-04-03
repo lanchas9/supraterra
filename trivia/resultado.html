@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es" class="notranslate" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>watchpartytnt.com</title>
+</head>
+<body onload="cargaResultados()">
+    <img src="img/banner.jpg" alt="" srcset="" class="logoTitulo">
+    <hr class="divisionMoradaArriba">
+    <div class="divCentrado">
+        <span class="textoTitulo">Resultado</span>
+    </div>
+    <hr class="divisionMoradaAbajo">
+    
+    <p class="texto">Tuviste </p>
+    <p class="mensajeResultado grande" id="numeroAciertos">1 / 6 </p>
+    <p class="texto">aciertos </p>
+    <p class="texto oculto centrado" id="textoGanador">
+    <p class="texto">con un tiempo de: </p>
+    <p class="mensajeResultado grande" id="textotiempoCuestionario"> </p>
+    <p class="texto centrado" id="">
+        ¡Gracias por tu participación! <br> 
+        Presentaremos al ganador al final del evento.<br>
+       
+    </p>
+    <img src="img/qr.jpg" alt="" srcset="" class="qrcode2">
+
+    <p class="texto oculto centrado" id="textoPerdedor">
+        ¡Gracias por participar! <br>
+    </p>
+    
+    <div class="centrado">
+        <button class="boton" onclick="mandaLinkWeb()">Salir</button>
+    </div>
+    <script type="text/javascript">
+        let numAciertos = 0;
+
+        function mandaLinkWeb(){
+            window.location.href = 'https://www.yellowhat.mx'
+        }
+
+            async function cargaResultados(){
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                let idUsuario = parseInt(urlParams.get('idUsuario'));
+                numAciertos = parseInt(urlParams.get('numAciertos')) 
+                let numPreguntas = urlParams.get('numPreguntas') 
+                let tiempoRegistroJuegos = parseInt(urlParams.get('tiempoCuestionario'));
+                document.getElementById("numeroAciertos").innerHTML = numAciertos + " / " + numPreguntas
+                document.getElementById("textotiempoCuestionario").innerHTML = (tiempoRegistroJuegos/1000) + " segundos"
+
+                if (numAciertos >= 0){
+                    document.getElementById("textoGanador").className = "texto mostrar centrado"
+                     
+                    let botonRegresar = getCookie("botonRegresar")
+                    if (botonRegresar == false){
+                            const data = {
+                                "idUsuario" : idUsuario,
+                                "resultadoRegistroJuego" : numAciertos,
+                                "tiempoRegistroJuegos" : tiempoRegistroJuegos
+
+                            }
+                            const dataJson = JSON.stringify(data)
+
+                            const settings = {
+                            method: 'POST',
+                            headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: 
+                                dataJson
+                            };
+                            
+                            try {
+                            const fetchResponse = await fetch(`https://mosaico.app:4000/watchpartytnt/guardaRegistroJuego`, settings);
+                            const data = await fetchResponse.json();
+                            resul = data.statusCode
+                            if(resul == 200){
+                                console.log("Registro de juego guardado correctamente")
+                            }else{
+                                console.log("Error: " + data.message)
+                            }
+                        } catch (e) {
+                            console.log("Error:" + e)
+                        }
+                    }
+                // }else if(numAciertos > 0){
+                //     document.getElementById("textoGanador").className = "texto mostrar centrado"
+                     
+                //     let botonRegresar = getCookie("botonRegresar")
+                //     if (botonRegresar == false){
+                //             const data = {
+                //                 "idUsuario" : idUsuario,
+                //             }
+                //             const dataJson = JSON.stringify(data)
+
+                //             const settings = {
+                //             method: 'POST',
+                //             headers: {
+                //                 Accept: 'application/json',
+                //                 'Content-Type': 'application/json',
+                //             },
+                //             body: 
+                //                 dataJson
+                //             };
+                            
+                //             try {
+                //             // const fetchResponse = await fetch(`https://mosaico.app:4000/airFrance/guardaGanador`, settings);
+                //             // const data = await fetchResponse.json();
+                //             // resul = data.statusCode
+                //             let resul = 200;
+                //             if(resul == 200){
+                //                 console.log("Email enviado correctamente")
+                //             }else{
+                //                 console.log("Error: " + data.message)
+                //             }
+                //         } catch (e) {
+                //             console.log("Error:" + e)
+                //         }
+                //     }
+            }else{
+                    document.getElementById("textoPerdedor").className = "texto mostrar centrado"
+                }
+            }
+
+            // async function entregaPremios(){
+            //     switch(true){
+            //             case (numAciertos >=6):
+            //                 await sendCharacterNumber("6")
+            //                 console.log("Enviamos 6")
+            //             case (numAciertos >=5):
+            //                 await sendCharacterNumber("5")
+            //                 console.log("Enviamos 5")
+            //             case (numAciertos >=4):
+            //                 await sendCharacterNumber("4")
+            //                 console.log("Enviamos 4")
+            //             case (numAciertos >=3):
+            //                 await sendCharacterNumber("3")
+            //                 console.log("Enviamos 3")
+            //             case (numAciertos >=2):
+            //                 await sendCharacterNumber("2")
+            //                 console.log("Enviamos 2")
+            //             case (numAciertos >=1):
+            //                 await sendCharacterNumber("1")
+            //                 console.log("Enviamos 1")
+            //                 break;
+            //         }
+            // }
+    </script>
+    <script src="js/cookie.js"type="text/javascript"></script>    
+</body>
+</html>

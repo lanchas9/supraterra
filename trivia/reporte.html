@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es" class="notranslate" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>watchpartytnt.com</title>
+</head>
+<body onload="actualiza()">
+    <img src="img/banner.jpg" alt="" srcset="" class="logoTitulo">
+    <div class="divCentrado">
+        <span class="textoTitulo">Resultados Trivia:</span>
+    </div>
+    <div class="display">
+        <hr class="divisionMoradaArriba">
+        <p class="texto"># Usuarios Participantes : </p>
+            <p class="mensajeError grande margen" id="numUsuariosTotales"> </p>
+        <hr class="divisionMoradaAbajo">
+        <p class="texto">1er Lugar: </p>
+            <p class="mensajeError mediano" id="lugar1"> </p>
+        <p class="texto">2do Lugar: </p>
+            <p class="mensajeError mediano" id="lugar2"> </p>
+        <p class="texto">3er Lugar: </p>
+            <p class="mensajeError mediano" id="lugar3"> </p>
+        <p class="texto">4to Lugar: </p>
+            <p class="mensajeError mediano" id="lugar4"> </p>
+        <p class="texto">5to Lugar: </p>
+            <p class="mensajeError mediano" id="lugar5"> </p>
+        
+    </div>
+    <script type='text/javascript'>
+
+         async function actualiza(){
+            
+            const settings = {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                 };
+                try {
+                    const fetchResponse = await fetch(`https://mosaico.app:4000/watchpartytnt/dameTopGanadores`, settings);
+                    const data = await fetchResponse.json();
+                    if (data.statusCode==200){
+                        let numUsuariosTotales  = data.numParticipantes
+                        document.getElementById("numUsuariosTotales").innerHTML = numUsuariosTotales 
+                        
+                        for(resultados in data.message){
+                            let tiempo = String(data.message[resultados].tiempoRegistroJuegos)
+                            let seg = tiempo.substring(0,tiempo.length-3) + "." + tiempo.slice(-3) 
+                            let texto = data.message[resultados].nombreUsuario + " - " + data.message[resultados].resultadoRegistroJuego + " puntos en " + seg  + " seg"
+                            document.getElementById(`lugar${parseInt(resultados)+1}`).innerHTML = texto 
+                        }
+
+                    }
+                } catch (e) {
+                    console.log("Error" + e)
+                }
+        }
+
+    </script>
+</body>
+</html>

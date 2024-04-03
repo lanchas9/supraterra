@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es" class="notranslate" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>watchpartytnt.com</title>
+</head>
+<body>
+    <img src="img/banner.jpg" alt="" srcset="" class="logoTitulo" onclick="borraCookie()">
+    <hr class="divisionMoradaArriba">
+    <div class="divCentrado">
+        <span class="textoTitulo">Registro</span>
+    </div>
+    <hr class="divisionMoradaAbajo">
+    <br>
+    <p class="texto">Nombre Completo</p>
+    <input type="text" class="inputDatos" id="nombreUsuario" >
+    <p class="texto">Correo Electrónico</p>
+    <input type="email" class="inputDatos" id="correoUsuario" >
+    <!-- <p class="texto">Celular (10 dígitos)</p>
+    <input type="number" class="inputDatos" id="celularUsuario" > -->
+    <br><br>
+    <p class="mensajeError" id="mensajeError"></p>
+    <div class="centrado">
+        <button class="boton" onclick="validaDatos()">Guardar</button>
+    </div>
+    
+    <script type="text/javascript">
+        function borraCookie(){
+            guardaCookie("yaContesto","")
+        }
+
+        async function validaDatos() {
+            document.getElementById("mensajeError").innerHTML = ""
+            let nombreUsuario = new String(document.getElementById("nombreUsuario").value);
+            let correoUsuario = new String(document.getElementById("correoUsuario").value);
+            // let celularUsuario = new String(document.getElementById("celularUsuario").value);
+            let celularUsuario = "1234567890"
+            
+            let valido = true
+            let mensaje = ""
+            
+            celularUsuario = celularUsuario.trim()
+            if(celularInValido(celularUsuario)){
+                valido = false
+                mensaje = "celular no es de 10 dígitos"
+            }
+            correoUsuario = correoUsuario.trim()
+            if(mailInValido(correoUsuario)){
+                valido = false
+                mensaje = "correo invalido"
+            }
+
+            if (nombreUsuario.length<= 5) {
+                valido = false
+                mensaje = "Nombre demasiado corto"
+            }
+
+            if (getCookie("yaContesto")) {
+                valido = false
+                mensaje = "Este dispositivo ya fué utlizado para participar"
+            }
+            
+            if(valido){
+                let resul = await guardaDatos(nombreUsuario, correoUsuario,celularUsuario)
+                if (resul.statusCode ==200){
+                    guardaCookie("idUsuario",resul.idUsuario);
+                    window.location.href = `preguntas.html?idUsuario=${resul.idUsuario}`;
+                }else{
+                    document.getElementById("mensajeError").innerHTML = resul.message
+                }
+            }else{
+                document.getElementById("mensajeError").innerHTML = mensaje
+            }
+        }
+
+        function guardaCookie(name, value){
+            setCookie(name, value, 10);
+        }
+        
+        async function guardaDatos(nombreUsuario, correoUsuario,celularUsuario){
+            let resul = {
+                error : true,
+                message: "",
+                idUsuario: 0,
+                statusCode: 0
+            }
+            const data = {
+                    "nombreUsuario" : nombreUsuario,
+                    "correoUsuario" : correoUsuario,
+                    "celularUsuario" : celularUsuario
+                }
+                const dataJson = JSON.stringify(data)
+
+                const settings = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                 body: 
+                    dataJson
+                 };
+                try {
+                    const fetchResponse = await fetch(`https://mosaico.app:4000/watchpartytnt/guardaUsuario`, settings);
+                    const data = await fetchResponse.json();
+                    console.log("Data" + JSON.stringify(data))
+                    
+                    if(data.statusCode == 200){
+                        resul.statusCode = data.statusCode
+                        resul.idUsuario = data.message[0].idUsuario
+                        resul.message = data.message
+                    }else{                        
+                        resul.statusCode = data.statusCode
+                        resul.message = data.message
+                    }
+                    
+                } catch (e) {
+                    console.log("Error" + e)
+                    resul.statusCode = 404
+                    resul.message = e
+                    return resul;
+                }
+                return resul    
+        }
+
+        function mailInValido(correoUsuario) {
+            let esInValido = true
+
+           if  (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(correoUsuario)) {
+                esInValido = false
+             } 
+            return esInValido
+        }
+        
+        function celularInValido(celularUsuario) {
+            let esInValido = true            
+            if( isNumeric(celularUsuario) && celularUsuario.length == 10 ){
+                esInValido = false
+            }
+            return esInValido
+        }
+
+        function isNumeric(str) {
+            if (typeof str != "string") return false // we only process strings!  
+            return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+                    !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+        }
+    </script>
+    <script src="js/cookie.js"type="text/javascript"></script>
+</body>
+</html>
