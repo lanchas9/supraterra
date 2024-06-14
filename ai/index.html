@@ -141,8 +141,8 @@
             const formData = new FormData();
             let filename = "audio" + Date.now() + ".mp3";
             formData.append(filename, blob);
-            let urlOpcion1 = "http://mosaico.app:4000/uploadFileAudio";
-            let urlOpcion2 = "http://mosaico.app:4000/uploadFileAudio?promptPreSet=" + encodeURI(promptPreSet) + "&textoAnterior=" + encodeURI(textoAnterior);
+            let urlOpcion1 = "https://mosaico.app:4000/uploadFileAudio";
+            let urlOpcion2 = "https://mosaico.app:4000/uploadFileAudio?promptPreSet=" + encodeURI(promptPreSet) + "&textoAnterior=" + encodeURI(textoAnterior);
             
             let urlFinal = urlOpcion2
             console.log("urlFinal=" + urlFinal);
