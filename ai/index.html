@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 320px;
+        }
+        header img {
+            width: 20%;
+            /* height: 100%; */
+        }
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 45vh;
+        }
+        footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+        }
+        footer h1 {
+            color: white;
+        }
+        .button {
+            margin-top: 20px;
+            padding: 40px 100px;
+            background-color: white;
+            color: black;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 70px;
+            font-size: 60px;
+            width: 30%;
+            text-align: center;
+            height: 5%;
+            vertical-align: middle;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            /* background-color: red; */
+            margin-top: 40px;
+        }
+        .titulo {
+            margin-top: 80px;
+            color: #fff;
+            font-size: 30px;
+            margin-bottom: 15%;
+            width: 80%;
+            margin-left: 10%;
+        }
+        .imagen {
+            width: 1024px;
+            height: 1024px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body style="background-color: black;">
+    <header>
+        <img src="img/logo.jpg" alt="Logo">
+    </header>
+    <main>
+        <img src="img/imagePlaceHolder.png" alt="Imagen" id="imagen" class="imagen">
+    </main>
+    <section class="center">
+        <div class="button" id="grabar" onclick="grabarAudio()">Grabar</div>
+    </section>
+    <footer>
+        <h1 id="texto" class="titulo"></h1> 
+    </footer>
+    <section class="center">
+        <div class="button" id="reinciar" onclick="limpiar()">Reinciar</div>
+    </section>
+    <script>
+        let textoAnterior = "";
+        let promptPreSet = "genera imagenes estilo realista alta calidad, ";
+        let estamosGrabando = false;
+        let mediaRecorder;
+
+        function limpiar(){
+            document.getElementById("texto").innerText = "";
+            document.getElementById("imagen").src = "img/imagePlaceHolder.png";
+            imgAntetextoAnteriorrior = "";
+        }
+
+        //crea una funcion que se llama grabaraudio y que al darle click escuche el audio del microfono por 10 segundos y lo guarde en un archivo
+        async function grabarAudio(){
+            if (estamosGrabando) {
+                console.log("deteniendo grabacion");
+                document.getElementById("grabar").style.backgroundColor = "white";
+                document.getElementById("grabar").style.color = "black";
+                mediaRecorder.stop();
+                estamosGrabando = false;
+            }else{
+                estamosGrabando = true;
+                console.log("grabando");
+                document.getElementById("texto").innerText = "";
+                document.getElementById("grabar").style.backgroundColor = "red";
+                document.getElementById("grabar").style.color = "white";
+                navigator.mediaDevices.getUserMedia({audio: true})
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
+                    const audioChunks = [];
+                    mediaRecorder.addEventListener("dataavailable", event => {
+                        audioChunks.push(event.data);
+                    });
+                    mediaRecorder.addEventListener("stop", () => {
+                        const audioBlob = new Blob(audioChunks);
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const audio = new Audio(audioUrl);
+                        console.log("vamos a enviar el blob");
+                        enviarblob(audioBlob);
+                        audio.play();
+                    });
+                });
+            }
+        }
+        //crea una funcion que reciba un BLOB y lo envìe a la API usando multipart/form-data
+        async function enviarblob(blob){
+            const formData = new FormData();
+            let filename = "audio" + Date.now() + ".mp3";
+            formData.append(filename, blob);
+            let urlOpcion1 = "http://mosaico.app:4000/uploadFileAudio";
+            let urlOpcion2 = "http://mosaico.app:4000/uploadFileAudio?promptPreSet=" + encodeURI(promptPreSet) + "&textoAnterior=" + encodeURI(textoAnterior);
+            
+            let urlFinal = urlOpcion2
+            console.log("urlFinal=" + urlFinal);
+            let respuesta = await fetch(urlFinal, {
+                method: "POST",
+                body: formData
+            });
+            let respuesta_json = await respuesta.json();
+            if (respuesta_json.statusCode != 200) {
+                console.log("Error al subir el archivo");
+                return;
+            }else{
+                console.log("Archivo subido correctamente");
+                //let resul = await enviarAudioAWhisper(respuesta_json.message.fileUrl);
+                let texto = respuesta_json.message[0].text;
+                let imagen = respuesta_json.message[0].image;
+                textoAnterior = textoAnterior + texto
+                let anterior = document.getElementById("texto").innerText
+                document.getElementById("texto").innerText = textoAnterior;
+                //convierte la imagen en base64 y la muestra en el elemento "imagen"
+                let img = document.getElementById("imagen");
+                img.src = "data:image/png;base64," + imagen;
+                console.log("Imagen recibida"); 
+            }
+        }
+
+        // async function enviarAudioAWhisper(url){
+        //     let respuesta = await fetch("https://model-03y0z9vq.api.baseten.co/production/predict", {
+        //         method: "POST",
+        //         headers: {
+        //             Authorization: 'Api-Key iNxLff0M.DBCgBO1aooVkVelNP7XNVF8pAmVCZcMd',
+        //             mode: 'no-cors', // no-cors, *cors, same-origin
+        //         },
+        //         body: JSON.stringify({
+        //             url: url
+        //         })
+        //     });
+        //     let respuesta_json = await respuesta.json();
+        //     if (respuesta_json.statusCode != 200) {
+        //         console.log("Error al enviar el audio a whisper");
+        //         return;
+        //     }else{
+        //         console.log("Audio enviado a whisper correctamente");
+        //         document.getElementById("texto").innerText = respuesta_json.text;
+        //     }
+        // }
+
+    </script>
+</body>
+</html>
