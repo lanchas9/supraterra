@@ -125,6 +125,24 @@ body{
     width: 40%;
     /* max-width: 150px; */
     /* height: 5%; */
-    margin-top: 20px;
+    margin-top: 0px;
     /* background-color: red; */
+    
   }
+  .titulo{
+    color: white;
+    font-size: 20px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+  }
+  .boton3{
+    width: 30%;
+    margin-right: 10px;
+    margin-bottom: 15px;
+    max-width: 300px;
+}
+.flotando{
+    position: absolute;
+    top: 10px;
+    right: -50vw;
+}
