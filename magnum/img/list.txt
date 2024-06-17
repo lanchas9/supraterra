@@ -1,0 +1,17 @@
+0.png
+1.png
+2.png
+3.png
+abreCamara.png
+abreGaleria.png
+camaraSelfie.png
+camaraTrasera.png
+cancelar.png
+descargar.png
+entrar.png
+enviar.png
+guardar.png
+logo.png
+repetir.png
+salir.png
+tomaSelfie.png

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Magnum Photobooth</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+</head>
+<body onload="muestraFoto()">
+    <div class="centrado">
+        <div id="camara" class="camara">
+            <img src="img/logo_optimized_.png" alt="" srcset="" class="logo2">
+        </div>
+        <img src="" alt="" srcset="" class="imagenSalida" id="imagen">
+        <br><br><br>
+        
+        <!-- <table>
+            <tr>
+                <td>
+                    <img src="overlay/01_optimized_.png" alt="" srcset="" class="thumbnail" onclick="creaLinkDownload(0)">
+                </td>
+                <td>
+                    <img src="overlay/02_optimized_.png" alt="" srcset="" class="thumbnail" onclick="creaLinkDownload(1)">
+                </td>
+                <td>
+                    <img src="overlay/03_optimized_.png" alt="" srcset="" class="thumbnail" onclick="creaLinkDownload(2)">
+                </td>
+            </tr>
+        </table> -->
+        <a href="nada.jpg" download="" id="downloadIcon">
+            <img src="img/descargar_optimized_.png" alt="" srcset="" class="boton2">
+        </a>
+        <a href=JavaScript:window.top.close()>
+            <img src="img/salir_optimized_.png" alt="" srcset="" class="boton2">
+        </a>
+    
+        <div id="instagramDiv" class="instagramDiv">
+            <a href="" id="instagramLink" class="instagram">
+                <img src="img/instagram_optimized_.png" alt="" srcset="" class="boton2">
+            </a>
+        </div>
+    </div>
+<script>
+    let preSet = "f_auto/fl_attachment/"
+    let paths = [];
+    let url = "";
+    let overlaySeleccionado = 0;
+    paths.push("");
+    paths.push("https://res.cloudinary.com/yellowhat/image/upload/t_magnum01/");
+    paths.push("https://res.cloudinary.com/yellowhat/image/upload/t_magnum02/");
+    paths.push("https://res.cloudinary.com/yellowhat/image/upload/t_magnum03/");
+
+    function muestraFoto(){
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        url = urlParams.get('foto');
+        overlaySeleccionado = parseInt(urlParams.get('overlaySeleccionado'));
+        console.log({url});
+        let imagen01 = document.getElementById('imagen');
+        imagen.src = paths[overlaySeleccionado] + url;
+        creaLinkDownload(overlaySeleccionado);
+        creaLinkShareToInstagram(overlaySeleccionado);
+    }
+
+    // function siguientePagina(){
+    //     window.location.href = "https://www.magnumicecream.com/";
+    // }
+
+    function creaLinkDownload(numFoto){
+        let downloadIcon = document.getElementById('downloadIcon');
+        downloadIcon.href = paths[numFoto] + preSet + url;
+        downloadIcon.download = "foto" + numFoto + ".jpg";
+
+        let imagen01 = document.getElementById('imagen');
+        imagen.src = paths[numFoto] + url;
+    }
+
+    function creaLinkShareToInstagram(numFoto){
+        let instagramLink = document.getElementById('instagramLink');
+        //instagramLink.href = "https://www.instagram.com/";
+        // instagramLink.href = "https://www.instagram.com/intent/post?media=" + paths[numFoto] + url;
+        instagramLink.href = "https://www.instagram.com/magnum/"
+    }
+</script>
+</body>
+</html>

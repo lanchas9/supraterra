@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+        <title>Magnum Photobooth</title>
+</head>
+<body>
+    <div class="centrado" id="padre">
+        <div id="header" class="hidden">
+            <img src="img/logo_optimized_.png" alt="" srcset="" class="logo2">
+        </div>
+        <div id="logo" class="show">
+            <img src="img/logo_optimized_.png" alt="" srcset="" class="logo">
+        </div>
+        <div id="camara" class="hidden">
+            <video controls="true" autoplay playsinline loop muted id="video" class="video"></video>
+            <table  class="tr100">
+                <tr>
+                    <td class="td33">
+                        <img src="overlay/01_optimized_.png" alt="" srcset="" class="thumbnail2" onclick="ponerOverlaySobreVideo(0)">
+                    </td>
+                    <td class="td33">
+                        <img src="overlay/02_optimized_.png" alt="" srcset="" class="thumbnail2" onclick="ponerOverlaySobreVideo(1)">
+                    </td>
+                    <td class="td33">
+                        <img src="overlay/03_optimized_.png" alt="" srcset="" class="thumbnail2" onclick="ponerOverlaySobreVideo(2)">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="divImagen" class="hidden">
+            <!-- <img id="imagen" src="" alt="" srcset=""> -->
+            <table class="tr100">
+                <tr>
+                    <td class="td33">
+                        <img src="overlay/01_optimized_.png" alt="" srcset="" class="thumbnail2" onclick="ponerOverlaySobreVideo(0)">
+                    </td>
+                    <td class="td33">
+                        <img src="overlay/02_optimized_.png" alt="" srcset="" class="thumbnail2" onclick="ponerOverlaySobreVideo(1)">
+                    </td>
+                    <td class="td33">
+                        <img src="overlay/03_optimized_.png" alt="" srcset="" class="thumbnail2" onclick="ponerOverlaySobreVideo(2)">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br><br>
+        <img src="img/camaraSelfie_optimized_.png" alt="" srcset="" class="boton2" onclick="boton1presionado()" id="btn1">
+        <img src="img/camaraTrasera_optimized_.png" alt="" srcset="" class="boton2" onclick="boton2presionado()" id="btn2">
+    </div>
+    
+<script>
+    let modoBoton = 'paso1'
+    let camaraAbierta = false;
+    let stream = null;
+    let modoUpload = false;
+    let overlaySeleccionado = 0;
+
+    function ponerOverlaySobreVideo(val){
+        
+        let str = ""
+        if (modoBoton == "paso1"){
+            str = "video"
+        }else{
+            str = "canvas"
+        }
+        let index = val + 1;
+        overlaySeleccionado = index;
+        let video = document.getElementById(str);
+        let divCamara = document.getElementById("camara");
+        if(document.querySelector("#overlay") != null){
+            divCamara.removeChild(document.querySelector("#overlay"));
+        }
+        let img = document.createElement("img");
+        img.class = "overlay";
+        img.id = "overlay";
+        img.src = "overlay/0" + index + "_optimized_.png";
+        img.width = video.scrollWidth;
+        img.height = video.scrollHeight;
+        img.style.position = "absolute";
+        img.style.top = video.offsetTop + "px";
+        img.style.left = video.offsetLeft + "px";
+        console.log("Ancho : " + divCamara.scrollWidth + " Alto : " + divCamara.scrollHeight)
+        divCamara.appendChild(img);
+        console.log("ya pusimos el poster al div de la camara")        
+    }
+
+    // async function boton2presionado(){
+    //     if (camaraAbierta){
+    //         window.location.href = 'camara.html'
+    //         camaraAbierta = false;
+    //         cancelarCamara()
+    //     }else{
+            
+    //         abreGaleria()
+    //     }
+    // }
+
+
+    async function abreGaleria(){
+        let input = document.createElement("input");
+        input.type = "file";
+        input.accept = "image/*";
+        // input.capture = "environment";
+        input.onchange = function(event){
+            modoUpload = true;
+            modoBoton = 'paso2'
+            let file = event.target.files[0];
+            let reader = new FileReader();
+            reader.onload = function(e){
+                /* Emilio Abril 2024
+                let img = document.getElementById("imagen");
+                img.src = e.target.result;
+                img.className = "imagen";
+                
+                let divImg = document.getElementById("divImagen")
+                divImg.appendChild(img);
+                divImg.classList.replace("hidden", "show");
+                */
+
+                if(document.querySelector("#canvas") != null){
+                    document.getElementById("divImagen").removeChild(document.querySelector("#canvas"));
+                }
+
+                let canvas = document.createElement("canvas");
+                canvas.className = "camaraSelfie";
+                canvas.id = "canvas";
+
+                // const video = document.querySelector('#video')
+                // canvas.width = video.videoWidth
+                // canvas.height = video.videoHeight
+                var image = new Image();
+                image.onload = function() {
+                    canvas.width = image.width
+                    canvas.height = image.height
+                    canvas.getContext('2d').drawImage(image, 0, 0)
+                    canvas.className  ="imagen"
+
+                    let divImg = document.getElementById("divImagen")
+                    divImg.appendChild(canvas);
+                    divImg.classList.replace("hidden", "show");
+                };
+                image.src = e.target.result;
+                
+                
+
+                let btn1 = document.querySelector("#btn1");
+                btn1.src = "img/aceptar_optimized_.png";
+
+                document.getElementById("logo").classList.replace("show", "hidden");
+                document.getElementById("header").classList.replace("hidden", "show");
+            }
+            reader.readAsDataURL(file);
+        }
+        input.click();
+    }
+
+    async function cancelarCamara(){
+        let btn1 = document.querySelector("#btn1");
+        btn1.src = "img/camaraSelfie_optimized_.png";
+
+        let btn2 = document.querySelector("#btn2");
+        btn2.src = "img/cameraTrasera_optimized_.png";
+
+        document.getElementById("logo").classList.replace("hidden", "show");
+        document.getElementById("camara").classList.replace("show", "hidden");
+        document.getElementById("header").classList.replace("show", "hidden");
+    }
+
+    async function boton1presionado(){
+        if (camaraAbierta){
+            tomaFoto()
+        }else{
+            let tipoCamara = "user"
+            abreCamara(tipoCamara)
+        }   
+    }
+
+    async function boton2presionado(){
+        if (camaraAbierta){
+            window.location.href = 'camara.html'
+            camaraAbierta = false;
+            cancelarCamara()
+        }else{
+            let tipoCamara = "environment"
+            abreCamara(tipoCamara)
+        }
+    }
+
+    async function abreCamara(tipoCamara){
+        const supported = navigator.mediaDevices.getSupportedConstraints();
+        if(!camaraAbierta){
+            camaraAbierta = true;
+            let constraints
+            if(window.location.hostname == "127.0.0.1"){
+                constraints= {
+                video: {
+                    width: {
+                        min: 360,
+                        ideal: 720,
+                        max: 1080,
+                    },
+                    height: {
+                        min: 640,
+                        ideal:  1280,
+                        max: 1920,
+                    },
+                    facingMode: tipoCamara
+                    , video: true
+                    },
+                }
+            }else if(window.innerHeight > window.innerWidth){
+                constraints = {
+                video: {
+                    width: {
+                        min: 640,
+                        ideal: 1280,
+                        max: 1920,
+                    },
+                    height: {
+                        min: 360,
+                        ideal:  720,
+                        max: 1080,
+                    },
+                    facingMode: tipoCamara
+                    , video: true
+                    },
+                }
+            }else{
+                constraints= {
+                video: {
+                    width: {
+                        min: 360,
+                        ideal: 720,
+                        max: 1080,
+                    },
+                    height: {
+                        min: 640,
+                        ideal:  1280,
+                        max: 1920,
+                    },
+                    facingMode: tipoCamara
+                    , video: true
+                    },
+                }
+            }
+
+            //TOMA DE FOTOGRAFÍA VERSION 1 DECAPRITADED
+            /*
+            if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+            navigator.mediaDevices.getUserMedia({video: true})
+            
+            try{
+                const videoStream = await navigator.mediaDevices.getUserMedia(constraints)
+                const video = document.querySelector('#video')
+                video.srcObject = videoStream
+            }catch(error){
+                console.error("Error : " + error)
+            }
+        }
+        */
+        //fin
+        // alert("Objeto : " + navigator.mediaDevices)
+        try{
+            if (!navigator.mediaDevices && !navigator.mediaDevices.getUserMedia) {
+                    navigator.userMedia = navigator.mozGetUserMedia || navigator.getUserMedia
+                if (!navigator.userMedia) {
+                    alert("Please Update or Use Different Browser");
+                return
+                }
+                navigator.userMedia(constraints, (stream) => showCam(stream), (err) => showErr(err))
+                return
+            }
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then((stream) => showCam(stream))
+                .catch((err) => showErr(err))
+            }catch(error){
+                alert("Error mensaje: " + error);
+            }
+        }else{
+            tomaFoto()
+        }
+    }
+
+
+    function showCamOLD(stream) {
+        let video = document.querySelector("#video");
+        video.setAttribute("playsinline", true);
+        video.srcObject = stream;
+        // video.height = video.scrollWidth * 1.33
+        video.scrollWidth = video.scrollHeight
+        
+        let btn1 = document.querySelector("#abreCamara");
+        btn1.classList.replace("show", "hidden");
+
+        let btn2 = document.querySelector("#tomaFoto");
+        btn2.classList.replace("hidden", "show");
+
+        let btn3 = document.querySelector("#repiteFoto");
+        btn3.classList.replace("show", "hidden");
+
+        let btn4 = document.querySelector("#guardaFoto");
+        btn4.classList.replace("show", "hidden");
+    }
+    
+    function showCam(streamLive) {
+        stream = streamLive;
+        //Cambio Abril 2024 por emilio
+        
+        if(document.querySelector("#video") == null){
+            let video = document.createElement("video");
+            video.className = "camaraSelfie"
+            video.setAttribute("autoplay", true);
+            video.setAttribute("playsinline", true);
+            video.srcObject = stream;
+            document.getElementById("camara").appendChild(video);
+            video.height = video.scrollWidth * 1.33
+            video.scrollWidth = video.scrollHeight
+            video.srcObject = stream;
+            
+            console.log("ya pusimos el poster al tag de video")
+        }else{
+            let video = document.querySelector("#video");
+            video.srcObject = stream;
+        }
+        // let video = document.querySelector("#video");
+        // let divCamara = document.getElementById("camara");
+        // let img = document.createElement("img");
+        // img.src = "overPrueba_optimized_.png";
+        // img.width = video.scrollWidth;
+        // img.height = video.scrollHeight;
+        // console.log("Ancho : " + divCamara.scrollWidth + " Alto : " + divCamara.scrollHeight)
+        // divCamara.appendChild(img);
+        // console.log("ya pusimos el poster al div de la camara")
+        
+
+        // let video = document.querySelector("#video");
+        // video.setAttribute("playsinline", true);
+        
+        // video.height = video.scrollWidth * 1.33
+        //video.scrollWidth = video.scrollHeight
+
+
+        let btn1 = document.querySelector("#btn1");
+        btn1.src = "img/tomaSelfie_optimized_.png";
+
+        let btn2 = document.querySelector("#btn2");
+        btn2.src = "img/cancelar_optimized_.png";
+
+        document.getElementById("logo").classList.replace("show", "hidden");
+        document.getElementById("camara").classList.replace("hidden", "show");
+        document.getElementById("header").classList.replace("hidden", "show");
+        
+        // document.getElementById("center").removeChild(btn1);
+
+        // let btn2 = document.createElement("img");
+        // btn2.id = "tomaFoto";
+        // btn2.src = "img/btn1_optimized_.png";
+        // btn2.onclick = function(){tomaFoto()};
+        // btn2.className = "image2";
+        // document.getElementById("center").appendChild(btn2);
+    }
+
+    function showErr(err) {
+        let message = err.name === "NotFoundError" ? "Please Attach Camera" :
+        err.name === "NotAllowedError" ? "Please Grant Permission to Access Camera" : err
+        alert(message)
+    }
+    let indexTomaFoto = 0;
+
+    async function tomaFoto(){
+        if(indexTomaFoto == 0 ){
+            let div = document.createElement("div");
+            div.id = "divFoto1";
+            let camara = document.getElementById("camara");
+            camara.appendChild(div);
+            div.style.width = camara.scrollWidth + "px";
+            div.style.height = camara.scrollHeight + "px";
+            // div.style.backgroundColor = "red";
+            div.style.position = "absolute";
+            div.style.top = camara.offsetTop + "px";
+            div.style.left = camara.offsetLeft + "px";
+            div.style.zIndex = "1";
+            div.style.backgroundImage = "url('img/num3_optimized_.png')";
+            div.style.backgroundSize = "cover";
+            div.style.backgroundRepeat = "no-repeat";
+            div.style.backgroundPosition = "center";
+            div.style.opacity = "1.0";
+            indexTomaFoto = 1
+            setTimeout(function(){
+                tomaFoto()
+            }, 1000)
+        }else if(indexTomaFoto == 1 ){
+            indexTomaFoto = 2
+            setTimeout(function(){
+                tomaFoto()
+            }, 1000)
+        }else if(indexTomaFoto == 2 ){
+            indexTomaFoto = 3
+            let camara = document.getElementById("divFoto1");
+            camara.style.backgroundImage = "url('img/num2_optimized_.png')";
+            setTimeout(function(){
+                tomaFoto()
+            }, 1000)
+        }else if(indexTomaFoto == 3 ){
+            indexTomaFoto = 4
+            let camara = document.getElementById("divFoto1");
+            camara.style.backgroundImage = "url('img/num1_optimized_.png')";
+            setTimeout(function(){
+                tomaFoto()
+            }, 1000)
+        }else if(indexTomaFoto == 4 ){
+            indexTomaFoto = 5
+            let camara = document.getElementById("divFoto1");
+            camara.style.backgroundImage = "url('img/num0_optimized_.png')";
+            setTimeout(function(){
+                tomaFoto()
+            }, 1000)
+        }else if(modoBoton == 'paso1'){
+            let canvas = document.createElement("canvas");
+            canvas.className = "camaraSelfie";
+            canvas.id = "canvas";
+
+            const video = document.querySelector('#video')
+            canvas.width = video.videoWidth
+            canvas.height = video.videoHeight
+            canvas.getContext('2d').drawImage(video, 0, 0)
+            canvas.className  ="imagen"
+            // constraints= {
+            //     video: {
+            //         width: {
+            //             min: 480,
+            //             ideal: 1080,
+            //             max: 1080,
+            //         },
+            //         height: {
+            //             min: 480,
+            //             ideal: 1080,
+            //             max: 1080,
+            //         },
+            //         facingMode: 'user'
+            //     },
+            // }
+            // const videoStream = await navigator.mediaDevices.getUserMedia(constraints)
+            // videoStream.getTracks().forEach((track) => {
+            //     track.stop()
+            // })
+            // video.className = "camaraSelfie ocultoCanvas"
+            document.getElementById("camara").removeChild(video);
+            document.getElementById("divFoto1").remove();
+            document.getElementById("camara").prepend(canvas);
+            modoBoton = 'paso2'
+
+            let btn1 = document.querySelector("#btn1");
+            btn1.src = "img/aceptar_optimized_.png";
+            // btn1.onclick = function(){guardarFoto()};
+
+            //-----------------BOTONES INICIO ABRIL 2024
+            // let btn1 = document.createElement("img");
+            // btn1.src = "img/btn2_optimized_.png";
+            // btn1.onclick = function(){tomaFoto()};
+            // btn1.className = "image2";
+            // btn1.id = "repiteFoto";
+            // document.getElementById("center").appendChild(btn1);
+
+            // let btn2 = document.createElement("img");
+            // btn2.src = "img/btn3_optimized_.png";
+            // btn2.onclick = function(){guardarFoto()};
+            // btn2.className = "image2";
+            // btn2.id = "guardaFoto";
+            // document.getElementById("center").appendChild(btn2);
+            // document.getElementById("center").removeChild(document.getElementById("tomaFoto"));
+
+            //-----------------BOTONES FIN ABRIL 2024
+
+            // let btn1 = document.querySelector("#abreCamara");
+            // btn1.classList.replace("show", "hidden");
+
+            // let btn2 = document.querySelector("#tomaFoto");
+            // btn2.classList.replace("show", "hidden");
+
+            // let btn3 = document.querySelector("#repiteFoto");
+            // btn3.classList.replace("hidden", "show");
+
+            // let btn4 = document.querySelector("#guardaFoto");
+            // btn4.classList.replace("hidden", "show");
+
+
+        }else{
+            /*
+            const canvas = document.querySelector('#canvas')
+            // const video = document.querySelector('#video')
+
+            let video = document.createElement("video");
+            video.setAttribute("autoplay", true);
+            video.setAttribute("playsinline", true);
+            video.srcObject = stream;
+            video.id = "video";
+            document.getElementById("camara").appendChild(video);
+            video.className = "camaraSelfie"
+
+            document.getElementById("camara").removeChild(canvas);
+            document.getElementById("camara").appendChild(video);
+
+            let btn0 = document.querySelector("#repiteFoto");
+            document.getElementById("center").removeChild(btn0);
+
+            let btn1 = document.querySelector("#guardaFoto");
+            document.getElementById("center").removeChild(btn1);
+
+            let btn2 = document.createElement("img");
+            btn2.id = "tomaFoto";
+            btn2.src = "img/btn1_optimized_.png";
+            btn2.onclick = function(){tomaFoto()};
+            btn2.className = "image2";
+            document.getElementById("center").appendChild(btn2);
+
+            // canvas.className = "camaraSelfie ocultoCanvas"
+            // video.className = "camaraSelfie visibleCanvas"
+            //cargaResultados()
+            modoBoton = 'paso1'
+            */
+           guardarFoto()
+        }
+    }
+
+    async function guardarFoto(){
+        if(modoBoton == 'paso1'){
+            modoBoton = 'paso2'
+        }else{
+            modoBoton = 'paso1'
+            // console.log("Hacemos upLoad de foto y vamos a registro Exitoso ")
+            
+
+            muestraLoading()
+            const canvas = document.querySelector('#canvas')
+            let img = await canvas.toBlob(async function(blob){
+                //////////////
+                const formData = new FormData();
+                let resul = {
+                    error : true,
+                    message: "",
+                    statusCode: 0
+                }
+                let nombreFoto = Date.now()
+
+                formData.append(nombreFoto, blob, nombreFoto + '.jpg');
+
+                const options = {
+                    method: 'POST',
+                    body: formData
+                };
+                try {
+                    let r = await fetch("https://mosaico.app:10801/upload", options)
+                    if(!r.ok){
+                        resul.statusCode = r.status
+                        resul.message = r.statusText
+                    }
+                    let data = await r.json()
+                        //Your logic, in my case I get JSON from server
+                    if(data.statusCode == 200){
+                        resul.error = false
+                        resul.statusCode = data.statusCode
+                        resul.message = data.message
+                        abrePhotobooth(resul.message[0].filename)
+                    }else{                        
+                        resul.statusCode = data.statusCode
+                        resul.message = data.message
+                    }   
+                } catch (error) {
+                    console.log("Error : " + error)
+                }
+                
+            },'image/jpeg', 0.95)            
+        }
+    }
+
+    function abrePhotobooth(str){
+        setTimeout(() => {
+            window.location.href = 'salida.html' + '?overlaySeleccionado=' + overlaySeleccionado + '&foto=' + str
+        }, 5000);
+    }
+
+    function muestraLoading(){
+        let divNuevo = document.createElement("div")
+        // divNuevo.style.width = document.getElementById("camara").style.width 
+        // divNuevo.style.height = document.getElementById("camara").style.height
+        // divNuevo.style.width = "100vw"
+        // divNuevo.style.height = "100vh"
+
+        // divNuevo.style.opacity= 0.7;
+        // divNuevo.style.position = "absolute";
+        // divNuevo.style.top = "0px";
+        divNuevo.className = "loadingBox"
+
+        let loadingNuevo = document.createElement("img")
+        loadingNuevo.src = "img/loading.gif"
+        loadingNuevo.className = "loadingAnimation"
+
+        // loadingNuevo.style.width = document.getElementById("camara").width
+        divNuevo.appendChild(loadingNuevo)
+        document.getElementById("padre").appendChild(divNuevo)
+        console.log("Muestra loading")  
+    }
+    
+</script>
+</body>
+</html>

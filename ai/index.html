@@ -75,7 +75,7 @@
         }
     </style>
 </head>
-<body style="background-color: black;">
+<body style="background-color: black;" onload="carga()">
     <header>
         <img src="img/logo.jpg" alt="Logo">
     </header>
@@ -92,10 +92,30 @@
         <div class="button" id="reinciar" onclick="limpiar()">Reinciar</div>
     </section>
     <script>
+        //recibe en la direccion url la variable modoProveedor que indica si se va a usar el proveedor de 01 y 02
+
         let textoAnterior = "";
-        let promptPreSet = "genera imagenes estilo realista alta calidad, ";
+        let promptPreSet = "Generate an image in High Quality in cartoon style, ";
         let estamosGrabando = false;
         let mediaRecorder;
+        modoProveedor = 1;
+
+        //funcion que se ejecuta al cargar la pagina
+        async function carga(){
+            if (window.location.search != "") {
+                let urlParams = new URLSearchParams(window.location.search);
+                modoProveedor = parseInt(urlParams.get("modoProveedor"));
+                let reusl = ""
+                if (modoProveedor == 1) {
+                    reul = "BASETEN : Proveedor Whisper y SDXL Turbo";
+                }else if (modoProveedor == 2) {
+                    resul = "EDEN AI Proveedor Whisper, Traductor y SDXL";
+                }else if (modoProveedor == 3) {
+                    resul = "EDEN AI Proveedor Whisper, Traductor y BASETEN CON SDXL Turbo";
+                }
+                console.log(promptPreSet);
+            }
+        }
 
         function limpiar(){
             document.getElementById("texto").innerText = "";
@@ -141,10 +161,8 @@
             const formData = new FormData();
             let filename = "audio" + Date.now() + ".mp3";
             formData.append(filename, blob);
-            let urlOpcion1 = "https://mosaico.app:4000/uploadFileAudio";
-            let urlOpcion2 = "https://mosaico.app:4000/uploadFileAudio?promptPreSet=" + encodeURI(promptPreSet) + "&textoAnterior=" + encodeURI(textoAnterior);
+            let urlFinal = "https://mosaico.app:4000/uploadFileAudio?promptPreSet=" + encodeURI(promptPreSet) + "&textoAnterior=" + encodeURI(textoAnterior) + "&modoProveedor=" + modoProveedor;
             
-            let urlFinal = urlOpcion2
             console.log("urlFinal=" + urlFinal);
             let respuesta = await fetch(urlFinal, {
                 method: "POST",
