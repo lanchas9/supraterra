@@ -583,7 +583,8 @@
 
     function abrePhotobooth(str){
         setTimeout(() => {
-            window.location.href = 'salida.html' + '?overlaySeleccionado=' + overlaySeleccionado + '&foto=' + str
+            let overlayFinal = overlaySeleccionado == 0 ? overlaySeleccionado : 1
+            window.location.href = 'salida.html' + '?overlaySeleccionado=' + overlayFinal + '&foto=' + str
         }, 5000);
     }
 
