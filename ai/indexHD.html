@@ -2,125 +2,59 @@
 <html>
 <head>
     <title>Test</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: black;
-            font-family: Arial, sans-serif;
-        }
-        header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 320px;
-        }
-        header img {
-            width: 20%;
-            /* height: 100%; */
-        }
-        main {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 45vh;
-        }
-        footer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 400px;
-        }
-        footer h1 {
-            color: white;
-        }
-        .button {
-            margin-top: 20px;
-            padding: 40px 100px;
-            background-color: white;
-            color: black;
-            text-transform: uppercase;
-            text-decoration: none;
-            border-radius: 70px;
-            font-size: 60px;
-            width: 30%;
-            text-align: center;
-            height: 5%;
-            vertical-align: middle;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 600;
-        }
-        .center {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100px;
-            /* background-color: red; */
-            margin-top: 40px;
-        }
-        .titulo {
-            margin-top: 80px;
-            color: #fff;
-            font-size: 30px;
-            margin-bottom: 15%;
-            width: 80%;
-            margin-left: 10%;
-        }
-        .imagen {
-            width: 1024px;
-            height: 1024px;
-            margin: 0 auto;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styleHD.css">
 </head>
 <body style="background-color: black;" onload="carga()">
-    <header>
-        <img src="img/logo.jpg" alt="Logo">
+    <header class="header">
+        <img src="img/logo.jpg" alt="Logo" class="logo">
     </header>
-    <main>
-        <img src="img/imagePlaceHolder.png" alt="Imagen" id="imagen" class="imagen">
+    <main class="main">
+        <section class="center">
+            <img src="img/imagePlaceHolder2.png" alt="Imagen" id="imagen" class="imagen">
+        </section>
+        <section class="center">
+            <div class="button" id="grabar" onclick="grabarAudio()">Grabar</div>
+        </section>
+        <section class="section">
+            <h1 id="texto" class="titulo"></h1> 
+        </section>
     </main>
-    <section class="center">
-        <div class="button" id="grabar" onclick="grabarAudio()">Grabar</div>
-    </section>
-    <footer>
-        <h1 id="texto" class="titulo"></h1> 
-    </footer>
-    <section class="center">
+    <footer class="footer">
         <div class="button" id="reinciar" onclick="limpiar()">Reinciar</div>
-    </section>
+    </footer>
+    
     <script>
         //recibe en la direccion url la variable modoProveedor que indica si se va a usar el proveedor de 01 y 02
 
         let textoAnterior = "";
-        let promptPreSet = "Generate an image in High Quality in cartoon style, ";
+        let promptPreSetSpanish = "Genera una imagen en alta calidad con estilo caricatura, ";
+        let promptPreSetenglish = "Generate an image in High Quality in cartoon style, ";
+        let promptPreSet = promptPreSetSpanish
         let estamosGrabando = false;
         let mediaRecorder;
-        modoProveedor = 1;
+        let modoProveedor = 1;
 
         //funcion que se ejecuta al cargar la pagina
         async function carga(){
             if (window.location.search != "") {
                 let urlParams = new URLSearchParams(window.location.search);
                 modoProveedor = parseInt(urlParams.get("modoProveedor"));
-                let reusl = ""
+                let resul = ""
                 if (modoProveedor == 1) {
-                    reul = "BASETEN : Proveedor Whisper y SDXL Turbo";
+                    resul = "BASETEN : Proveedor Whisper y SDXL Turbo";
                 }else if (modoProveedor == 2) {
                     resul = "EDEN AI Proveedor Whisper, Traductor y SDXL";
                 }else if (modoProveedor == 3) {
                     resul = "EDEN AI Proveedor Whisper, Traductor y BASETEN CON SDXL Turbo";
                 }
-                console.log(promptPreSet);
+                console.log(resul);
             }
         }
 
         function limpiar(){
             document.getElementById("texto").innerText = "";
             document.getElementById("imagen").src = "img/imagePlaceHolder.png";
-            imgAntetextoAnteriorrior = "";
+            textoAnterior = "";
         }
 
         //crea una funcion que se llama grabaraudio y que al darle click escuche el audio del microfono por 10 segundos y lo guarde en un archivo
