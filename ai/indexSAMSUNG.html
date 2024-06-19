@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+    <link rel="stylesheet" href="css/styleSAMSUNG.css">
+</head>
+<body onload="carga()">
+    <div class="header">
+        <img src="img/logo.jpg" alt="Logo" class="logo">
+    </div>
+    <div class="main">
+        <div class="center">
+            <img src="img/imagePlaceHolder2.png" alt="Imagen" id="imagen" class="imagen">
+        </div>
+        <div class="center">
+            <div class="button" id="grabar" onclick="grabarAudio()">Grabar</div>
+        </div>
+        <div class="section">
+            <h1 id="texto" class="titulo"></h1> 
+        </div>
+    </div>
+    <div class="footer">
+        <div class="button" id="reinciar" onclick="limpiar()">Reinciar</div>
+    </div>
+    <script>
+        //recibe en la direccion url la variable modoProveedor que indica si se va a usar el proveedor de 01 y 02
+
+        let textoAnterior = "";
+        let promptPreSetSpanish = "Genera una imagen en alta calidad con estilo caricatura, ";
+        let promptPreSetenglish = "Generate an image in High Quality in cartoon style, ";
+        let promptPreSet = promptPreSetSpanish
+        let estamosGrabando = false;
+        let mediaRecorder;
+        let modoProveedor = 1;
+
+        //funcion que se ejecuta al cargar la pagina
+        async function carga(){
+            if (window.location.search != "") {
+                let urlParams = new URLSearchParams(window.location.search);
+                modoProveedor = parseInt(urlParams.get("modoProveedor"));
+                let resul = ""
+                if (modoProveedor == 1) {
+                    resul = "BASETEN : Proveedor Whisper y SDXL Turbo";
+                }else if (modoProveedor == 2) {
+                    resul = "EDEN AI Proveedor Whisper, Traductor y SDXL";
+                }else if (modoProveedor == 3) {
+                    resul = "EDEN AI Proveedor Whisper, Traductor y BASETEN CON SDXL Turbo";
+                }
+                console.log(resul);
+            }
+        }
+
+        function limpiar(){
+            document.getElementById("texto").innerText = "";
+            document.getElementById("imagen").src = "img/imagePlaceHolder.png";
+            textoAnterior = "";
+        }
+
+        //crea una funcion que se llama grabaraudio y que al darle click escuche el audio del microfono por 10 segundos y lo guarde en un archivo
+        async function grabarAudio(){
+            if (estamosGrabando) {
+                console.log("deteniendo grabacion");
+                document.getElementById("grabar").style.backgroundColor = "white";
+                document.getElementById("grabar").style.color = "black";
+                mediaRecorder.stop();
+                estamosGrabando = false;
+            }else{
+                estamosGrabando = true;
+                console.log("grabando");
+                document.getElementById("texto").innerText = "";
+                document.getElementById("grabar").style.backgroundColor = "red";
+                document.getElementById("grabar").style.color = "white";
+                navigator.mediaDevices.getUserMedia({audio: true})
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+                    mediaRecorder.start();
+                    const audioChunks = [];
+                    mediaRecorder.addEventListener("dataavailable", event => {
+                        audioChunks.push(event.data);
+                    });
+                    mediaRecorder.addEventListener("stop", () => {
+                        const audioBlob = new Blob(audioChunks);
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        const audio = new Audio(audioUrl);
+                        console.log("vamos a enviar el blob");
+                        enviarblob(audioBlob);
+                        audio.play();
+                    });
+                });
+            }
+        }
+        //crea una funcion que reciba un BLOB y lo envìe a la API usando multipart/form-data
+        async function enviarblob(blob){
+            const formData = new FormData();
+            let filename = "audio" + Date.now() + ".mp3";
+            formData.append(filename, blob);
+            let urlFinal = "https://mosaico.app:4000/uploadFileAudio?promptPreSet=" + encodeURI(promptPreSet) + "&textoAnterior=" + encodeURI(textoAnterior) + "&modoProveedor=" + modoProveedor;
+            
+            console.log("urlFinal=" + urlFinal);
+            let respuesta = await fetch(urlFinal, {
+                method: "POST",
+                body: formData
+            });
+            let respuesta_json = await respuesta.json();
+            if (respuesta_json.statusCode != 200) {
+                console.log("Error al subir el archivo");
+                return;
+            }else{
+                console.log("Archivo subido correctamente");
+                //let resul = await enviarAudioAWhisper(respuesta_json.message.fileUrl);
+                let texto = respuesta_json.message[0].text;
+                let imagen = respuesta_json.message[0].image;
+                textoAnterior = textoAnterior + texto
+                let anterior = document.getElementById("texto").innerText
+                document.getElementById("texto").innerText = textoAnterior;
+                //convierte la imagen en base64 y la muestra en el elemento "imagen"
+                let img = document.getElementById("imagen");
+                img.src = "data:image/png;base64," + imagen;
+                console.log("Imagen recibida"); 
+            }
+        }
+
+        // async function enviarAudioAWhisper(url){
+        //     let respuesta = await fetch("https://model-03y0z9vq.api.baseten.co/production/predict", {
+        //         method: "POST",
+        //         headers: {
+        //             Authorization: 'Api-Key iNxLff0M.DBCgBO1aooVkVelNP7XNVF8pAmVCZcMd',
+        //             mode: 'no-cors', // no-cors, *cors, same-origin
+        //         },
+        //         body: JSON.stringify({
+        //             url: url
+        //         })
+        //     });
+        //     let respuesta_json = await respuesta.json();
+        //     if (respuesta_json.statusCode != 200) {
+        //         console.log("Error al enviar el audio a whisper");
+        //         return;
+        //     }else{
+        //         console.log("Audio enviado a whisper correctamente");
+        //         document.getElementById("texto").innerText = respuesta_json.text;
+        //     }
+        // }
+
+    </script>
+</body>
+</html>
