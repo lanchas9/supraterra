@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es" class="notranslate" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Micrositio Pandora</title>
+</head>
+<body>
+    <img src="logo.png" alt="" srcset="" class="logoTitulo">
+    <hr class="divisionRosaArriba">
+    <div class="divCentrado">
+        <span class="textoTitulo">Registro Exitoso</span>
+        <br><br>
+        <p class="textoTitulo">Boleto # <b id="numBoleto">111</b></p>
+    </div>
+    <hr class="divisionRosaAbajo">
+    <p class="texto">Ya estas registrado en nuestro concurso, espera los resultados próximamente en nuestras redes sociales</p>
+    <br><br>
+    <div class="centrado">
+        <a href="https://www.pandoraoficial.com.mx/">
+            <button class="boton">Salir</button>
+        </a>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const numBoleto = urlParams.get('boleto');
+        console.log(numBoleto);
+        document.getElementById('numBoleto').innerText = numBoleto;
+    </script>
+</body>
+</html>

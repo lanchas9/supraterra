@@ -1,0 +1,69 @@
+$dark: #16213E;
+$overlay: rgba(0,0,0,.2);
+$midtone: white;
+$textColor: black;
+$highlight: #FFCCD5;
+$radius: 15px;
+
+// body {
+//   background-color: $dark;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   min-height: 100vh;
+// }
+
+.slot-machine {
+  padding: 20px;
+  background-color: $midtone;
+  // color: $textColor;
+  border-radius: $radius;
+  width: 50%;
+  
+  &__slots {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 20px;
+    padding: 20px;
+    background-color: $overlay;
+    border-radius: $radius;
+    margin-bottom: 10px;
+  }
+  
+  &__slot {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    
+    img {
+      display: block;
+    }
+  }
+  
+  &__button {
+    display: block;
+    width: 100%;
+    // margin-left: 25%;
+    height: 40px;
+    background: $highlight;
+    border: 0;
+    text-transform: uppercase;
+    color: $textColor;
+    font-weight: 600;
+    padding: 0 20px;
+    font-size: 20px;
+    border-radius: $radius;
+    cursor: pointer;
+    
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+#log {
+  max-width: 380px;
+  font: normal 44px sans-serif;
+  color: black;
+  word-wrap: break-word;
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es" class="notranslate" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styleSlotMachine.css">
+    <title>Micrositio Pandora</title>
+</head>
+<body>
+    <img src="logo.png"alt="" srcset="" class="logoTitulo">
+    <hr class="divisionRosaArriba">
+    <div class="divCentrado">
+        <span class="textoTitulo">SORTEO</span>
+    </div>
+    <hr class="divisionRosaAbajo">
+    <p class="texto">Da cliclk en el boton para inciar el sorteo:</p>
+
+    <div class="slot-machine">
+        <div class="divCentrado margen25">
+            <div class="slot-machine__slots">
+            <div class="slot slot-machine__slot"></div>
+            <div class="slot slot-machine__slot"></div>
+            <div class="slot slot-machine__slot"></div>
+            </div>
+            <button type="button" id="start" class="slot-machine__button">INICIAR SORTEO</button>
+            <br><br><br>
+            <div id="log"></div>
+            </div>
+        </div>
+    <script type="text/javascript">
+            const urlParams = new URLSearchParams(window.location.search);
+            const strNombreGanador = urlParams.get('nombreganador');
+            console.log(strNombreGanador);
+        function shuffle(array) {
+            let currentIndex = array.length,
+                randomIndex;
+
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]
+                ];
+            }
+
+            return array;
+            }
+
+            const getRandomInt = (min, max) => {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            const removeAllChildNodes = (parent) => {
+            while (parent.firstChild) {
+                parent.removeChild(parent.firstChild);
+            }
+            }
+
+            // List of prizes
+            const prizes = [
+            'numeros/0.jpg',
+            'numeros/1.jpg',
+            'numeros/2.jpg',
+            'numeros/3.jpg',
+            'numeros/4.jpg',
+            'numeros/5.jpg',
+            'numeros/6.jpg',
+            'numeros/7.jpg',
+            'numeros/8.jpg',
+            'numeros/9.jpg'
+            ]
+
+            const slots = document.getElementsByClassName('slot');
+            const defaultSize = 100;
+            const totalDuplicates = 7;
+
+            // Clear slots and recreate random list of images
+            const buildItemLists = (playerWon, winningItem, randomDifference) => {
+            // Iterate through the slot html elements
+            Array.prototype.forEach.call(slots, (slot, s) => {
+                let prizeBlocks = document.createElement('div');
+                prizeBlocks.classList.add('slot-machine__prizes');
+
+                // Generate prize log
+                const log = document.getElementById("log");
+                //log.innerHTML = `Ganhou: ${playerWon ? "Sim" : "Não"}<br> ${playerWon ? `Item sorteado: ${winningItem}` : ""}`;
+                log.innerHTML = ""
+                log.className = "textoTitulo"
+                // Multiply and shuffle prize images for visual purposes
+                randomPrizes = shuffle(prizes.flatMap(i => Array(totalDuplicates).fill(i)));
+                randomPrizes.unshift(prizes[0]);
+                randomPrizes.forEach((prize) => {
+                let prizeElement = document.createElement('img');
+                prizeElement.setAttribute('src', prize);
+                prizeElement.setAttribute('width', defaultSize);
+                prizeElement.setAttribute('height', defaultSize);
+                prizeBlocks.appendChild(prizeElement);
+                })
+
+                // Adds the result to the last row
+                if (playerWon) {
+                let winningElement = document.createElement('img');
+                winningElement.setAttribute('src', winningItem);
+                winningElement.setAttribute('width', defaultSize);
+                winningElement.setAttribute('height', defaultSize);
+                prizeBlocks.appendChild(winningElement);
+                
+                } else {
+                const position = s < 2 ? 0 : s;
+                let negativeResult = document.createElement('img');
+                negativeResult.setAttribute('src', prizes[position + randomDifference]);
+                negativeResult.setAttribute('width', defaultSize);
+                negativeResult.setAttribute('height', defaultSize);
+                prizeBlocks.appendChild(negativeResult);
+                }
+
+                // Clear the slots and add the new ones
+                removeAllChildNodes(slot);
+                slot.appendChild(prizeBlocks);
+            });
+            }
+
+            // Builds the slots for the first time
+            buildItemLists(false, '');
+
+            // Determine whether the player won and start the spinning animation
+            const startAnimation = () => {
+            const playerWon = Math.random() < 0.5;
+
+            // Get a random item from the prizes array
+            const winningItem = prizes[getRandomInt(0, prizes.length - 1)];
+
+            // Get random difference for negative result
+            const randomDifference = getRandomInt(0, prizes.length - 3);
+
+            // Rebuild the items list with the result
+            buildItemLists(playerWon, winningItem, randomDifference);
+
+            // Determine the total height to be animated  
+            const totalHeight = prizes.length * totalDuplicates * defaultSize;
+
+            // Animate each one of the slots
+            const items = document.getElementsByClassName('slot-machine__prizes');
+            Array.prototype.forEach.call(items, (slot, s) => {
+                slot.animate([{
+                    transform: "translateY(0)"
+                },
+                {
+                    transform: `translateY(-${totalHeight}px)`
+                }
+                ], {
+                duration: 4000 + (s * 500),
+                fill: "forwards",
+                easing: 'ease-in-out'
+                });
+            });
+            setTimeout(() => {
+                console.log("termino");
+                const log = document.getElementById("log");
+                //log.innerHTML = `Ganhou: ${playerWon ? "Sim" : "Não"}<br> ${playerWon ? `Item sorteado: ${winningItem}` : ""}`;
+                log.innerHTML = strNombreGanador
+                log.className = "textoTitulo"
+            }, 5000);
+            }
+
+            const start = document.getElementById('start');
+
+            start.addEventListener('click', () => startAnimation());
+
+    </script>
+</body>
+</html>
