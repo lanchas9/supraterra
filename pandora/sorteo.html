@@ -7,8 +7,13 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="styleSlotMachine.css">
     <title>Micrositio Pandora</title>
+    <script src="js/lottie.js"></script>
 </head>
-<body>
+<body onload="cargaDatos()">
+    <div id="element1" class="element noVisible">
+    </div>
+    <div id="element2" class="element noVisible">
+    </div>
     <img src="logo.png"alt="" srcset="" class="logoTitulo">
     <hr class="divisionRosaArriba">
     <div class="divCentrado">
@@ -30,9 +35,32 @@
             </div>
         </div>
     <script type="text/javascript">
-            const urlParams = new URLSearchParams(window.location.search);
-            const strNombreGanador = urlParams.get('nombreganador');
-            console.log(strNombreGanador);
+        var lottie1
+        var lottie2
+
+        async function cargaDatos(){
+            element = document.getElementById("element")
+            lottie1 = lottie.loadAnimation({
+            container: element1, // the dom element that will contain the animation
+            renderer: 'svg',
+            loop: true,
+            autoplay: false,
+            path: 'lottie/1663-balloons.json' // the path to the animation json
+            });
+            
+            lottie2 = lottie.loadAnimation({
+            container: element2, // the dom element that will contain the animation
+            renderer: 'svg',
+            loop: true,
+            autoplay: false,
+            path: 'lottie/92235-confetti.json' // the path to the animation json
+            });    
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const strNombreGanador = urlParams.get('nombreganador');
+        console.log(strNombreGanador);
+        
         function shuffle(array) {
             let currentIndex = array.length,
                 randomIndex;
@@ -165,6 +193,7 @@
                 //log.innerHTML = `Ganhou: ${playerWon ? "Sim" : "Não"}<br> ${playerWon ? `Item sorteado: ${winningItem}` : ""}`;
                 log.innerHTML = strNombreGanador
                 log.className = "textoTitulo"
+                iniciaAnimacion()
             }, 5000);
             }
 
@@ -172,6 +201,19 @@
 
             start.addEventListener('click', () => startAnimation());
 
+            function iniciaAnimacion(){
+            document.getElementById("element1").className = "element siVisible"
+            document.getElementById("element2").className = "element siVisible"
+            lottie1.play()
+            lottie2.play()
+        }
+
+        function detenAnimacion(){
+            document.getElementById("element1").className = "element noVisible"
+            document.getElementById("element2").className = "element noVisible"
+            lottie1.stop()
+            lottie2.stop()
+        }
     </script>
 </body>
 </html>
