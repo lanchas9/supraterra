@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Registros</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="js/jquery.min.js"  type='text/javascript'></script>
+    <script src="js/qrcode.js"  type='text/javascript'></script>
+    <link rel="stylesheet" href="css/reportes.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,800" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+    <script type="text/javascript" src="https://oss.sheetjs.com/sheetjs/xlsx.full.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tabulator/4.9.3/css/tabulator_midnight.min.css" rel="stylesheet">
+
+</head>
+<body onload="cargaDatos()">
+    
+    <div class="banner">
+        <img src="img/LogoToyota.png" alt="" srcset="" id="imagenBack" class="imagenPortada">
+        <!-- <img src="jpg/logo/1216_Kia_basic_logo_White_no_background.png" alt="" srcset="" class="logo" id="imagenLogo"> -->
+    </div>
+    <div class="cuerpo centrado">
+        <div class="titulo"><B>REPORTE REGISTROS DIARIOS Toyota</B></div>
+            <div class="titulo">
+                <b id="titulo" class="titu"></b> - 
+                <span id="contador" class="cont ador"> 0 personas</span>
+            </div>
+            <div id="chart"></div>
+        <br>
+        <span class="titulo">Descarga Reporte Completo</span>
+        <img id="download-xlsx" class="imagenLogo center" src="img/excel.png" alt="" srcset="">
+        <br><br>
+        <div id="example-table"></div>
+    </div>
+        <button class="boton" onclick="regresar()">Regresar</button>
+    <br><br><br>
+    <script type="text/javascript">
+        //Reporte Excel
+    
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const diaEspecifico = urlParams.get('diaEspecifico')
+        const reporte = urlParams.get('grafica')
+        let tituloReporte = urlParams.get('titulo')
+        
+    async function fetchReportJSON() {
+        const response = await fetch('http://localhost:9998/toyota/' + "datosCompletosUsariosRegistradosTotales");
+        const tabledata = await response.json();
+        if (response.status == 200){
+            if((reporte == 'reporteUsuariosRegistrados') || (reporte == 'reporteUsuariosRegistradosIncluidoDemo')){
+                tabledata.forEach(element => {
+                element.Reenviar = '📩'
+                element.Actualizar = '💾'
+                element.codigoQR = '👁️'
+                element.WhatsApp = '📲'
+                });
+            }
+            return tabledata;
+        }else{
+            let array = []
+            array.push({data: "No existen datos"})
+            return array
+            
+        }
+    }
+
+    fetchReportJSON().then(tabledata => {
+        var table = new Tabulator("#example-table", {
+            height:"800px",
+            layout:"fitColumns",
+            data:tabledata,
+            autoColumns:true,
+            autoColumnsDefinitions:function(definitions){
+            //definitions - array of column definition objects
+
+            definitions.forEach((column) => {
+                column.headerFilter = true; // add header filter to every column
+                column.hozAlign="center"
+                if((reporte == 'reporteUsuariosRegistrados') || (reporte == 'reporteUsuariosRegistradosIncluidoDemo')){
+                    let columnasEditables = ['correoUsuario', 'nombreUsuario', 'apellidoUsuario', 'celularUsuario']
+                    if(columnasEditables.some(r=>columnasEditables.includes(column.title))){
+                        column.editor = true
+                    }
+                }
+            });
+            return definitions;
+            },
+            // rowClick:function(e, row){
+            // //e - the click event object
+            // //row - row component
+            // // reenviaMail(row.getCells()[1].getValue())
+            // console.log('renglon completo')
+            // }
+            cellClick:function(e, cell){
+                //e - the click event object
+                //cell - cell component
+                console.log('cell clickeada')
+                if (cell.getValue() == '📩'){
+                    let correoUsuario = cell.getRow().getData().correoUsuario
+                    if (confirm('Confirmas el reenvío del correo para: ' + correoUsuario)) {
+                        // Send it!
+                            reenviaMail(correoUsuario)
+                        } else {
+                        // Do nothing!
+                    }
+                }else if (cell.getValue() == '💾'){
+                    let correoUsuario = cell.getRow().getData().correoUsuario
+                    if (confirm('Confirmas que quieres actualizar los datos de: ' + correoUsuario)) {
+                        // Send it!
+                            actualizaDB(cell.getRow().getData())
+                            console.log(cell.getRow().getData())
+                        } else {
+                        // Do nothing!
+                    }
+                }else if (cell.getValue() == '👁️'){
+                    let idQR = cell.getRow().getData().idQR
+                    let correoUsuario = cell.getRow().getData().correoUsuario
+                    muestraPopUp(idQR, correoUsuario)
+                }else if (cell.getValue() == '📲'){
+                    let celularUsuario = cell.getRow().getData().celularUsuario
+                    let nombreCompleto = cell.getRow().getData().nombreUsuario + ' ' + cell.getRow().getData().apellidoUsuario
+                    let idQR = cell.getRow().getData().idQR
+                    enviaTwilio(celularUsuario, nombreCompleto, idQR)
+                }
+            },
+            cellEdited:function(cell){
+                //cell - cell component
+                //console.log(cell.getValue())
+            }, 
+            dataFiltered:function(filters, rows){
+                if(table===undefined){
+                }else{
+                    if(rows.length==table.getDataCount()){
+                        var count = table.getDataCount();
+                        const element = document.getElementById("numeroRenglones");
+                        element.innerHTML = 'Número Renglones: ' + count
+                        element.style.color = "black"
+                    }else{
+                        var count = rows.length
+                        const element = document.getElementById("numeroRenglones");
+                        element.innerHTML = 'Registros encontrados: ' + count
+                        element.style.color = "red"
+                    }
+                }
+                return true
+            },
+        });
+        var count = table.getDataCount();
+        const element = document.getElementById("contador");
+        element.innerHTML = 'Número Registros: ' + count
+
+        //trigger download of data.xlsx file
+        document.getElementById("download-xlsx").addEventListener("click", function(){
+            const d = new Date();
+            let fechaFormateada = d.toLocaleString();
+            fechaFormateada = fechaFormateada.replaceAll("/","_")
+            fechaFormateada = fechaFormateada.replaceAll(", ","-")
+            fechaFormateada = fechaFormateada.replaceAll(":","_")
+        table.download("xlsx", reporte + "-" + fechaFormateada + ".xlsx", {sheetName:"Reporte KIA " + diaEspecifico});
+        });
+    });
+
+
+        //Reporte EXCEL
+        function regresar(){
+            window.location.href = `reporte.html`;
+        }
+        
+        async function cargaDatos(){
+            let dataJson = {}
+            //----------
+            const settings = {
+                method: 'GET',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            };
+                
+            try {
+                const fetchResponse = await fetch(`http://localhost:9998/toyota/graficaRegistrosPorHora`, settings);
+                const tabledata = await fetchResponse.json();
+                let resul = fetchResponse.status
+                /* let resul = 200; */
+                if(resul == 200){
+                    tituloReporte  = "Reporte de la fecha " + "Mayo 26 al 28 "
+                    const etiqueta = dameTitulo(tituloReporte)
+                const labelsFromTable = tabledata.map(data => data.horaMasDia )
+                const labels = labelsFromTable
+                // const labels = await dameLabels(labelsFromTable)
+                const dataManual = tabledata.message.map(data => data.Registrados)
+
+                var count = dataManual.reduce((suma, actual)=> suma+actual)
+                // document.getElementById("titulo").innerHTML = etiqueta
+                const element = document.getElementById("contador");
+                element.innerHTML = 'Número de Registros: ' + count
+
+                 // let context = document.getElementById('chart').getContext('2d')
+                 var newCanvas = document.createElement('canvas');
+                newCanvas.id = 'canv';
+                newCanvas.height = window.innerHeight*0.65
+                newCanvas.width = window.innerWidth
+                document.getElementById('chart').appendChild(newCanvas);
+                var context = newCanvas.getContext('2d'); // whatever type of context
+
+                var gradient = context.createLinearGradient(0, 0, 0, 1000);
+                gradient.addColorStop(0, "rgb(255,90,1)");
+                gradient.addColorStop(0.15, "rgb(255,140,0)");
+                gradient.addColorStop(0.25, "rgb(255,90,1)");
+                gradient.addColorStop(0.5, "rgb(255,140,0)");
+                gradient.addColorStop(0.75, "rgb(255,90,1)");
+                gradient.addColorStop(1, "rgb(255,140,0)");
+
+                const data = {
+                    labels: labels,
+                    datasets: [{
+                        label: etiqueta,
+                        backgroundColor: gradient,
+                        borderColor: 'rgb(0,0,0)',
+                        data: dataManual,
+                        borderWidth : 2,
+                    }]
+                };
+                // const config = {
+                // labels: labels,
+                // datasets: [
+                //     {
+                //         label: 'Registros',
+                //         data: dataManual,
+                //         borderColor: 'rgb(255, 99, 132)',
+                //         backgroundColor: 'rgb(0, 255, 0)',
+                //         borderWidth: 2,
+                //         borderRadius: 5,
+                //         borderSkipped: false,
+                //     }
+                // ]
+                // };
+
+                const config = {
+                    type: 'bar',
+                    data: data,
+                }
+                
+                var chart = new Chart(context, config);
+
+            }else{
+                    console.log("Error: " + tabledata.message);  
+                }
+            } catch (e) {
+                console.log("Error:" + e);
+            }
+            //----------
+            fetchReportJSON()
+        }
+        function dameTitulo(titulo){
+            let nuevo = titulo.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ")    
+            return nuevo.charAt(0).toUpperCase() + nuevo.slice(1)
+        }   
+    </script>
+</body>
+</html>

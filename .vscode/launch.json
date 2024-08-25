@@ -36,5 +36,12 @@
             "url": "http://127.0.0.1:5501/pandora/reporte.html",
             "webRoot": "${workspaceFolder}/"
         },
+        {
+            "name": "Toyota",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://127.0.0.1:5501/toyota/reporte.html",
+            "webRoot": "${workspaceFolder}/"
+        },
     ]
 }
